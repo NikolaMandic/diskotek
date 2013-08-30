@@ -1,3 +1,3 @@
 ld
 ==
-early development version!!!
+early development version of ui for gdb debugger for arm on linux !!!
