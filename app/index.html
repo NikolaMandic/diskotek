@@ -1,0 +1,107 @@
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <!-- build:css(.tmp) styles/main.css -->
+        <link rel="stylesheet" href="styles/main.css">
+        <link rel="stylesheet" href="bower_components/stroll/css/stroll.css">
+        <!-- endbuild -->
+</head>
+  <body ng-app="ldApp">
+    <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <!--[if lt IE 9]>
+      <script src="bower_components/es5-shim/es5-shim.js"></script>
+      <script src="bower_components/json3/lib/json3.min.js"></script>
+    <![endif]-->
+
+    <!-- Add your site or application content here -->
+ <div id="debugMenu" ng-controller="MainCtrl">
+    
+  <div id="fileItem">
+    <label for="name">name</label>
+    <INPUT type="TEXT" ng-model="file" name="name" value="" id="name">
+    <a ng-click="commandStart('gdb-multiarch '+$scope.file)">debug<a/>
+    
+  </div>
+<div id="controls">
+  <a ng-click="cont()">run </a> 
+     
+  <a  ng-click="stepOver()">step over</a> 
+  <a ng-click="stepInto()">step into</a> 
+  <!--
+   <a  class="glyphicon glyphicon-play">run </a> 
+  <a class="glyphicon glyphicon-arrow-down" ng-click="stepOver()">step over</a> 
+  <a class="glyphicon glyphicon-arrow-right" ng-click="stepInto()">step into</a> 
+
+  -->
+</div>
+  <div id="commandItem">
+    <INPUT type="TEXT" ng-model="command"/>
+    <a ng-click="commandExec(command)">send command  <a/>
+      
+  </div>
+  <div id="views">
+    <a  href="#/">disassembly</a>
+    <a    href="#/ch">graph</a>
+  </div>
+</div>
+
+   <div class="container" ng-view="">
+    
+
+    
+    
+    </div>
+
+
+       <script src="bower_components/jquery/jquery.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+
+        <!-- build:js scripts/plugins.js -->
+        <script src="bower_components/bootstrap-sass/js/affix.js"></script>
+        <script src="bower_components/bootstrap-sass/js/alert.js"></script>
+        <script src="bower_components/bootstrap-sass/js/dropdown.js"></script>
+        <script src="bower_components/bootstrap-sass/js/tooltip.js"></script>
+        <script src="bower_components/bootstrap-sass/js/modal.js"></script>
+        <script src="bower_components/bootstrap-sass/js/transition.js"></script>
+        <script src="bower_components/bootstrap-sass/js/button.js"></script>
+        <script src="bower_components/bootstrap-sass/js/popover.js"></script>
+        <script src="bower_components/bootstrap-sass/js/carousel.js"></script>
+        <script src="bower_components/bootstrap-sass/js/scrollspy.js"></script>
+        <script src="bower_components/bootstrap-sass/js/tab.js"></script>
+       
+        <script src="bower_components/stroll/js/stroll.js"></script>
+        <script src="bower_components/raphael/raphael.js"></script>
+        <!-- endbuild -->
+
+        <!-- build:js scripts/modules.js -->
+        <script src="bower_components/angular-resource/angular-resource.js"></script>
+        <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+        <script src="bower_components/angular-route/angular-route.js"></script>
+        <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+        <!-- endbuild -->
+
+        <!-- build:js({.tmp,app}) scripts/scripts.js -->
+        <script src="scripts/app.js"></script>
+        <script src="scripts/controllers/main.js"></script>
+        <script src="scripts/controllers/Ch.js"></script>
+        <!-- endbuild -->
+        <!-- livereload script -->
+        <script type="text/javascript">document.write('<script src="http://'
+           + (location.host || 'localhost').split(':')[0]
+           + ':35729/livereload.js?snipver=1" type="text/javascript"><\/script>')
+        </script>
+</body>
+</html>
