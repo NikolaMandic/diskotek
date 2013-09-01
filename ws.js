@@ -29,7 +29,8 @@ var command = require('command');
     socket.on('start', function (data) {
       console.log(data);
       try{
-        qemu_static = cp.spawn('qemu-arm-static',['-g','12345', data.name, '-E',' QEMU_LD_PREFIX=/usr/arm-linux-gnueabi']);
+        qemu_static = cp.fork('./sp.js');//cp.exec('qemu-arm-static',['-g','12345', data.name, '-E','QEMU_LD_PREFIX=/usr/arm-linux-gnueabi']);
+        console.log('ovde');
         gdb = cp.spawn('gdb-multiarch', [ data.name] );
         gdb.stdout.setEncoding('utf-8');
         gdb.stdout.on('data',function(chunk) {
@@ -37,7 +38,15 @@ var command = require('command');
                     type:'output',
                     data:chunk
                     });
+        });
+        gdb.stderr.setEncoding('utf-8');
+        gdb.stderr.on('data',function(chunk) {
+          socket.emit('news',{
+                    type:'output',
+                    data:chunk
+                    });
         })
+
       }catch(err){
         console.log(err);
      }
@@ -47,7 +56,7 @@ var command = require('command');
     socket.on('command',function(data) {
          
       console.log(data);
-      gdb.stdin.write(data.ptyPayload);
+      gdb.stdin.write(data.ptyPayload+"\n");
     });
 
   });

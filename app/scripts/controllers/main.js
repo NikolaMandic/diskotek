@@ -17,9 +17,38 @@ function linkify( selector ) {
         };
     }
 }
-
+var socket;
+function start_command (name) {
+  socket.emit('start', { name: name });
+  socket.emit('command', { ptyPayload: "set arch arm" });
+  socket.emit('command', { ptyPayload: "target remote :12345" });
+  setTimeout(getDissasembly,500);
+ 
+}
+function getDissasembly () {
+    // body...
+  socket.emit('command', { ptyPayload: "disas $pc,+40" });
+}
 angular.module('ldApp').factory('Data',function(){
-  return {data:[],ds:{result:'',registers:''}}
+  var obj={
+    data:[],
+    ds:{
+      result:[],
+      registers:''
+    },
+    sock:socket  
+  };
+
+   obj.sock=socket = io.connect('http://localhost:807');
+
+    socket.on('news', function (data) {
+    console.log(data);
+    //obj.sc(data.data);
+    obj.ds.result=data.data.split("\n");
+    if('scope' in obj)obj.scope.$apply();
+  });
+
+  return obj;
 });
 
 angular.module('ldApp')
@@ -31,12 +60,16 @@ angular.module('ldApp')
    // stroll.bind( '.hero-unit ul',{ live: true } ); 
 linkify( 'a' );
   
- Data.sc=$scope; 
 // "0x40801e14: ldr r4, [pc, #148] ; 0x40801eb0 ".split(/(\w+):\s(\w+)\s(.+)\s;\s(.+)/);
 //"=> 0x40801e1c: bl 0x40805d44".split(/\=\>\s(\w+):\s(\w+)\s(.+)(\s;\s(.+))?/);
   // "0x40801e14: ldr r4, [pc, #148] ; 0x40801eb0 ".split(/(\w+):\s(\w+)\s(.+)(\s;\s(.+))?/);
   $scope.file='proba';
-    $scope.result='';
+    $scope.ds=Data.ds;
+  Data.scope=$scope;
+ /*Data.sc=function(r){
+  $scope.result=r?[r] :[] ;
+ };
+ */
     $scope.commandExec=function(cmnd){
       $scope.result=cmnd;
      
@@ -52,7 +85,11 @@ linkify( 'a' );
     };
     $scope.commandExecL=function(cmnd,resultVariable,splice1,splice2){
      // $scope.result=cmnd;
-     
+    
+      Data.sock.emit('command',{
+                         ptyPayload:cmnd
+      });
+     /*
       return $.ajax({
         method:'POST',
         url:'http://localhost:8080/o/a',
@@ -72,8 +109,12 @@ linkify( 'a' );
               $scope.$apply();
           }
       });
+      */
     };
     $scope.commandStart=function(cmnd){
+      start_command($scope.file);
+      getDissasembly();
+      /*
       $.ajax({
         method:'POST',
         url:'http://localhost:8080/start/'+$scope.file,
@@ -86,7 +127,7 @@ linkify( 'a' );
         });
         $scope.registerInfo();
       });
-    
+      */
     };
    $scope.registerInfo = function() {
     $scope.commandExecL('info registers','registers',1,-2);
@@ -136,8 +177,8 @@ linkify( 'a' );
    };
    $scope.stepOver = function  () {
      $scope.commandExecL('ni');
-     $scope.disasR();
-     $scope.registerInfo();
+     //$scope.disasR();
+    // $scope.registerInfo();
    };
    $scope.cont = function  () {
      $scope.commandExecL('c');

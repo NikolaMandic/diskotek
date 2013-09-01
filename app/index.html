@@ -49,7 +49,7 @@
 </div>
   <div id="commandItem">
     <INPUT type="TEXT" ng-model="command"/>
-    <a ng-click="commandExec(command)">send command  <a/>
+    <a ng-click="commandExecL(command)">send command  <a/>
       
   </div>
   <div id="views">
@@ -67,9 +67,14 @@
 
 
        <script src="bower_components/jquery/jquery.js"></script>
-    <script src="bower_components/angular/angular.js"></script>
+<script src="http://localhost:807/socket.io/socket.io.js"></script>
+   
+ <script src="bower_components/stroll/js/stroll.js"></script>
+        <script src="bower_components/raphael/raphael.js"></script>
+        <script src="bower_components/underscore/underscore.js"></script>
 
-        <!-- build:js scripts/plugins.js -->
+    <script src="bower_components/angular/angular.js"></script>
+                <!-- build:js scripts/plugins.js -->
         <script src="bower_components/bootstrap-sass/js/affix.js"></script>
         <script src="bower_components/bootstrap-sass/js/alert.js"></script>
         <script src="bower_components/bootstrap-sass/js/dropdown.js"></script>
@@ -82,9 +87,7 @@
         <script src="bower_components/bootstrap-sass/js/scrollspy.js"></script>
         <script src="bower_components/bootstrap-sass/js/tab.js"></script>
        
-        <script src="bower_components/stroll/js/stroll.js"></script>
-        <script src="bower_components/raphael/raphael.js"></script>
-        <!-- endbuild -->
+               <!-- endbuild -->
 
         <!-- build:js scripts/modules.js -->
         <script src="bower_components/angular-resource/angular-resource.js"></script>
