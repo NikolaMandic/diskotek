@@ -18,33 +18,83 @@ function linkify( selector ) {
     }
 }
 var socket;
-function start_command (name) {
-  socket.emit('start', { name: name });
-  socket.emit('command', { ptyPayload: "set arch arm" });
-  socket.emit('command', { ptyPayload: "target remote :12345" });
-  setTimeout(getDissasembly,500);
- 
-}
-function getDissasembly () {
-    // body...
-  socket.emit('command', { ptyPayload: "disas $pc,+40" });
-}
 angular.module('ldApp').factory('Data',function(){
+  //gdb service
   var obj={
     data:[],
-    ds:{
+    sharedData:{
       result:[],
+      result_raw:[],
       registers:''
     },
     sock:socket  
   };
 
-   obj.sock=socket = io.connect('http://localhost:807');
+  obj.callbackQueue=[];
+  function dissasemblyCallback(){
+    obj.sharedData.dissasembly= obj.sharedData.result.slice(0,-1);
+  }
+  obj.getDissasembly = function getDissasembly () {
+    
+    obj.callbackQueue.push(dissasemblyCallback);
+    socket.emit('command', { ptyPayload: "disas $pc,+40" });
+  }
+  obj.getRegisterInfo = function (){
+    obj.callbackQueue.push(function (){
+      obj.sharedData.registers = obj.sharedData.result.slice(0,-1);
+    });
 
-    socket.on('news', function (data) {
+    socket.emit('command', { ptyPayload: "info registers" });
+   // $scope.commandExecL('info registers','registers',1,-2);
+  }
+  obj.start_command = function start_command (name) {
+
+    
+    obj.callbackQueue.push(function() {});
+obj.callbackQueue.push(function() {});
+obj.callbackQueue.push(function() {});
+    socket.emit('start', { name: name });
+    var f=function(){socket.emit('command', { ptyPayload: "set arch arm" });
+    };
+    setTimeout(f,2000);
+    var f2=function(){
+      socket.emit('command', { ptyPayload: "target remote :12345" });
+    };
+    setTimeout(f2,2100);
+    setTimeout(obj.getDissasembly,2300);
+
+    setTimeout(obj.getRegisterInfo,2350);
+    
+    setTimeout(function(){ obj.scope.$apply(); },2400);
+  }
+ 
+
+  obj.sock=socket = io.connect('http://localhost:807');
+
+  socket.on('news', function (data) {
     console.log(data);
     //obj.sc(data.data);
-    obj.ds.result=data.data.split("\n");
+    var dataSplited = data.data.split("\n") ;
+    obj.sharedData.result_raw = obj.sharedData.result_raw.concat(dataSplited);
+    obj.sharedData.result=obj.sharedData.result_raw;
+    var last = obj.sharedData.result_raw[obj.sharedData.result_raw.length-1];
+    if(last ==="(gdb) " /*|| last ===""*/ ){
+      var callback = obj.callbackQueue.shift();
+      if(callback)callback();
+      obj.sharedData.result_raw=[];
+
+    }    
+   /* 
+    if(obj.sharedData.result.length>0){
+      if('match' in obj.sharedData.result[obj.sharedData.result.length-1]){
+        if(obj.sharedData.result[obj.sharedData.result.length-1].match("/^(gdb).+/")){
+              }
+      }else{
+        console.log("match not found");
+        console.log(obj.sharedData );
+      }
+    }
+    */
     if('scope' in obj)obj.scope.$apply();
   });
 
@@ -53,7 +103,7 @@ angular.module('ldApp').factory('Data',function(){
 
 angular.module('ldApp')
   .controller('MainCtrl2', function ($scope,$http,Data) {
-      $scope.ds=Data.ds;
+      $scope.sharedData=Data.sharedData;
   });
 angular.module('ldApp')
   .controller('MainCtrl', function ($scope,$http,Data) {
@@ -64,7 +114,7 @@ linkify( 'a' );
 //"=> 0x40801e1c: bl 0x40805d44".split(/\=\>\s(\w+):\s(\w+)\s(.+)(\s;\s(.+))?/);
   // "0x40801e14: ldr r4, [pc, #148] ; 0x40801eb0 ".split(/(\w+):\s(\w+)\s(.+)(\s;\s(.+))?/);
   $scope.file='proba';
-    $scope.ds=Data.ds;
+    $scope.sharedData=Data.sharedData;
   Data.scope=$scope;
  /*Data.sc=function(r){
   $scope.result=r?[r] :[] ;
@@ -112,8 +162,8 @@ linkify( 'a' );
       */
     };
     $scope.commandStart=function(cmnd){
-      start_command($scope.file);
-      getDissasembly();
+      Data.start_command($scope.file);
+      //Data.getDissasembly();
       /*
       $.ajax({
         method:'POST',
@@ -130,7 +180,7 @@ linkify( 'a' );
       */
     };
    $scope.registerInfo = function() {
-    $scope.commandExecL('info registers','registers',1,-2);
+    Data.getRegisterInfo();
      
    };  
    $scope.dcd = function() {
@@ -176,7 +226,10 @@ linkify( 'a' );
 
    };
    $scope.stepOver = function  () {
+     Data.callbackQueue.push(function() {});
      $scope.commandExecL('ni');
+     Data.getDissasembly();
+     Data.getRegisterInfo();
      //$scope.disasR();
     // $scope.registerInfo();
    };

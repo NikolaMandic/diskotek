@@ -3,7 +3,7 @@
   <div class="hero-unit">
 
     <ul class="wave">
-        <li ng-repeat="thing in ds.result">{{thing}}</li>
+        <li ng-repeat="thing in sharedData.dissasembly">{{thing}}</li>
     </ul>
    </div>
    <!--
@@ -13,7 +13,7 @@
     -->
   <div id="registers">
     <ul>
-      <li ng-repeat="register in ds.registers">{{ register }}</li>
+      <li ng-repeat="register in sharedData.registers">{{ register }}</li>
     </ul>
   </div>
 
