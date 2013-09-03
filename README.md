@@ -11,7 +11,6 @@ sudo apt-get install qemu-user-static
 sudo apt-get install gdb-multiarch
 export QEMU_LD_PREFIX=/usr/arm-linux/gnueabi
 
-
 get the latest nodejs
 from project directory
 
