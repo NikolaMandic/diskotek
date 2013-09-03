@@ -1,27 +1,24 @@
 'use strict';
 var supports3DTransforms =  document.body.style['webkitPerspective'] !== undefined || 
                             document.body.style['MozPerspective'] !== undefined;
-
+/*
 function linkify( selector ) {
     if( supports3DTransforms ) {
-        
-        var nodes = document.querySelectorAll( selector );
+       $(selector).each(function(value){
+         if( !value.className || !value.className.match( /roll/g ) ) {
+            value.className += ' roll';
+            value.innerHTML = '<span data-title="'+ value.text +'">' + value.innerHTML + '</span>';
+         }
 
-        for( var i = 0, len = nodes.length; i < len; i++ ) {
-            var node = nodes[i];
-
-            if( !node.className || !node.className.match( /roll/g ) ) {
-                node.className += ' roll';
-                node.innerHTML = '<span data-title="'+ node.text +'">' + node.innerHTML + '</span>';
-            }
-        };
+       }); 
     }
 }
+*/
 var socket;
 angular.module('ldApp').factory('Data',function(){
   //gdb service
   var obj={
-    data:[],
+    //idata:[],
     sharedData:{
       result:[],
       result_raw:[],
@@ -188,10 +185,12 @@ angular.module('ldApp')
   .controller('MainCtrl', function ($scope,$http,Data) {
    // stroll.bind( '.hero-unit ul',{ live: true } ); 
   
+//linkify( '#debugMenu a' );
 // "0x40801e14: ldr r4, [pc, #148] ; 0x40801eb0 ".split(/(\w+):\s(\w+)\s(.+)\s;\s(.+)/);
 //"=> 0x40801e1c: bl 0x40805d44".split(/\=\>\s(\w+):\s(\w+)\s(.+)(\s;\s(.+))?/);
   // "0x40801e14: ldr r4, [pc, #148] ; 0x40801eb0 ".split(/(\w+):\s(\w+)\s(.+)(\s;\s(.+))?/);
-  $scope.file='proba';
+  
+    $scope.file='proba';
     $scope.sharedData=Data.sharedData;
   Data.scope=$scope;
  /*Data.sc=function(r){
@@ -365,5 +364,4 @@ angular.module('ldApp')
 
 
    ];
-//linkify( '#debugMenu a' );
 });

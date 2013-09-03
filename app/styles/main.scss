@@ -33,7 +33,7 @@ body {
 @include make-lg-column(3);
 }
 #views{
-@include make-lg-column(2);
+@include make-lg-column(3);
 }
 #holder {
     height: 900px;
