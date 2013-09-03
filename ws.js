@@ -25,7 +25,7 @@ var started=0;
 var command = require('command');
   command.open('./');
 var commandStack=[];
-var command_count=0;
+var command_count=1;
 io.set('log level',1);
   io.sockets.on('connection', function (socket) {
    // socket.emit('news', { hello: 'world' });

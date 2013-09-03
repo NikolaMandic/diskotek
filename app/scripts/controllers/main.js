@@ -33,7 +33,76 @@ angular.module('ldApp').factory('Data',function(){
   obj.callbackQueue=[];
   function dissasemblyCallback(){
     obj.sharedData.dissasembly= obj.sharedData.result.slice(0,-1);
-  }
+//$scope.disasR(80,'dcd');
+       var b = [];
+       var c=0;
+      b.push([]);
+       var dissasmArr = [];
+       var dissamObj = [];
+       var r=obj.sharedData.dissasembly.map(function(value,index,array){
+         //decode outpu
+         var regexp1=/^\=\>\s*(.*):\s(\w+)([^;]*)(;(.*))?$/;
+
+         //addr inst opcodes ; comment
+         var regexp2=/^\s*(.*):\s(\w+)([^;]*)(;(.*))?$/;
+         ////\s*(\w+)(.*?):\s+(\w+)\s(.+?)\s*;\s(.+)\s*/g; ///\s*(\w+)(.*?):\s(\w+)\s(.+?)(\s;\s(.+))?\s*/g;
+         var regexp3=/\s*(\w+)(.*?):\s+(\w+)\s(.+)\s*/g;
+         var s;
+         var typeOfReg ;
+         var inst_obj ;
+         if(value.match(regexp1)){
+           s =  value.split(regexp1);
+           typeOfReg=1;
+          inst_obj ={
+              current:true,
+              address: s[1],
+              opcode:  s[2],
+              operands:s[3],
+              comment: s[4],
+             };
+
+         }else if(value.match(regexp2)){
+           s =  value.split(regexp2);
+           typeOfReg=2;
+           inst_obj ={
+              current:false,
+              address: s[1],
+              opcode:  s[2],
+              operands:s[3],
+              comment: s[4],
+             };
+
+         }
+
+         
+         if(s){
+           if(s[3].match(/^b.*/)){
+             b[c].push(s);
+             c++;
+             b.push([]);
+           }else{
+           
+             b[c].push(s);
+           }
+           dissasmArr.push(s);
+           dissamObj.push(inst_obj);
+
+         }else{
+           
+         }
+         
+         return s;
+   //"=> 0x40801e1c: bl 0x40805d44".split(/\=\>\s(\w+):\s(\w+)\s(.+)(\s;\s(.+))?/);
+    // "0x40801e14: ldr r4, [pc, #148] ; 0x40801eb0 ".split(/(\w+):\s(\w+)\s(.+)(\s;\s(.+))?/);
+       
+       });
+      // _.each(b,function(element,index,list){
+      //   if(_.find( element[-1][0]) )
+      // });
+       obj.sharedData.dissArr=dissamObj;
+       obj.data=b;
+
+  };
   obj.getDissasembly = function getDissasembly () {
     
     obj.callbackQueue.push(dissasemblyCallback);
@@ -41,7 +110,15 @@ angular.module('ldApp').factory('Data',function(){
   }
   obj.getRegisterInfo = function (){
     obj.callbackQueue.push(function (){
-      obj.sharedData.registers = obj.sharedData.result.slice(0,-1);
+      obj.sharedData.registers = obj.sharedData.result.slice(0,-1).map(function(value){
+        var s=value.split(/(\w+)\s*(\w+)\s*(\w+)/);
+        return {
+          name:s[1],
+          value1:s[2],
+          value2:s[3],
+
+        };
+      });
     });
 
     socket.emit('command', { ptyPayload: "info registers" });
@@ -51,8 +128,8 @@ angular.module('ldApp').factory('Data',function(){
 
     
     obj.callbackQueue.push(function() {});
-obj.callbackQueue.push(function() {});
-obj.callbackQueue.push(function() {});
+    obj.callbackQueue.push(function() {});
+    obj.callbackQueue.push(function() {});
     socket.emit('start', { name: name });
     var f=function(){socket.emit('command', { ptyPayload: "set arch arm" });
     };
@@ -67,7 +144,9 @@ obj.callbackQueue.push(function() {});
     
     setTimeout(function(){ obj.scope.$apply(); },2400);
   }
- 
+   var decod=function decode(result){
+       };
+
 
   obj.sock=socket = io.connect('http://localhost:807');
 
@@ -188,24 +267,43 @@ linkify( 'a' );
      var b = [];
      var c=0;
     b.push([]);
+     var dissasmArr = [];
+     var dissamObj = [];
      $scope.dcd_=$scope.result.map(function(value,index,array){
+       //decode outpu
        var regexp1=/\s*\=\>\s(\w+)(.*?):\s(\w+)\s(.+)(\s;\s(.+))?\s*/g;
+
+       //addr inst opcodes ; comment
        var regexp2=/\s*(\w+)(.*?):\s(\w+)\s(.+)(\s;\s(.+))?\s*/g;
        var s;
+       var typeOfReg ;
        if(value.match(regexp1)){
          s =  value.split(regexp1);
+         typeOfReg=1;
        }else if(value.match(regexp2)){
          s =  value.split(regexp2);
+         typeOfReg=2;
        }
+       
        if(s){
          if(s[3].match(/^b.*/)){
-
            b[c].push(s);
            c++;
            b.push([]);
          }else{
          
-          b[c].push(s);
+           b[c].push(s);
+         }
+         dissasmArr.push(s);
+         if(typeOfReg==1){
+           dissamObj.push({
+            address: s[0],
+            opcode:  s[1],
+            operands:s[3],
+            comment: s[4],
+           });
+         }else{
+           
          }
        }
        return s;
@@ -213,7 +311,10 @@ linkify( 'a' );
   // "0x40801e14: ldr r4, [pc, #148] ; 0x40801eb0 ".split(/(\w+):\s(\w+)\s(.+)(\s;\s(.+))?/);
      
      });
-     
+    // _.each(b,function(element,index,list){
+    //   if(_.find( element[-1][0]) )
+    // });
+     Data.sharedData.dissArr=dissamObj;
      Data.data=b;
    };
    $scope.disasR = function(span,variable) {

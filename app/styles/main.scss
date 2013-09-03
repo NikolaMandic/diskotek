@@ -21,6 +21,7 @@ body {
 #wrapermain{
 
 @include make-row();
+
 }
 #fileItem{
 @include make-lg-column(3);
@@ -50,7 +51,8 @@ padding:10px;
     width: 1200px;
 }
 #registers{
-  @include make-lg-column(3);
+  @include make-md-column(3);
+  /*
     //width: 600px;
     font:Console;
     font-color:#002300;
@@ -60,7 +62,7 @@ padding:10px;
     background-color: rgba(0,220,110,0.07);
     border-radius: 6px;
     padding: 0px;
-
+*/
 }
 #registers li:nth-child(16)
 {
@@ -72,15 +74,45 @@ ul
 }
 
 .hero-unit {
-  @include make-lg-column(6);
+  @include make-md-column(6);
+  /*
     margin: auto 0 auto;
     //width: 600px;
     font-size: 18px;
     font-weight: 200;
     line-height: 30px;
-    background-color: rgba(0,220,30,0.07);
+    //background-color: rgba(0,220,30,0.07);
     border-radius: 6px;
     padding: 0px;
+    */
+}
+.inst_row{
+  @include make-row();
+}
+.inst_addr{
+  @include make-md-column(3);
+}
+.inst_opcode{
+  @include make-md-column(3);
+}
+.inst_operands{
+  @include make-md-column(3);
+}
+.inst_comment{
+  @include make-md-column(3);
+  color: #00AA00;
+}
+.reg_row{
+@include make-row();
+}
+.reg_name{
+@include make-md-column(2);
+}
+.reg_value1{
+@include make-md-column(5);
+}
+.reg_value2{
+@include make-md-column(5);
 }
 
 .hero-unit h1 {
@@ -118,11 +150,14 @@ z-index: 2;
 -o-transform: translateZ(0px);
 transform: translateZ(0px);
 }
-ul li:nth-child(odd) {
-background: #fff;
+#registers .reg_row:nth-child(odd),.hero-unit .inst_row:nth-child(odd) {
+background: rgba(220,220,220,0.35);
 }
 
-
+.inst_row_current{
+@include make-row();
+background: rgba(220,0,0,0.05);
+}
 
 a {
     text-decoration: none;
