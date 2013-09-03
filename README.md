@@ -6,15 +6,15 @@ not made to be runnable on other computer right now  :-D
 ubuntu setup
 ==
 
-sudo apt-get install gcc-arm-linux-gnueabi
-sudo apt-get install qemu-user-static
-sudo apt-get install gdb-multiarch
-export QEMU_LD_PREFIX=/usr/arm-linux/gnueabi
+  sudo apt-get install gcc-arm-linux-gnueabi <br/>
+  sudo apt-get install qemu-user-static <br/>
+  sudo apt-get install gdb-multiarch <br/>
+  export QEMU_LD_PREFIX=/usr/arm-linux/gnueabi <br/>
 
-get the latest nodejs
-from project directory
 
-sudo nodejs ws.js
+get the latest nodejs<br/>
+from project directory<br/>
+  sudo nodejs ws.js<br/>
 
 open localhost:3000 in browser and click debug
 
