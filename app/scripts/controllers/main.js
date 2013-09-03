@@ -106,7 +106,7 @@ angular.module('ldApp').factory('Data',function(){
   obj.getDissasembly = function getDissasembly () {
     
     obj.callbackQueue.push(dissasemblyCallback);
-    socket.emit('command', { ptyPayload: "disas $pc,+40" });
+    socket.emit('command', { ptyPayload: "disas $pc-40,$pc+40" });
   }
   obj.getRegisterInfo = function (){
     obj.callbackQueue.push(function (){
@@ -187,7 +187,6 @@ angular.module('ldApp')
 angular.module('ldApp')
   .controller('MainCtrl', function ($scope,$http,Data) {
    // stroll.bind( '.hero-unit ul',{ live: true } ); 
-linkify( 'a' );
   
 // "0x40801e14: ldr r4, [pc, #148] ; 0x40801eb0 ".split(/(\w+):\s(\w+)\s(.+)\s;\s(.+)/);
 //"=> 0x40801e1c: bl 0x40805d44".split(/\=\>\s(\w+):\s(\w+)\s(.+)(\s;\s(.+))?/);
@@ -214,7 +213,13 @@ linkify( 'a' );
     };
     $scope.commandExecL=function(cmnd,resultVariable,splice1,splice2){
      // $scope.result=cmnd;
-    
+      if(resultVariable){ 
+        Data.callbackQueue.push(function() {
+          Data.sharedData[resultVariable]=Data.sharedData.result;
+        });
+      }else{
+        Data.callbackQueue.push(function() {});
+      }
       Data.sock.emit('command',{
                          ptyPayload:cmnd
       });
@@ -327,7 +332,6 @@ linkify( 'a' );
 
    };
    $scope.stepOver = function  () {
-     Data.callbackQueue.push(function() {});
      $scope.commandExecL('ni');
      Data.getDissasembly();
      Data.getRegisterInfo();
@@ -361,5 +365,5 @@ linkify( 'a' );
 
 
    ];
-
+//linkify( '#debugMenu a' );
 });

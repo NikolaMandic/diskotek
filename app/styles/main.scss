@@ -28,19 +28,12 @@ body {
 }
 #controls{
 @include make-lg-column(3);
-padding:10px;
 }
 #commandItem{
 @include make-lg-column(3);
-padding:10px;
 }
 #views{
-@include make-lg-column(3);
-}
-#commandItem a{
-
-  margin:4px;
-
+@include make-lg-column(2);
 }
 #holder {
     height: 900px;
@@ -63,6 +56,9 @@ padding:10px;
     border-radius: 6px;
     padding: 0px;
 */
+}
+#commandResult{
+  @include make-md-column(3);
 }
 #registers li:nth-child(16)
 {

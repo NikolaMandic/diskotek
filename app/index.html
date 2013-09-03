@@ -35,26 +35,27 @@
     <a ng-click="commandStart('gdb-multiarch '+$scope.file)">debug<a/>
     
   </div>
-<div id="controls">
-  <a ng-click="cont()">run </a> 
-     
-  <a  ng-click="stepOver()">step over</a> 
-  <a ng-click="stepInto()">step into</a> 
-  <!--
-   <a  class="glyphicon glyphicon-play">run </a> 
-  <a class="glyphicon glyphicon-arrow-down" ng-click="stepOver()">step over</a> 
-  <a class="glyphicon glyphicon-arrow-right" ng-click="stepInto()">step into</a> 
-
-  -->
-</div>
-  <div id="commandItem">
-    <INPUT type="TEXT" ng-model="command"/>
-    <a ng-click="commandExecL(command)">send command  <a/>
-      
+  <div id="controls">
+      <a ng-click="cont()">run </a> 
+       
+    <a  ng-click="stepOver()">step over</a> 
+    <a ng-click="stepInto()">step into</a> 
+    
   </div>
   <div id="views">
     <a  href="#/">disassembly</a>
     <a    href="#/ch">graph</a>
+
+  </div>
+
+ 
+  <div id="commandItem">
+    <INPUT type="TEXT" ng-model="command"/>
+    <a ng-click="commandExecL(command,'commandResult')">send command  <a/>
+      
+  </div>
+  <div id="name">
+      
   </div>
 </div>
 
