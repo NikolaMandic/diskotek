@@ -16,7 +16,7 @@ get the latest nodejs<br/>
 from project directory<br/>
   sudo nodejs ws.js<br/>
 
-open localhost:3000 in browser and click debug
+open localhost:3000/index.html#/ in browser and click debug
 
 to stop it kill the node process
 
