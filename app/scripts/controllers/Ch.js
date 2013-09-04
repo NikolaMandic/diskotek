@@ -112,7 +112,7 @@ if(this.type!='rect') return;
       r.rect(rx,ry,250,Data.data[i].length*15+20);
       for (var j = 0; j < Data.data[i].length; j++) {
           
-      var a=  r.text(rx+25, ry+15*(j+1), Data.data[i][j].join(" "),r.getFont('Helvetica'),10,'baseline').attr({'text-anchor':'baseline',font:"10px Helvetica",opacity:0.5}).attr({fill: "#f0f"}).attr({'text-anchor':'baseline'});
+      var a=  r.text(rx+25, ry+15*(j+1), Data.data[i][j].address+": "+ Data.data[i][j].opcode+" "+ Data.data[i][j].operands,r.getFont('Helvetica'),10,'baseline').attr({'text-anchor':'baseline',font:"10px Helvetica",opacity:0.5}).attr({fill: "#f0f"}).attr({'text-anchor':'baseline'});
        $(a.node).css('text-anchor','baseline');
       };
       var st = r.setFinish();

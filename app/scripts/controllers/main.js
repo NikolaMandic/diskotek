@@ -210,7 +210,7 @@ angular.module('ldApp').factory('Data',function(){
          
        });
        */
-      obj.data=b;
+      obj.data=bbox;
 
   };
   obj.getDissasembly = function getDissasembly () {
