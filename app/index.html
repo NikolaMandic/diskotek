@@ -73,7 +73,8 @@
         <script src="bower_components/underscore/underscore.js"></script>
 
     <script src="bower_components/angular/angular.js"></script>
-               
+             <!-- build:js scripts/plugins.js -->
+
         <script src="bower_components/bootstrap-sass/js/affix.js"></script>
         <script src="bower_components/bootstrap-sass/js/alert.js"></script>
         <script src="bower_components/bootstrap-sass/js/dropdown.js"></script>
@@ -85,16 +86,21 @@
         <script src="bower_components/bootstrap-sass/js/carousel.js"></script>
         <script src="bower_components/bootstrap-sass/js/scrollspy.js"></script>
         <script src="bower_components/bootstrap-sass/js/tab.js"></script>
-       
-        
+                       <!-- endbuild -->
+
+                       <!-- build:js scripts/modules.js -->
         <script src="bower_components/angular-resource/angular-resource.js"></script>
         <script src="bower_components/angular-cookies/angular-cookies.js"></script>
         <script src="bower_components/angular-route/angular-route.js"></script>
         <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
-        
+                       <!-- endbuild -->
+             <!-- build:js({.tmp,app}) scripts/scripts.js -->
         <script src="scripts/app.js"></script>
         <script src="scripts/controllers/main.js"></script>
         <script src="scripts/controllers/Ch.js"></script>
+         <!-- endbuild -->
+         <!-- livereload script -->
+
          <script type="text/javascript">document.write('<script src="http://'
            + (location.host || 'localhost').split(':')[0]
            + ':35729/livereload.js?snipver=1" type="text/javascript"><\/script>')
