@@ -1,18 +1,21 @@
 'use strict';
-var supports3DTransforms =  document.body.style['webkitPerspective'] !== undefined || 
-                            document.body.style['MozPerspective'] !== undefined;
+/*global _:false */
+/*global io:false */
+
+var supports3DTransforms =  document.body.style.webkitPerspective !== undefined ||
+                            document.body.style.MozPerspective !== undefined;
 
 
 function linkify( selector ) {
   if( supports3DTransforms ) {
-                
+
     var nodes = document.querySelectorAll( selector );
     for(var i=0,len=nodes.length; i<len;i++){
       var node=nodes[i];
       if( !node.className || !node.className.match( /roll/g ) ) {
         node.className += ' roll';
         node.innerHTML = '<span data-title="'+ node.text +'">' + node.innerHTML + '</span>';
-      }       
+      }
     }
   }
 }
@@ -24,200 +27,130 @@ angular.module('ldApp').factory('Data',function(){
     //idata:[],
     sharedData:{
       result:[],
-      result_raw:[],
+      resultRaw:[],
       registers:''
     },
-    sock:socket  
+    sock:socket
   };
 
   obj.callbackQueue=[];
+
   function dissasemblyCallback(){
     obj.sharedData.dissasembly= obj.sharedData.result.slice(0,-1);
-//$scope.disasR(80,'dcd');
-       var b = [];
-       var c=0;
-      b.push([]);
-      var bbBoundaryArr=[];
-      var bbConnection=[];
-      var basicBlocks=[];
-      basicBlocks.push([]);
+    var b = [];
+    b.push([]);
+    var basicBlocks=[];
+    basicBlocks.push([]);
 
-      var dissasmArr = [];
-      var dissamObj = [];
-      //bbBoundaryArr.push({from:0,to:0});
-      var boundaries=[];
-      var afteb=false;
-      var r=obj.sharedData.dissasembly.map(function(value,index,array){
-        //decode outpu
-        var regexp1=/^\=\>\s*(.*):\s+(\w+)([^;]*)(;(.*))?$/;
+    var disasArr = [];
+    var disasObjArr = [];
+    //bbBoundaryArr.push({from:0,to:0});
+    var boundaries=[];
+    var branchPreviousInst=false;
 
-        //addr inst opcodes ; comment
-        var regexp2=/^\s*(.*):\s+(\w+)([^;]*)(;(.*))?$/;
-        ////\s*(\w+)(.*?):\s+(\w+)\s(.+?)\s*;\s(.+)\s*/g; ///\s*(\w+)(.*?):\s(\w+)\s(.+?)(\s;\s(.+))?\s*/g;
-        var regexp3=/\s*(\w+)(.*?):\s+(\w+)\s(.+)\s*/g;
-        var s;
-        var typeOfReg ;
-        var inst_obj ;
-        if(value.match(regexp1)){
-          s =  value.split(regexp1);
-          typeOfReg=1;
-         inst_obj ={
-             current:true,
-             address: s[1],
-             opcode:  s[2],
-             operands:s[3],
-             comment: s[4],
-            };
-        }else if(value.match(regexp2)){
-          s =  value.split(regexp2);
-          typeOfReg=2;
-          inst_obj ={
-             current:false,
-             address: s[1],
-             opcode:  s[2],
-             operands:s[3],
-             comment: s[4],
-             up:false,
-             down:false,
-            };
+    var branchArray=[];
+    _.each(obj.sharedData.dissasembly,function(value){
+      //detects disassembly line with => in it
+      var disasLineCurrent=/^\=\>\s*(.*):\s+(\w+)([^;]*)(;(.*))?$/;
+      //detects line from gdb output
+      var disasLine=/^\s*(.*):\s+(\w+)([^;]*)(;(.*))?$/;
+
+      var splitedInstruction;
+      var typeOfReg ;
+      var instObj ;
+      if(value.match(disasLineCurrent)){
+        splitedInstruction =  value.split(disasLineCurrent);
+        typeOfReg=1;
+        instObj ={
+          current:true,
+          address: splitedInstruction[1],
+          opcode:  splitedInstruction[2],
+          operands:splitedInstruction[3],
+          comment: splitedInstruction[4],
+        };
+      }else if(value.match(disasLine)){
+        splitedInstruction =  value.split(disasLine);
+        typeOfReg=2;
+        instObj ={
+          current:false,
+          address: splitedInstruction[1],
+          opcode:  splitedInstruction[2],
+          operands:splitedInstruction[3],
+          comment: splitedInstruction[4],
+          uppperBoundary:false,//true if it is upper boundary of basic block
+          downBoundary:false,//bottom boundary
+        };
+      }
+
+      if(splitedInstruction){
+        if (branchPreviousInst){
+          instObj.uppperBoundary=true;
+          boundaries.push(instObj);
+          branchPreviousInst=false;
         }
-      
-        if(s){
-          if (afteb){
-            inst_obj.up=true;
-            boundaries.push(inst_obj);
-            afteb=false;
-          }
-          if(s[2].match(/^b.*/)){
-            b[c].push(s);
-            if(inst_obj!==undefined){
-             afteb=true;
-             inst_obj.down=true;
-             boundaries.push(inst_obj);
-            }else{
-              console.log('undefined');
-            console.log(s);
-            }
-            basicBlocks[c].push(inst_obj);
-            c++;
-            b.push([]);
-            basicBlocks.push([]);
-            
-            bbConnection.push({
-              from:index,
-              to:index+1
-            });
-           // bbBoundaryArr[c].to=index;
-          }else{
-              if(boundaries.length==0){
-                inst_obj.up=true;
-                boundaries.push(inst_obj);
-              }
-            basicBlocks[c].push(inst_obj);
-            b[c].push(s);
-          }
-          dissasmArr.push(s);
-          dissamObj.push(inst_obj);
-
+        if(splitedInstruction[2].match(/^b.*/)){
+          branchPreviousInst=true;
+          instObj.bottomBoundary=true;
+          boundaries.push(instObj);
+          branchArray.push(instObj);
         }else{
-            
-        }
-        
-        return s;
-   //"=> 0x40801e1c: bl 0x40805d44".split(/\=\>\s(\w+):\s(\w+)\s(.+)(\s;\s(.+))?/);
-    // "0x40801e14: ldr r4, [pc, #148] ; 0x40801eb0 ".split(/(\w+):\s(\w+)\s(.+)(\s;\s(.+))?/);
-       
-      });
-      // _.each(b,function(element,index,list){
-      //   if(_.find( element[-1][0]) )
-      // });
-      
-
-      obj.sharedData.dissArr=dissamObj;
-
-      
-      _.each(basicBlocks,function(value,index1,block1from){
-        var elem = _.findWhere(dissamObj,{'address':value[value.length-1].operands.substring(1)});
-        if(elem){
-          var indexDest = _.indexOf(boundaries,elem);
-          if(indexDest==-1){
-            /*
-            bbConnection.push({
-              from:
-            });
-            */
-            elem.up=true;
-            boundaries.push(elem);
+          if(boundaries.length===0){
+            instObj.uppperBoundary=true;
+            boundaries.push(instObj);
           }
         }
-        
-        /*
-        bbConnection.push({
-          from:index,
-          to:
-        });
-        */
-       
-      });
-      var bb=_.sortBy(boundaries,'address');
-      var bbox=[];
-      var c =0;
-      var c2=0;
-      _.each(dissamObj,function(value,index,list){
-        if(value==bb[c2]){
-          if(value.up && value.down){
-            bbox.push([]);
-            bbox[bbox.length-1].push(value);
-          }else
-          if(value.up==true){
-            bbox.push([]);
-            bbox[bbox.length-1].push(value);
+        disasArr.push(splitedInstruction);
+        disasObjArr.push(instObj);
 
-          }
-           if(value.down==true){
-            bbox[bbox.length-1].push(value);
-          }
-         c2+=1; 
-         /*
-          if(c2%2!==0){
-            bbox.push([]);//make new bb
-            
-            bbox[bbox.length-1].push(value); //put element on bottom in current 
-          }else{
-          
-            bbox[bbox.length-1].push(value); //put element on bottom in current 
-          }
-          */
-           
-        }else{
-          bbox[bbox.length-1].push(value); //put element on bottom in current 
+      }else{
+
+      }
+
+
+    });
+
+
+    obj.sharedData.disasArr=disasObjArr;
+
+    //find instructions that are jumped on and put it in boundaries
+    _.each(branchArray,function(value){
+      var elem = _.findWhere(disasObjArr,{'address':value.operands.substring(1)});
+      if(elem){
+        var indexDest = _.indexOf(boundaries,elem);
+        if(indexDest===-1){
+          elem.up=true;
+          boundaries.push(elem);
         }
-      });
+      }
 
-       /*
-       _.each(basicBlocks,function(value,index1,block1from){
-         _.each(basicBlocks,function(v2,index2,block2to){
-           var elem = _.findWhere(v2,{'address':value[value.length-1].operands.substring(1)});
-           
-             var indexDest = _.indexOf(v2,elem);
-             if(indexDest!=0){
-               bbConnection()
-               // var v2.splice();
-                console.log(value);
-                console.log(v2);
-             }
-         });
-         
-       });
-       */
-      obj.data=bbox;
+    });
+    var boundariesSorted=_.sortBy(boundaries,'address');
+    var boundaryArrC=0;
+    _.each(disasObjArr,function(value){
+      if(value===boundariesSorted[boundaryArrC]){
+        if(value.uppperBoundary===true){
+          basicBlocks.push([]);
+          basicBlocks[basicBlocks.length-1].push(value);
 
-  };
-  obj.getDissasembly = function getDissasembly () {
-    
-    obj.callbackQueue.push(dissasemblyCallback);
-    socket.emit('command', { ptyPayload: "disas $pc,$pc+1000" });
+        }
+        if(value.bottomBoundary===true){
+          basicBlocks[basicBlocks.length-1].push(value);
+        }
+        boundaryArrC+=1;
+
+      }else{
+        basicBlocks[basicBlocks.length-1].push(value);
+      }
+    });
+
+    obj.data=obj.sharedData.disassebmly;//basicBlocks;
+
   }
+  obj.getDissasembly = function getDissasembly () {
+
+    obj.callbackQueue.push(dissasemblyCallback);
+    socket.emit('command', { ptyPayload: 'disas $pc,$pc+1000' });
+  };
   obj.getRegisterInfo = function (){
     obj.callbackQueue.push(function (){
       obj.sharedData.registers = obj.sharedData.result.slice(0,-1).map(function(value){
@@ -231,60 +164,41 @@ angular.module('ldApp').factory('Data',function(){
       });
     });
 
-    socket.emit('command', { ptyPayload: "info registers" });
-   // $scope.commandExecL('info registers','registers',1,-2);
-  }
-  obj.start_command = function start_command (name) {
+    socket.emit('command', { ptyPayload: 'info registers' });
+  };
+  obj.startCommand = function (name) {
 
-    
+
     obj.callbackQueue.push(function() {});
     obj.callbackQueue.push(function() {});
     obj.callbackQueue.push(function() {});
     socket.emit('start', { name: name });
-    var f=function(){socket.emit('command', { ptyPayload: "set arch arm" });
-    };
-    setTimeout(f,2000);
-    var f2=function(){
-      socket.emit('command', { ptyPayload: "target remote :12345" });
-    };
-    setTimeout(f2,2100);
-    setTimeout(obj.getDissasembly,2300);
+    socket.emit('command', { ptyPayload: 'set arch arm' });
+    socket.emit('command', { ptyPayload: 'target remote :12345' });
+    obj.getDissasembly();
+    obj.getRegisterInfo();
 
-    setTimeout(obj.getRegisterInfo,2350);
     
-    setTimeout(function(){ obj.scope.$apply(); },2400);
-  }
-   var decod=function decode(result){
-       };
-
-
+  };
   obj.sock=socket = io.connect('http://localhost:807');
 
   socket.on('news', function (data) {
     console.log(data);
-    //obj.sc(data.data);
-    var dataSplited = data.data.split("\n") ;
-    obj.sharedData.result_raw = obj.sharedData.result_raw.concat(dataSplited);
-    obj.sharedData.result=obj.sharedData.result_raw;
-    var last = obj.sharedData.result_raw[obj.sharedData.result_raw.length-1];
-    if(last ==="(gdb) " /*|| last ===""*/ ){
+    var dataSplited = data.data.split('\n') ;
+    obj.sharedData.resultRaw = obj.sharedData.resultRaw.concat(dataSplited);
+    obj.sharedData.result=obj.sharedData.resultRaw;
+    var last = obj.sharedData.resultRaw[obj.sharedData.resultRaw.length-1];
+    if(last ==='(gdb) '){
       var callback = obj.callbackQueue.shift();
-      if(callback)callback();
-      obj.sharedData.result_raw=[];
-
-    }    
-   /* 
-    if(obj.sharedData.result.length>0){
-      if('match' in obj.sharedData.result[obj.sharedData.result.length-1]){
-        if(obj.sharedData.result[obj.sharedData.result.length-1].match("/^(gdb).+/")){
-              }
-      }else{
-        console.log("match not found");
-        console.log(obj.sharedData );
+      if(callback){
+        callback();
       }
+      obj.sharedData.resultRaw=[];
+
     }
-    */
-    if('scope' in obj)obj.scope.$apply();
+    if('scope' in obj){
+      obj.scope.$apply();
+    }
   });
 
   return obj;
@@ -293,189 +207,44 @@ angular.module('ldApp').factory('Data',function(){
 angular.module('ldApp')
   .controller('MainCtrl2', function ($scope,$http,Data) {
       $scope.sharedData=Data.sharedData;
-  });
+    });
 angular.module('ldApp')
   .controller('MainCtrl', function ($scope,$http,Data) {
-   // stroll.bind( '.hero-unit ul',{ live: true } ); 
-  
-//linkify( 'a');
-// "0x40801e14: ldr r4, [pc, #148] ; 0x40801eb0 ".split(/(\w+):\s(\w+)\s(.+)\s;\s(.+)/);
-//"=> 0x40801e1c: bl 0x40805d44".split(/\=\>\s(\w+):\s(\w+)\s(.+)(\s;\s(.+))?/);
-  // "0x40801e14: ldr r4, [pc, #148] ; 0x40801eb0 ".split(/(\w+):\s(\w+)\s(.+)(\s;\s(.+))?/);
-  
+
     $scope.file='proba';
     $scope.sharedData=Data.sharedData;
-  Data.scope=$scope;
- /*Data.sc=function(r){
-  $scope.result=r?[r] :[] ;
- };
- */
-    $scope.commandExec=function(cmnd){
-      $scope.result=cmnd;
-     
-      $.ajax({
-        method:'POST',
-        url:'http://localhost:8080/o/a',
-        data: {cmd:cmnd}}).always(function(data){
-          $scope.result=data;
-          $scope.resultSplit=data.split("\n")
-          $scope.resultSplit=$scope.resultSplit.splice(2,$scope.resultSplit.length)
-          $scope.$apply();
-      });
+    Data.scope=$scope;
+    $scope.commandStart=function(){
+      Data.startCommand($scope.file);
     };
-    $scope.commandExecL=function(cmnd,resultVariable,splice1,splice2){
-     // $scope.result=cmnd;
-      if(resultVariable){ 
-        Data.callbackQueue.push(function() {
-          Data.sharedData[resultVariable]=Data.sharedData.result;
-        });
-      }else{
-        Data.callbackQueue.push(function() {});
-      }
-      Data.sock.emit('command',{
-                         ptyPayload:cmnd
-      });
-     /*
-      return $.ajax({
-        method:'POST',
-        url:'http://localhost:8080/o/a',
-        data: {cmd:cmnd}}).always(function(data){
-          if(resultVariable){
-            $scope[resultVariable+"_raw"]=data;
-            $scope[resultVariable]=data.split("\n");
-            if($scope[resultVariable] instanceof Array){
-              if(splice1 & splice2){
-               $scope[resultVariable]=$scope[resultVariable].slice(splice1,splice2);
-              }
-            }else{
-             $scope[resultVariable]=[];
-            }
-            Data.ds[resultVariable]=$scope[resultVariable];
+    $scope.registerInfo = function() {
+      Data.getRegisterInfo();
 
-              $scope.$apply();
-          }
-      });
-      */
     };
-    $scope.commandStart=function(cmnd){
-      Data.start_command($scope.file);
-      //Data.getDissasembly();
-      /*
-      $.ajax({
-        method:'POST',
-        url:'http://localhost:8080/start/'+$scope.file,
-        data: {cmd:cmnd}}).always(function(data){
-              
-          $scope.result=data;
-      }).success(function(){
-        $scope.commandExecL('disas $pc-40,$pc+40','result',2,-1).always(function(){
-        $scope.dcd();
-        });
-        $scope.registerInfo();
-      });
-      */
+    $scope.stepOver = function  () {
+      $scope.commandExecL('ni');
+      Data.getDissasembly();
+      Data.getRegisterInfo();
     };
-   $scope.registerInfo = function() {
-    Data.getRegisterInfo();
-     
-   };  
-   $scope.dcd = function() {
-     //$scope.disasR(80,'dcd');
-     var b = [];
-     var c=0;
-    b.push([]);
-     var dissasmArr = [];
-     var dissamObj = [];
-     $scope.dcd_=$scope.result.map(function(value,index,array){
-       //decode outpu
-       var regexp1=/\s*\=\>\s(\w+)(.*?):\s(\w+)\s(.+)(\s;\s(.+))?\s*/g;
-
-       //addr inst opcodes ; comment
-       var regexp2=/\s*(\w+)(.*?):\s(\w+)\s(.+)(\s;\s(.+))?\s*/g;
-       var s;
-       var typeOfReg ;
-       if(value.match(regexp1)){
-         s =  value.split(regexp1);
-         typeOfReg=1;
-       }else if(value.match(regexp2)){
-         s =  value.split(regexp2);
-         typeOfReg=2;
-       }
-       
-       if(s){
-         if(s[3].match(/^b.*/)){
-           b[c].push(s);
-           c++;
-           b.push([]);
-         }else{
-         
-           b[c].push(s);
-         }
-         dissasmArr.push(s);
-         if(typeOfReg==1){
-           dissamObj.push({
-            address: s[0],
-            opcode:  s[1],
-            operands:s[3],
-            comment: s[4],
-           });
-         }else{
-           
-         }
-       }
-       return s;
- //"=> 0x40801e1c: bl 0x40805d44".split(/\=\>\s(\w+):\s(\w+)\s(.+)(\s;\s(.+))?/);
-  // "0x40801e14: ldr r4, [pc, #148] ; 0x40801eb0 ".split(/(\w+):\s(\w+)\s(.+)(\s;\s(.+))?/);
-     
-     });
-    // _.each(b,function(element,index,list){
-    //   if(_.find( element[-1][0]) )
-    // });
-     Data.sharedData.dissArr=dissamObj;
-     Data.data=b;
-   };
-   $scope.disasR = function(span,variable) {
-     span = span | 80; 
-     variable = variable? variable : 'result';
-     $scope.commandExecL('disas $pc-'+span+',$pc+'+span,variable,2,-2).always(function(){
-        $scope.dcd();
-        });
-
-
-   };
-   $scope.stepOver = function  () {
-     $scope.commandExecL('ni');
-     Data.getDissasembly();
-     Data.getRegisterInfo();
-     //$scope.disasR();
-    // $scope.registerInfo();
-   };
-   $scope.cont = function  () {
-     $scope.commandExecL('c');
-     $scope.disasR();
-     $scope.registerInfo();
-   };
+    $scope.cont = function  () {
+      $scope.commandExecL('c');
+      $scope.disasR();
+      $scope.registerInfo();
+    };
     $scope.stepInto = function  () {
-     $scope.commandExecL('si');
-     $scope.disasR().always(function(){
+      $scope.commandExecL('si');
+      $scope.disasR().always(function(){
         $scope.dcd();
-        });
+      });
 
-     $scope.registerInfo();
-   }
+      $scope.registerInfo();
+    };
 
-   $scope.command=''; 
-   // $http({method: 'OPTIONS', url: 'http://localhost:5823/ls'}).success(function(data){
-   //   $scope.a=data;
-   //   alert(data);
-   // });
-   $scope.awesomeThings = [
-        'HTML5 Boilerplate',
-        'AngularJS',
-        'Karma',
-        
-
-
-   ];
-});
+    $scope.command='';
+    $scope.awesomeThings = [
+      'HTML5 Boilerplate',
+      'AngularJS',
+      'Karma',
+    ];
+  });
 
