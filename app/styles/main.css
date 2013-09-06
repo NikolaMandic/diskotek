@@ -7570,13 +7570,18 @@ body {
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\0000338}}
+.breakpoint {
+  background: rgba(220, 0, 0, 0.3);
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\0000342}}
 #holder {
   height: 900px;
   position: absolute;
   width: 1200px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\0000346}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\0000350}}
 #registers {
   position: relative;
   min-height: 1px;
@@ -7595,14 +7600,14 @@ body {
 */
 }
 @media (min-width: 992px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\0000346}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\0000350}}
   #registers {
     float: left;
     width: 25%;
   }
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\0000360}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\0000364}}
 #commandResult {
   position: relative;
   min-height: 1px;
@@ -7610,24 +7615,24 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\0000360}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\0000364}}
   #commandResult {
     float: left;
     width: 25%;
   }
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\0000364}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\0000368}}
 #registers li:nth-child(16) {
   background: rgba(192, 57, 43, 0.09);
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\0000368}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\0000372}}
 ul {
   list-style-type: none;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\0000372}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\0000376}}
 .hero-unit {
   position: relative;
   min-height: 1px;
@@ -7645,14 +7650,14 @@ ul {
     */
 }
 @media (min-width: 992px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\0000372}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\0000376}}
   .hero-unit {
     float: left;
     width: 50%;
   }
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\0000385}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\0000389}}
 .inst_row {
   margin-left: -15px;
   margin-right: -15px;
@@ -7669,7 +7674,7 @@ ul {
   clear: both;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\0000388}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\0000392}}
 .inst_addr {
   position: relative;
   min-height: 1px;
@@ -7677,14 +7682,14 @@ ul {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\0000388}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\0000392}}
   .inst_addr {
     float: left;
     width: 25%;
   }
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\0000391}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\0000395}}
 .inst_opcode {
   position: relative;
   min-height: 1px;
@@ -7692,14 +7697,14 @@ ul {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\0000391}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\0000395}}
   .inst_opcode {
     float: left;
     width: 25%;
   }
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\0000394}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\0000398}}
 .inst_operands {
   position: relative;
   min-height: 1px;
@@ -7707,14 +7712,14 @@ ul {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\0000394}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\0000398}}
   .inst_operands {
     float: left;
     width: 25%;
   }
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\0000397}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\00003101}}
 .inst_comment {
   position: relative;
   min-height: 1px;
@@ -7723,14 +7728,14 @@ ul {
   color: #00AA00;
 }
 @media (min-width: 992px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\0000397}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\00003101}}
   .inst_comment {
     float: left;
     width: 25%;
   }
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\00003101}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\00003105}}
 .reg_row {
   margin-left: -15px;
   margin-right: -15px;
@@ -7747,7 +7752,7 @@ ul {
   clear: both;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\00003104}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\00003108}}
 .reg_name {
   position: relative;
   min-height: 1px;
@@ -7755,14 +7760,14 @@ ul {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\00003104}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\00003108}}
   .reg_name {
     float: left;
     width: 16.66667%;
   }
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\00003107}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\00003111}}
 .reg_value1 {
   position: relative;
   min-height: 1px;
@@ -7770,14 +7775,14 @@ ul {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\00003107}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\00003111}}
   .reg_value1 {
     float: left;
     width: 41.66667%;
   }
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\00003110}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\00003114}}
 .reg_value2 {
   position: relative;
   min-height: 1px;
@@ -7785,21 +7790,21 @@ ul {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\00003110}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\00003114}}
   .reg_value2 {
     float: left;
     width: 41.66667%;
   }
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\00003114}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\00003118}}
 .hero-unit h1 {
   font-size: 60px;
   line-height: 1;
   letter-spacing: -1px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\00003119}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\00003123}}
 ul {
   position: relative;
   width: 100%;
@@ -7816,7 +7821,7 @@ ul {
   perspective: 400px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\00003135}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\00003139}}
 ul li {
   position: relative;
   background: #eee;
@@ -7830,16 +7835,16 @@ ul li {
   transform: translateZ(0px);
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\00003149}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\00003153}}
 #registers .reg_row:nth-child(odd), .hero-unit .inst_row:nth-child(odd) {
   background: rgba(220, 220, 220, 0.35);
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\00003153}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\00003157}}
 .inst_row_current {
   margin-left: -15px;
   margin-right: -15px;
-  background: rgba(220, 0, 0, 0.05);
+  background: rgba(0, 220, 0, 0.05);
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/bower_components\/bootstrap-sass\/lib\/_mixins\.scss}line{font-family:\0000321}}
 .inst_row_current:before, .inst_row_current:after {
@@ -7853,13 +7858,13 @@ ul li {
   clear: both;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\00003158}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\00003162}}
 a {
   text-decoration: none;
   color: #198de6;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\00003163}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\00003167}}
 .roll {
   display: inline-block;
   overflow: hidden;
@@ -7870,7 +7875,7 @@ a {
   -moz-perspective-origin: 50% 50%;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\00003175}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\00003179}}
 .roll span {
   display: block;
   position: relative;
@@ -7883,14 +7888,14 @@ a {
   -moz-transform-style: preserve-3d;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\00003189}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\00003193}}
 .roll:hover span {
   background: #111;
   -webkit-transform: translate3d(0px, 0px, -30px) rotateX(90deg);
   -moz-transform: translate3d(0px, 0px, -30px) rotateX(90deg);
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\00003195}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/uname\/ld\/app\/styles\/main\.scss}line{font-family:\00003199}}
 .roll span:after {
   content: attr(data-title);
   display: block;

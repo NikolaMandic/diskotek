@@ -3,7 +3,7 @@
   <div id="dissasembly" class="hero-unit">
 
     <div class="{{thing.current?'inst_row_current':'inst_row'}}" ng-repeat="thing in sharedData.disasArr">
-        <div class="inst_addr">
+      <div class="inst_addr {{thing.hasBreakpoint?'breakpoint':'' }}" ng-click="toggleBreakpoint(thing.address,thing)">
           {{thing.address}}
         </div>
         

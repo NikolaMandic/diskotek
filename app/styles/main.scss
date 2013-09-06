@@ -35,6 +35,10 @@ body {
 #views{
 @include make-lg-column(3);
 }
+.breakpoint{
+  background: rgba(220,00,00,0.3);
+}
+
 #holder {
     height: 900px;
    // left: 50%;
@@ -152,7 +156,7 @@ background: rgba(220,220,220,0.35);
 
 .inst_row_current{
 @include make-row();
-background: rgba(220,0,0,0.05);
+background: rgba(0,220,0,0.05);
 }
 
 a {

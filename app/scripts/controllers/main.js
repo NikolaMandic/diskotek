@@ -28,7 +28,8 @@ angular.module('ldApp').factory('Data',function(){
     sharedData:{
       result:[],
       resultRaw:[],
-      registers:''
+      registers:'',
+      breakpoints:[]
     },
     sock:socket
   };
@@ -149,7 +150,7 @@ angular.module('ldApp').factory('Data',function(){
   obj.getDissasembly = function getDissasembly () {
 
     obj.callbackQueue.push(dissasemblyCallback);
-    socket.emit('command', { ptyPayload: 'disas $pc,$pc+1000' });
+    socket.emit('command', { ptyPayload: 'disas $pc-80,$pc+80' });
   };
   obj.getRegisterInfo = function (){
     obj.callbackQueue.push(function (){
@@ -166,6 +167,55 @@ angular.module('ldApp').factory('Data',function(){
 
     socket.emit('command', { ptyPayload: 'info registers' });
   };
+  obj.setBreakpoint = function(address) {
+    obj.callbackQueue.push(function() {});
+    
+    socket.emit('command',{
+      ptyPayload: 'break *' + address       
+    });
+    
+  };
+  obj.removeBreakpoint = function(address) {
+    obj.callbackQueue.push(function() {});
+    socket.emit('command',{
+      ptyPayload : 'clear *' + address
+    });
+  
+  };
+  obj.infoBreakpoints = function(){
+    obj.callbackQueue.push(function() {
+      if(obj.sharedData.result[0].match(/^No.*/)){
+      return;
+      }
+      obj.sharedData.breakpoints = obj.sharedData.result.slice(1).map(function(value) {
+        var split = value.split(/\s*(\w+)\s*(\w+)\s*(\w+)\s*(\w+)\s*(\w*)\s*/);
+        return{
+          num:split[1],
+          type:split[2],
+          disp:split[3],
+          enb:split[4],
+          address:split[5],
+          what:split[6]
+        };
+      });
+      if(obj.sharedData.disasArr){
+        _.each(obj.sharedData.breakpoints,function(value){
+          var elem = _.findWhere(obj.sharedData.disasArr,{'address':value.address});
+          if(elem){
+            var indexDest = _.indexOf(obj.sharedData.disasArr,elem);
+            if(indexDest!==-1){
+              elem.hasBreakpoint=true;
+            }
+          }
+
+    });
+      
+      }
+    });
+    socket.emit('command',{
+      ptyPayload : 'info break'
+    });
+  };
   obj.startCommand = function (name) {
 
 
@@ -177,7 +227,7 @@ angular.module('ldApp').factory('Data',function(){
     socket.emit('command', { ptyPayload: 'target remote :12345' });
     obj.getDissasembly();
     obj.getRegisterInfo();
-
+    obj.infoBreakpoints();
     
   };
   obj.sock=socket = io.connect('http://localhost:807');
@@ -206,11 +256,34 @@ angular.module('ldApp').factory('Data',function(){
 
 angular.module('ldApp')
   .controller('MainCtrl2', function ($scope,$http,Data) {
-      $scope.sharedData=Data.sharedData;
+    $scope.sharedData=Data.sharedData;
+    $scope.toggleBreakpoint = function(address,thing) {
+      thing.hasBreakpoint = thing.hasBreakpoint?false:true;
+      if(thing.hasBreakpoint){
+        Data.setBreakpoint(address);
+      }else{
+        Date.removeBreakpoint(address);
+      }
+      
+    };
+
     });
 angular.module('ldApp')
   .controller('MainCtrl', function ($scope,$http,Data) {
 
+    $scope.commandExecL=function(cmnd,resultVariable,splice1,splice2){
+     // $scope.result=cmnd;
+      if(resultVariable){
+        Data.callbackQueue.push(function() {
+          Data.sharedData[resultVariable]=Data.sharedData.result;
+        });
+      }else{
+        Data.callbackQueue.push(function() {});
+      }
+      Data.sock.emit('command',{
+                         ptyPayload:cmnd
+      });
+    }
     $scope.file='proba';
     $scope.sharedData=Data.sharedData;
     Data.scope=$scope;
@@ -228,18 +301,15 @@ angular.module('ldApp')
     };
     $scope.cont = function  () {
       $scope.commandExecL('c');
-      $scope.disasR();
-      $scope.registerInfo();
+      Data.getDissasembly();
+      Data.getRegisterInfo();
+      Data.infoBreakpoints();
     };
     $scope.stepInto = function  () {
       $scope.commandExecL('si');
-      $scope.disasR().always(function(){
-        $scope.dcd();
-      });
-
-      $scope.registerInfo();
+      Data.getDissasembly();
+      Data.getRegisterInfo();
     };
-
     $scope.command='';
     $scope.awesomeThings = [
       'HTML5 Boilerplate',
