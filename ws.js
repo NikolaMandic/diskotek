@@ -76,7 +76,23 @@ io.set('log level',1);
         }
       }
     });
-    
+    socket.on('assemble',function(data){
+      var exec = require('child_process').exec,
+      child;
+console.log('echo "'+data.command+'" > aa.txt; arm-linux-gnueabi-as aa.txt; arm-linux-gnueabi-objdump -d a.out |grep -o -E -e "0:(\s*(\w+)\s*)" | cut -d ":" -f 2| grep -o -E -e "\w+"');
+
+      child = exec('echo "'+data.command+'" > aa.txt; arm-linux-gnueabi-as aa.txt; arm-linux-gnueabi-objdump -d a.out |grep -o -E -e "0:(\\s*(\\w+)\\s*)" | cut -d ":" -f 2| grep -o -E -e "\\w+"',
+                function (error, stdout, stderr) {
+                  socket.emit('news',{
+                    bin:stdout
+                  })
+                  console.log('stdout: ' + stdout);
+                  console.log('stderr: ' + stderr);
+                  if (error !== null) {
+                    console.log('exec error: ' + error);
+                  }
+                }); 
+    }); 
     socket.on('command',function(data) {
       command_count+=1;
       console.log('info','command arrived: '+command_count);

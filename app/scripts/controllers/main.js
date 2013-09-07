@@ -49,7 +49,7 @@ angular.module('ldApp').directive('resizable', function() {
 angular.module('ldApp').factory('Data',function(){
   //gdb service
   var obj={
-    //idata:[],
+    data:[],
     sharedData:{
       result:[],
       resultRaw:[],
@@ -169,7 +169,7 @@ angular.module('ldApp').factory('Data',function(){
       }
     });
 
-    obj.data=obj.sharedData.disassebmly;//basicBlocks;
+    obj.data=basicBlocks;
 
   }
   obj.getDissasembly = function getDissasembly () {
