@@ -15,14 +15,15 @@
     "Ladda":"https://github.com/hakimel/Ladda.git",
     "raphael":"2.1.2",
     "socket.io":"0.9", 
-    "socket.io-client":"0.9"
+    "socket.io-client":"0.9",
+    "jqueryui": "http://code.jquery.com/ui/jquery-ui-git.js",
+    "jqueryuicss": "http://code.jquery.com/ui/jquery-ui-git.css"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.0",
     "angular-scenario": "~1.2.0",
     "underscore":"",
     "socket.io-client": "~0.9",
-    "requirejs":"",
-    "json2":"latest"
+    "requirejs":""
   }
 }

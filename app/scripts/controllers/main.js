@@ -21,6 +21,31 @@ function linkify( selector ) {
 }
 
 var socket;
+angular.module('ldApp').directive('draggable', function() {
+  var ddo = {
+    link: function(scope,iElement,iAttrs) {
+      $(iElement).draggable({
+        snap:true,
+        grid:[20,20]
+      });
+
+    }
+  };
+  return ddo;
+});
+angular.module('ldApp').directive('resizable', function() {
+  var ddo = {
+    link: function(scope,iElement,iAttrs) {
+      $(iElement).resizable({
+        
+        grid:[20,20]
+      });
+
+    }
+  };
+  return ddo;
+});
+
 angular.module('ldApp').factory('Data',function(){
   //gdb service
   var obj={
