@@ -18,7 +18,7 @@ from project directory<br/>
 
 open localhost:3000/index.html#/ in browser and click debug
 
-to stop it kill the node process
+
 
 
 
