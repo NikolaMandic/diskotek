@@ -100,13 +100,24 @@ console.log('echo "'+data.command+'" > aa.txt; arm-linux-gnueabi-as aa.txt; arm-
       if (command_count>1){
         commandStack.push(function() {
           gdb.stdin.write(data.ptyPayload+"\n");
+          if(data.ptyPayload==='quit'){
+            started=0;
+          }
+
         //  console.log(data.ptyPayload);
         });
       }else{
        console.log('info', "command executed right away")
         gdb.stdin.write(data.ptyPayload+"\n");
+        if(data.ptyPayload==='quit'){
+          started=0;
+        }
       }
     });
+
+
+       
+
 
   });
   

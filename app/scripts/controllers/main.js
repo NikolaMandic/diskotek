@@ -178,7 +178,7 @@ angular.module('ldApp').factory('Data',function(){
     socket.emit('command', { ptyPayload: 'disas $pc-80,$pc+80' });
   };
   obj.getRegisterInfo = function (){
-    obj.callbackQueue.push(function (){
+    obj.callbackQueue.push(function getRegInfoC(){
       obj.sharedData.registers = obj.sharedData.result.slice(0,-1).map(function(value){
         var s=value.split(/(\w+)\s*(\w+)\s*(\w+)/);
         return {
@@ -193,7 +193,7 @@ angular.module('ldApp').factory('Data',function(){
     socket.emit('command', { ptyPayload: 'info registers' });
   };
   obj.setBreakpoint = function(address) {
-    obj.callbackQueue.push(function() {});
+    obj.callbackQueue.push(function setBreakpointC() {});
     
     socket.emit('command',{
       ptyPayload: 'break *' + address       
@@ -201,14 +201,14 @@ angular.module('ldApp').factory('Data',function(){
     
   };
   obj.removeBreakpoint = function(address) {
-    obj.callbackQueue.push(function() {});
+    obj.callbackQueue.push(function removeBreakpointC() {});
     socket.emit('command',{
       ptyPayload : 'clear *' + address
     });
   
   };
   obj.infoBreakpoints = function(){
-    obj.callbackQueue.push(function() {
+    obj.callbackQueue.push(function infoBreakpointsC() {
       if(obj.sharedData.result[0].match(/^No.*/)){
       return;
       }
@@ -244,9 +244,9 @@ angular.module('ldApp').factory('Data',function(){
   obj.startCommand = function (name) {
 
 
-    obj.callbackQueue.push(function() {});
-    obj.callbackQueue.push(function() {});
-    obj.callbackQueue.push(function() {});
+    obj.callbackQueue.push(function callbackForStart() {});
+    obj.callbackQueue.push(function callbackForArchSet() {});
+    obj.callbackQueue.push(function callbackForTarget() {});
     socket.emit('start', { name: name });
     socket.emit('command', { ptyPayload: 'set arch arm' });
     socket.emit('command', { ptyPayload: 'target remote :12345' });
@@ -298,17 +298,25 @@ angular.module('ldApp')
 
     $scope.commandExecL=function(cmnd,resultVariable,splice1,splice2){
      // $scope.result=cmnd;
-      if(resultVariable){
-        Data.callbackQueue.push(function() {
-          Data.sharedData[resultVariable]=Data.sharedData.result;
-        });
+      if(_.isFunction(resultVariable)){
+      
+          Data.callbackQueue.push(resultVariable);
       }else{
-        Data.callbackQueue.push(function() {});
+        if(resultVariable){
+          Data.callbackQueue.push(function putStuffinResultC() {
+            Data.sharedData[resultVariable]=Data.sharedData.result;
+          });
+        }else{
+          if(resultVariable!==null ){
+            Data.callbackQueue.push(function anonCallback() {});
+          }
+        }
       }
       Data.sock.emit('command',{
                          ptyPayload:cmnd
       });
-    }
+
+    };
     $scope.file='proba';
     $scope.sharedData=Data.sharedData;
     Data.scope=$scope;
@@ -318,6 +326,14 @@ angular.module('ldApp')
     $scope.registerInfo = function() {
       Data.getRegisterInfo();
 
+    };
+    $scope.stop = function() {
+      $scope.commandExecL('detach',function detachC(){
+        Data.sharedData.disasArr=['detached'];
+        Data.sharedData.registers=[];
+        Data.data=[];
+      });
+      $scope.commandExecL('quit',null);
     };
     $scope.stepOver = function  () {
       $scope.commandExecL('ni');

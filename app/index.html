@@ -35,7 +35,7 @@
     <label for="name">name</label>
     <INPUT type="TEXT" ng-model="file" name="name" value="" id="name">
     <a ng-click="commandStart('gdb-multiarch '+$scope.file)">debug</a>
-    
+    <a ng-click="stop()">stop</a>
   </div>
   <div id="controls">
       <a ng-click="cont()">run </a> 
