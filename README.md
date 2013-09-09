@@ -9,7 +9,7 @@ ubuntu setup
 for tools needed check out /vdir/bootstrap.sh<br/>
 that is a script for bootstraping fresh installation of ubuntu precise so it can run this in vm
 
-some of the steps needed
+some of the steps needed<br/>
   sudo apt-get install gcc-arm-linux-gnueabi <br/>
   sudo apt-get install qemu-user-static <br/>
   sudo apt-get install gdb-multiarch <br/>
