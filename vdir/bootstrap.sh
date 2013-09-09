@@ -10,8 +10,8 @@ git clone https://github.com/NikolaMandic/ld.git
 cd ./ld 
 apt-get install nodejs -y
 apt-get install npm -y
-npm install express
-npm install socket.io
-npm install bower 
+npm install -g express
+npm install -g socket.io
+npm install -g bower 
 bower install
 nodejs ws.js
