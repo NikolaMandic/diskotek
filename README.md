@@ -23,10 +23,10 @@ vm debugging
 
 sudo apt-get install vagrant
 
-cd vdir
-vagrant up
-go to localhost:8080/index.html#/
-now app is being debugged inside a virtual machine
+cd vdir<br/>
+vagrant up<br/>
+go to localhost:8080/index.html#/<br/>
+now app is being debugged inside a virtual machine<br/>
 
 
 Pictures
