@@ -18,10 +18,19 @@ from project directory<br/>
 
 open localhost:3000/index.html#/ in browser and click debug
 
+vm debugging
+==
+
+sudo apt-get install vagrant
+
+cd vdir<br/>
+vagrant up<br/>
+go to localhost:8080/index.html#/<br/>
+now app is being debugged inside a virtual machine<br/>
 
 
-
-
+Pictures
+==
 ![](https://raw.github.com/NikolaMandic/ld/master/a.png)
 
 graphs via Raphael they can be moved
