@@ -6,14 +6,17 @@ unstable now but in active development
 ubuntu setup
 ==
 
+for tools needed check out /vdir/bootstrap.sh<br/>
+that is a script for bootstraping fresh installation of ubuntu precise so it can run this in vm
+
+some of the steps needed
   sudo apt-get install gcc-arm-linux-gnueabi <br/>
   sudo apt-get install qemu-user-static <br/>
   sudo apt-get install gdb-multiarch <br/>
   export QEMU_LD_PREFIX=/usr/arm-linux/gnueabi <br/>
 
+  latest nodejs<br/>
 
-get the latest nodejs<br/>
-from project directory<br/>
   sudo nodejs ws.js<br/>
 
 open localhost:3000/index.html#/ in browser and click debug
