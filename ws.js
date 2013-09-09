@@ -15,7 +15,6 @@ var app = express();
 app.use(express.static('./' + '/app'));
 
 app.listen(process.env.PORT || 3000);
-var $ = require("jquery");
 var io = require('socket.io').listen(807);
 var cp = require('child_process');
 //['qemu-arm-static','-g','12345',name,'-E QEMU_LD_PREFIX=/usr/arm-linux-gnueabi'],close_fds=True,env=env)
