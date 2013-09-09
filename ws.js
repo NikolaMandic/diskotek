@@ -22,8 +22,6 @@ var cp = require('child_process');
 var qemu_static; //= Ycp.fork('qemu-arm-static -g 12345 ,name,'-E QEMU_LD_PREFIX=/usr/arm-linux-gnueabi']);
 var gdb;
 var started=0;
-var command = require('command');
-  command.open('./');
 var commandStack=[];
 var command_count=1;
 io.set('log level',1);
