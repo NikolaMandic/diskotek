@@ -35,6 +35,8 @@ now app is being debugged inside a virtual machine<br/>
 Pictures
 ==
 ![](https://raw.github.com/NikolaMandic/ld/master/a.png)
+![](https://raw.github.com/NikolaMandic/ld/master/aa.png)
+![](https://raw.github.com/NikolaMandic/ld/master/bb.png)
+![](https://raw.github.com/NikolaMandic/ld/master/c.png)
 
-graphs via Raphael they can be moved
-![](https://raw.github.com/NikolaMandic/ld/master/b.png)
+
