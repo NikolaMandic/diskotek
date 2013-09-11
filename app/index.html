@@ -34,7 +34,9 @@
   <div id="fileItem">
     <label for="name">name</label>
     <INPUT type="TEXT" ng-model="file" name="name" value="" id="name">
-    <a ng-click="commandStart('gdb-multiarch '+$scope.file)">debug</a>
+    <a href="#/disas" ng-click="commandDissasemble()">dissasemble</a>|
+    <a ng-click="commandStart('gdb-multiarch '+$scope.file)">start debugging</a>|
+    <a ng-click="commandStartVM()">switch to vm</a>|
     <a ng-click="stop()">stop</a>
   </div>
   <div id="controls">
@@ -45,7 +47,9 @@
     
   </div>
   <div id="views">
-    <a  href="#/">disassembly</a>
+    views:
+    <a  href="#/">debug</a>
+    <a  href="#/disas">disassembly</a>
     <a    href="#/ch">graph</a>
 
   </div>
@@ -104,6 +108,7 @@
         <script src="scripts/controllers/main2.js"></script>
         <script src="scripts/controllers/data.js"></script>
         <script src="scripts/directives/customDirectives.js"></script>
+        <script src="scripts/controllers/disas.js"></script>
          <!-- endbuild -->
          <!-- livereload script -->
 

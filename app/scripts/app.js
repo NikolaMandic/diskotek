@@ -10,6 +10,10 @@ angular.module('ldApp', ['ngRoute'])
         templateUrl: 'views/ch.html',
         controller: 'Ch'
       })
+      .when('/disas',{
+        templateUrl:'views/disas.html',
+        controller: 'Disas'
+      })
       .otherwise({
         redirectTo: '/'
       });

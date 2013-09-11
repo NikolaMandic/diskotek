@@ -6,7 +6,8 @@ angular.module('ldApp').factory('Data',function(){
       result:[],
       resultRaw:[],
       registers:'',
-      breakpoints:[]
+      breakpoints:[],
+      disasViewData:{sectionD:[{}]}
     },
     sock:socket
   };
@@ -145,6 +146,52 @@ angular.module('ldApp').factory('Data',function(){
     });
 
   };
+  obj.commandExecLO=function(args){//cmnd,resultVariable,splice1,splice2){
+
+    // $scope.result=cmnd;
+    if(_.isFunction(args.resultVariable)){
+    
+        obj.callbackQueue.push(args.resultVariable);
+    }else{
+      if(args.resultVariable){
+        obj.callbackQueue.push(function putStuffinResultC() {
+          obj.sharedData[args.resultVariable]=obj.sharedData.result;
+        });
+      }else{
+        if(args.resultVariable!==null ){
+          obj.callbackQueue.push(function anonCallback() {});
+        }
+      }
+    }
+    obj.sock.emit(args.msgType|'command',{
+      ptyPayload:args.cmnd
+    });
+
+  };
+  obj.commandExecO=function(args){//cmnd,resultVariable,splice1,splice2){
+
+    // $scope.result=cmnd;
+    if(_.isFunction(args.callback)){
+    
+        obj.callbackQueue.push(args.callback);
+    }else{
+      if(args.resultVariable){
+        obj.callbackQueue.push(function putStuffinResultC() {
+          obj.sharedData[args.resultVariable]=obj.sharedData.result;
+        });
+      }else{
+        if(args.resultVariable!==null ){
+          obj.callbackQueue.push(function anonCallback() {});
+        }
+      }
+    }
+    var msgType = (args.msgType)?args.msgType : 'command';
+    var cmd = (args.ptyPayload)?args.ptyPayload : args.cmnd;
+    socket.emit(msgType,{
+      ptyPayload:cmd
+    });
+
+  };
 
   obj.getDissasembly = function getDissasembly () {
 
@@ -181,6 +228,67 @@ angular.module('ldApp').factory('Data',function(){
     });
   
   };
+  obj.disassemble = function(file) {
+    function processData(data){
+      return _.map(data.split("\n\nD").splice(1),function(item,index){
+        var split = item.split("\n\n");
+        //console.log("splited");
+        //console.log(split);
+        var re = /(\.?\w+)\:$/g;
+        var sectionName = re.exec(split[0])[1];
+        var sectionContentRaw=split[1];
+        var cont=split.splice(1);
+
+        var sectionContent = cont.map(function(sitem,sindex){
+          var c = sitem.split('\n');
+          //console.log(c);
+          var symName = (/<(.+)>\:$/g).exec(c[0])[1];
+          //console.log(symName);
+          var cs=c.slice(1,-1);
+          var symContent = cs.map(function(vitem,vindex){
+            // console.log(vitem);
+            //console.log('vindex'+vindex);
+            var re = (/\s*(\w+):\s*([a-f0-9]+)\s*(\w+)\s+([^;]+)\s*(;.*)?/g);
+            var instr = re.exec(vitem);
+            if(vitem.match(re)){
+              return {
+                address:instr[1],
+                memraw:instr[2],
+                op: instr[3] +' '+ instr[4],
+                comments: instr[5]
+              };
+            }else{
+              return{
+                address:'',
+                memraw:'',
+                op:'',
+                comments:''
+              };
+            }
+          });
+          //console.log('sindex'+sindex);
+          return {
+            symName:symName,
+            symContent:symContent
+          };
+        });
+        return {
+          sectionName:sectionName,
+          sectionContentRaw:sectionContentRaw,
+          sectionContent:sectionContent
+        };
+      })
+    }
+    obj.commandExecO({
+      callback: function(result){
+        obj.sharedData.disasViewData.sectionD=processData(result);
+      },
+      msgType: 'exec',
+      ptyPayload:'arm-linux-gnueabi-objdump -D proba'
+
+    });
+    
+  };
   obj.infoBreakpoints = function(){
     obj.callbackQueue.push(function infoBreakpointsC() {
       if(obj.sharedData.result[0].match(/^No.*/)){
@@ -215,6 +323,11 @@ angular.module('ldApp').factory('Data',function(){
       ptyPayload : 'info break'
     });
   };
+  obj.startCommandVM = function(name) {
+    socket.emit('debugInVM',{
+      name:name
+    });
+  };
   obj.startCommand = function (name) {
 
 
@@ -230,7 +343,16 @@ angular.module('ldApp').factory('Data',function(){
     
   };
   obj.sock=socket = io.connect('http://localhost:807');
-
+  socket.on('execNews',function (data) {
+      var data = data.data;
+      var callback = obj.callbackQueue.shift();
+      if(callback){
+        callback(data);
+      }
+  });
+  socket.on('debugInVMNews',function (argument) {
+     window.location('localhost:8080/index.html#/'); 
+  });
   socket.on('news', function (data) {
     console.log(data);
     var dataSplited = data.data.split('\n') ;
@@ -240,7 +362,7 @@ angular.module('ldApp').factory('Data',function(){
     if(last ==='(gdb) '){
       var callback = obj.callbackQueue.shift();
       if(callback){
-        callback();
+        callback(obj.sharedData.result);
       }
       obj.sharedData.resultRaw=[];
 

@@ -23,7 +23,7 @@ function linkify( selector ) {
 var socket;
 angular.module('ldApp')
   .controller('MainCtrl', function ($scope,$http,Data) {
-
+   // linkify('a');
     $scope.commandExecL=function(cmnd,resultVariable,splice1,splice2){
      // $scope.result=cmnd;
       if(_.isFunction(resultVariable)){
@@ -51,9 +51,15 @@ angular.module('ldApp')
     $scope.commandStart=function(){
       Data.startCommand($scope.file);
     };
+    $scope.commandStartVM=function() {
+      Data.startCommandVM($scope.file);
+    };
     $scope.registerInfo = function() {
       Data.getRegisterInfo();
 
+    };
+    $scope.commandDissasemble = function() {
+      Data.disassemble($scope.file);
     };
     $scope.stop = function() {
       $scope.commandExecL('detach',function detachC(){

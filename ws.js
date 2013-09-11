@@ -23,7 +23,8 @@ var gdb;
 var started=0;
 var commandStack=[];
 var command_count=1;
-io.set('log level',1);
+
+//io.set('log level',1);
   io.sockets.on('connection', function (socket) {
    // socket.emit('news', { hello: 'world' });
     socket.on('start', function (data) {
@@ -80,7 +81,7 @@ console.log('echo "'+data.command+'" > aa.txt; arm-linux-gnueabi-as aa.txt; arm-
 
       child = exec('echo "'+data.command+'" > aa.txt; arm-linux-gnueabi-as aa.txt; arm-linux-gnueabi-objdump -d a.out |grep -o -E -e "0:(\\s*(\\w+)\\s*)" | cut -d ":" -f 2| grep -o -E -e "\\w+"',
                 function (error, stdout, stderr) {
-                  socket.emit('news',{
+                  socket.emit('assembleNews',{
                     bin:stdout
                   })
                   console.log('stdout: ' + stdout);
@@ -90,6 +91,22 @@ console.log('echo "'+data.command+'" > aa.txt; arm-linux-gnueabi-as aa.txt; arm-
                   }
                 }); 
     }); 
+    socket.on('debugInVM',function(data){
+      var exec = require('child_process').exec,
+      child;
+      child = exec('cd vdir;vagrant up',
+                function (error, stdout, stderr) {
+                  socket.emit('debugInVMNews',{
+                    bin:stdout
+                  })
+                  console.log('stdout: ' + stdout);
+                  console.log('stderr: ' + stderr);
+                  if (error !== null) {
+                    console.log('exec error: ' + error);
+                  }
+                }); 
+     
+    });
     socket.on('command',function(data) {
       command_count+=1;
       console.log('info','command arrived: '+command_count);
@@ -110,6 +127,13 @@ console.log('echo "'+data.command+'" > aa.txt; arm-linux-gnueabi-as aa.txt; arm-
           started=0;
         }
       }
+    });
+    socket.on('exec',function(data){
+       cp.exec(data.ptyPayload, function(error,stdout,stderr) {
+         socket.emit('execNews',{
+          data:stdout
+         });
+       });    
     });
 
 
