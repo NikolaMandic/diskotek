@@ -23,7 +23,9 @@ function linkify( selector ) {
 var socket;
 angular.module('ldApp')
   .controller('MainCtrl', function ($scope,$http,Data) {
-   // linkify('a');
+    // linkify('a');
+
+    $scope.dUI=Data.sharedData.dUI;
     $scope.commandExecL=function(cmnd,resultVariable,splice1,splice2){
      // $scope.result=cmnd;
       if(_.isFunction(resultVariable)){
@@ -41,13 +43,14 @@ angular.module('ldApp')
         }
       }
       Data.sock.emit('command',{
-                         ptyPayload:cmnd
+        ptyPayload:cmnd
       });
 
     };
     $scope.file='proba';
     $scope.sharedData=Data.sharedData;
     Data.scope=$scope;
+    
     $scope.commandStart=function(){
       Data.startCommand($scope.file);
     };

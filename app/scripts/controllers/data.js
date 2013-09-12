@@ -3,6 +3,7 @@ angular.module('ldApp').factory('Data',function(){
   var obj={
     data:[],
     sharedData:{
+      dUI:{statusLine:''},
       result:[],
       resultRaw:[],
       registers:'',
@@ -13,6 +14,91 @@ angular.module('ldApp').factory('Data',function(){
   };
 
   obj.callbackQueue=[];
+
+  function basicBlocksFromDisassembly(data){
+    obj.sharedData.dissasembly = data; 
+    var b = [];
+    b.push([]);
+    var basicBlocks=[];
+    basicBlocks.push([]);
+    var disasArr = [];
+    var disasObjArr = [];
+    var boundaries=[];
+    var branchPreviousInst=false;
+    var branchArray=[];
+    _.each(obj.sharedData.dissasembly,function(value){
+        if (branchPreviousInst){
+          value.uppperBoundary=true;
+          boundaries.push(value);
+          branchPreviousInst=false;
+        }
+        if(value.op.match(/^b.*/)){
+          branchPreviousInst=true;
+          value.bottomBoundary=true;
+          if(!branchPreviousInst){
+            boundaries.push(value);
+          }
+          branchArray.push(value);
+        }else{
+          if(boundaries.length===0){
+            value.uppperBoundary=true;
+            boundaries.push(value);
+          }
+        }
+        disasArr.push(value);
+        disasObjArr.push(value);
+
+
+
+
+    });
+
+
+    obj.sharedData.disasArr=disasObjArr;
+
+    //find instructions that are jumped on and put it in boundaries
+    _.each(branchArray,function(value){
+      var elem = _.findWhere(disasObjArr,{'address':(/\s*(\w+).*/).exec(value.op)[1]});
+      if(elem){
+        var indexDest = _.indexOf(boundaries,elem);
+        if(indexDest===-1){
+          elem.up=true;
+          boundaries.push(elem);
+        }
+      }
+
+    });
+    var boundariesSorted=_.sortBy(boundaries,'address');
+    var boundaryArrC=0;
+    _.each(disasObjArr,function(value){
+      if(value===boundariesSorted[boundaryArrC]){
+        if(value.uppperBoundary && value.bottomBoundary){
+          basicBlocks.push([]);
+          basicBlocks[basicBlocks.length-1].push(value);
+          
+          basicBlocks.push([]);
+        }else{
+          if(value.uppperBoundary===true){
+            if(basicBlocks[basicBlocks.length-1].length!=0){
+            basicBlocks.push([]);
+            }
+            basicBlocks[basicBlocks.length-1].push(value);
+
+          }
+          if(value.bottomBoundary===true){
+            basicBlocks[basicBlocks.length-1].push(value);
+          }
+        }
+        boundaryArrC+=1;
+
+      }else{
+        basicBlocks[basicBlocks.length-1].push(value);
+      }
+    });
+
+    obj.data=basicBlocks;
+
+  }
 
   function dissasemblyCallback(){
     obj.sharedData.dissasembly= obj.sharedData.result.slice(0,-1);
@@ -255,6 +341,8 @@ angular.module('ldApp').factory('Data',function(){
                 address:instr[1],
                 memraw:instr[2],
                 op: instr[3] +' '+ instr[4],
+                opcode:instr[3],
+                operands:instr[4],
                 comments: instr[5]
               };
             }else{
@@ -282,7 +370,9 @@ angular.module('ldApp').factory('Data',function(){
     obj.commandExecO({
       callback: function(result){
         obj.sharedData.disasViewData.sectionD=processData(result);
-      },
+         var texts = _.findWhere(obj.sharedData.disasViewData.sectionD,{sectionName:'.text'});
+         basicBlocksFromDisassembly(_.flatten(_.pluck(texts.sectionContent,'symContent')));
+        },
       msgType: 'exec',
       ptyPayload:'arm-linux-gnueabi-objdump -D proba'
 
@@ -323,9 +413,32 @@ angular.module('ldApp').factory('Data',function(){
       ptyPayload : 'info break'
     });
   };
+
+
   obj.startCommandVM = function(name) {
-    socket.emit('debugInVM',{
-      name:name
+    obj.commandExecO({
+      msgType:'exec',
+      ptyPayload:'cd vdir; vagrant status; cd ../',
+      callback:function(data){
+        var status = (/.*default\s+(\w+\s*\w+).*/).exec(data)[1];
+        if(status==='not created'){
+          if(confirm('VM is not created if you click ok then background software will download 300+MB and do a bunch of CPU intensive config. Continue? ')){
+            socket.emit('debugInVM',{
+              name:name
+            });
+            socket.on('debugInVMStatus',function(data){
+              if(data.data!=='[vagrant] \r\u001b[0K' && !data.data.match(/\s+/)){
+                obj.sharedData.dUI.statusLine=data.data;//(/\s*(.+?)\s*$/).exec(data.data)[1];///\s*([^\s]+)\s*/.exec(data.data)
+                if('scope' in obj){
+                  obj.scope.$apply();
+                }
+              }
+            });
+          }else{
+
+          }
+        }
+      }
     });
   };
   obj.startCommand = function (name) {

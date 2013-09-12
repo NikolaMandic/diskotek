@@ -37,6 +37,7 @@ var command_count=1;
           //console.log('ovde');
           gdb = cp.spawn('gdb-multiarch', [ data.name] );
           gdb.stdout.setEncoding('utf-8');
+
           gdb.stdout.on('data',function(chunk) {
             
             socket.emit('news',{
@@ -91,6 +92,7 @@ console.log('echo "'+data.command+'" > aa.txt; arm-linux-gnueabi-as aa.txt; arm-
                   }
                 }); 
     }); 
+    /*
     socket.on('debugInVM',function(data){
       var exec = require('child_process').exec,
       child;
@@ -107,6 +109,7 @@ console.log('echo "'+data.command+'" > aa.txt; arm-linux-gnueabi-as aa.txt; arm-
                 }); 
      
     });
+    */
     socket.on('command',function(data) {
       command_count+=1;
       console.log('info','command arrived: '+command_count);
@@ -135,7 +138,22 @@ console.log('echo "'+data.command+'" > aa.txt; arm-linux-gnueabi-as aa.txt; arm-
          });
        });    
     });
-
+    socket.on('debugInVM',function(data){
+      var name = data.name;
+      var sp = require('child_process');
+      var vagrantp = sp.spawn('vagrant',['up'],{
+        cwd:process.env.PWD+'/vdir',
+        env:process.env
+      });
+      vagrantp.stdout.setEncoding('utf-8');
+      vagrantp.stdout.on('data',function(data){
+        socket.emit('debugInVMStatus',{data:data});
+      });
+      vagrantp.on('close',function(code){
+        socket.emit('debugInVMNews',{});
+        //if(code!==0) 
+      });
+    });
 
        
 

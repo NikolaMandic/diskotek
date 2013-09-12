@@ -7470,9 +7470,9 @@ html, body {
 
 /* line 11, main.scss */
 body {
-  background: #fafafa;
+  background: rgba(0, 110, 0, 0.5);
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color: #333;
+  color: #FFEEEE;
 }
 
 /* line 16, main.scss */
@@ -7481,7 +7481,87 @@ body {
   height: 1000px;
 }
 
-/* line 20, main.scss */
+/*   top menu   */
+/* line 22, main.scss */
+#debugMenu {
+  margin-left: -15px;
+  margin-right: -15px;
+}
+/* line 21, ../bower_components/bootstrap-sass/lib/_mixins.scss */
+#debugMenu:before, #debugMenu:after {
+  content: " ";
+  /* 1 */
+  display: table;
+  /* 2 */
+}
+/* line 25, ../bower_components/bootstrap-sass/lib/_mixins.scss */
+#debugMenu:after {
+  clear: both;
+}
+
+/* line 27, main.scss */
+#fileItem {
+  position: relative;
+  min-height: 1px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+@media (min-width: 1200px) {
+  /* line 27, main.scss */
+  #fileItem {
+    float: left;
+    width: 41.66667%;
+  }
+}
+
+/* line 31, main.scss */
+#controls {
+  position: relative;
+  min-height: 1px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+@media (min-width: 1200px) {
+  /* line 31, main.scss */
+  #controls {
+    float: left;
+    width: 16.66667%;
+  }
+}
+
+/* line 35, main.scss */
+#commandItem {
+  position: relative;
+  min-height: 1px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+@media (min-width: 1200px) {
+  /* line 35, main.scss */
+  #commandItem {
+    float: left;
+    width: 25%;
+  }
+}
+
+/* line 39, main.scss */
+#views {
+  position: relative;
+  min-height: 1px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+@media (min-width: 1200px) {
+  /* line 39, main.scss */
+  #views {
+    float: left;
+    width: 16.66667%;
+  }
+}
+
+/*   /top menu  */
+/*   disassembly view  */
+/* line 51, main.scss */
 #dissasembly_wraper {
   margin-left: -15px;
   margin-right: -15px;
@@ -7500,7 +7580,7 @@ body {
   clear: both;
 }
 
-/* line 25, main.scss */
+/* line 56, main.scss */
 .menu {
   position: relative;
   min-height: 1px;
@@ -7508,14 +7588,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 25, main.scss */
+  /* line 56, main.scss */
   .menu {
     float: left;
     width: 16.66667%;
   }
 }
 
-/* line 28, main.scss */
+/* line 59, main.scss */
 #contentdump {
   position: relative;
   min-height: 1px;
@@ -7523,14 +7603,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 28, main.scss */
+  /* line 59, main.scss */
   #contentdump {
     float: left;
     width: 83.33333%;
   }
 }
 
-/* line 32, main.scss */
+/* line 63, main.scss */
 .category {
   margin-left: -15px;
   margin-right: -15px;
@@ -7547,7 +7627,7 @@ body {
   clear: both;
 }
 
-/* line 35, main.scss */
+/* line 67, main.scss */
 .secSymbol {
   margin-left: -15px;
   margin-right: -15px;
@@ -7564,7 +7644,7 @@ body {
   clear: both;
 }
 
-/* line 38, main.scss */
+/* line 70, main.scss */
 .secInst {
   margin-left: -15px;
   margin-right: -15px;
@@ -7581,7 +7661,7 @@ body {
   clear: both;
 }
 
-/* line 41, main.scss */
+/* line 73, main.scss */
 .secAddr {
   position: relative;
   min-height: 1px;
@@ -7589,14 +7669,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 41, main.scss */
+  /* line 73, main.scss */
   .secAddr {
     float: left;
     width: 8.33333%;
   }
 }
 
-/* line 44, main.scss */
+/* line 76, main.scss */
 .secRaw {
   position: relative;
   min-height: 1px;
@@ -7604,14 +7684,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 44, main.scss */
+  /* line 76, main.scss */
   .secRaw {
     float: left;
     width: 16.66667%;
   }
 }
 
-/* line 47, main.scss */
+/* line 79, main.scss */
 .secOp {
   position: relative;
   min-height: 1px;
@@ -7619,14 +7699,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 47, main.scss */
+  /* line 79, main.scss */
   .secOp {
     float: left;
     width: 25%;
   }
 }
 
-/* line 50, main.scss */
+/* line 82, main.scss */
 .secCom {
   position: relative;
   min-height: 1px;
@@ -7634,41 +7714,26 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 50, main.scss */
+  /* line 82, main.scss */
   .secCom {
     float: left;
     width: 50%;
   }
 }
 
-/* line 53, main.scss */
+/* line 85, main.scss */
 .visible {
   display: inline;
 }
 
-/* line 56, main.scss */
+/* line 88, main.scss */
 .hidden {
   display: none;
 }
 
-/* line 60, main.scss */
-#debugMenu {
-  margin-left: -15px;
-  margin-right: -15px;
-}
-/* line 21, ../bower_components/bootstrap-sass/lib/_mixins.scss */
-#debugMenu:before, #debugMenu:after {
-  content: " ";
-  /* 1 */
-  display: table;
-  /* 2 */
-}
-/* line 25, ../bower_components/bootstrap-sass/lib/_mixins.scss */
-#debugMenu:after {
-  clear: both;
-}
-
-/* line 64, main.scss */
+/*   /disassembly view */
+/*   debug view      */
+/* line 99, main.scss */
 #wrapermain {
   margin-left: -15px;
   margin-right: -15px;
@@ -7685,79 +7750,12 @@ body {
   clear: both;
 }
 
-/* line 69, main.scss */
-#fileItem {
-  position: relative;
-  min-height: 1px;
-  padding-left: 15px;
-  padding-right: 15px;
-}
-@media (min-width: 1200px) {
-  /* line 69, main.scss */
-  #fileItem {
-    float: left;
-    width: 41.66667%;
-  }
-}
-
-/* line 72, main.scss */
-#controls {
-  position: relative;
-  min-height: 1px;
-  padding-left: 15px;
-  padding-right: 15px;
-}
-@media (min-width: 1200px) {
-  /* line 72, main.scss */
-  #controls {
-    float: left;
-    width: 16.66667%;
-  }
-}
-
-/* line 75, main.scss */
-#commandItem {
-  position: relative;
-  min-height: 1px;
-  padding-left: 15px;
-  padding-right: 15px;
-}
-@media (min-width: 1200px) {
-  /* line 75, main.scss */
-  #commandItem {
-    float: left;
-    width: 25%;
-  }
-}
-
-/* line 78, main.scss */
-#views {
-  position: relative;
-  min-height: 1px;
-  padding-left: 15px;
-  padding-right: 15px;
-}
-@media (min-width: 1200px) {
-  /* line 78, main.scss */
-  #views {
-    float: left;
-    width: 16.66667%;
-  }
-}
-
-/* line 81, main.scss */
+/* line 102, main.scss */
 .breakpoint {
   background: rgba(220, 0, 0, 0.3);
 }
 
-/* line 85, main.scss */
-#holder {
-  height: 900px;
-  position: absolute;
-  width: 1200px;
-}
-
-/* line 93, main.scss */
+/* line 106, main.scss */
 #registers {
   position: relative;
   min-height: 1px;
@@ -7776,14 +7774,14 @@ body {
 */
 }
 @media (min-width: 992px) {
-  /* line 93, main.scss */
+  /* line 106, main.scss */
   #registers {
     float: left;
     width: 25%;
   }
 }
 
-/* line 107, main.scss */
+/* line 120, main.scss */
 #commandResult {
   position: relative;
   min-height: 1px;
@@ -7791,24 +7789,19 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 107, main.scss */
+  /* line 120, main.scss */
   #commandResult {
     float: left;
     width: 25%;
   }
 }
 
-/* line 111, main.scss */
+/* line 125, main.scss */
 #registers li:nth-child(16) {
   background: rgba(192, 57, 43, 0.09);
 }
 
-/* line 115, main.scss */
-ul {
-  list-style-type: none;
-}
-
-/* line 119, main.scss */
+/* line 129, main.scss */
 .hero-unit {
   position: relative;
   min-height: 1px;
@@ -7826,14 +7819,14 @@ ul {
     */
 }
 @media (min-width: 992px) {
-  /* line 119, main.scss */
+  /* line 129, main.scss */
   .hero-unit {
     float: left;
     width: 50%;
   }
 }
 
-/* line 132, main.scss */
+/* line 142, main.scss */
 .inst_row {
   margin-left: -15px;
   margin-right: -15px;
@@ -7850,7 +7843,7 @@ ul {
   clear: both;
 }
 
-/* line 135, main.scss */
+/* line 145, main.scss */
 .inst_addr {
   position: relative;
   min-height: 1px;
@@ -7858,14 +7851,14 @@ ul {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 135, main.scss */
+  /* line 145, main.scss */
   .inst_addr {
     float: left;
     width: 25%;
   }
 }
 
-/* line 138, main.scss */
+/* line 148, main.scss */
 .inst_opcode {
   position: relative;
   min-height: 1px;
@@ -7873,14 +7866,14 @@ ul {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 138, main.scss */
+  /* line 148, main.scss */
   .inst_opcode {
     float: left;
-    width: 25%;
+    width: 16.66667%;
   }
 }
 
-/* line 141, main.scss */
+/* line 151, main.scss */
 .inst_operands {
   position: relative;
   min-height: 1px;
@@ -7888,14 +7881,14 @@ ul {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 141, main.scss */
+  /* line 151, main.scss */
   .inst_operands {
     float: left;
-    width: 25%;
+    width: 33.33333%;
   }
 }
 
-/* line 144, main.scss */
+/* line 154, main.scss */
 .inst_comment {
   position: relative;
   min-height: 1px;
@@ -7904,14 +7897,14 @@ ul {
   color: #00AA00;
 }
 @media (min-width: 992px) {
-  /* line 144, main.scss */
+  /* line 154, main.scss */
   .inst_comment {
     float: left;
     width: 25%;
   }
 }
 
-/* line 148, main.scss */
+/* line 158, main.scss */
 .reg_row {
   margin-left: -15px;
   margin-right: -15px;
@@ -7928,7 +7921,7 @@ ul {
   clear: both;
 }
 
-/* line 151, main.scss */
+/* line 161, main.scss */
 .reg_name {
   position: relative;
   min-height: 1px;
@@ -7936,14 +7929,14 @@ ul {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 151, main.scss */
+  /* line 161, main.scss */
   .reg_name {
     float: left;
     width: 16.66667%;
   }
 }
 
-/* line 154, main.scss */
+/* line 164, main.scss */
 .reg_value1 {
   position: relative;
   min-height: 1px;
@@ -7951,14 +7944,14 @@ ul {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 154, main.scss */
+  /* line 164, main.scss */
   .reg_value1 {
     float: left;
     width: 41.66667%;
   }
 }
 
-/* line 157, main.scss */
+/* line 167, main.scss */
 .reg_value2 {
   position: relative;
   min-height: 1px;
@@ -7966,61 +7959,23 @@ ul {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 157, main.scss */
+  /* line 167, main.scss */
   .reg_value2 {
     float: left;
     width: 41.66667%;
   }
 }
 
-/* line 161, main.scss */
-.hero-unit h1 {
-  font-size: 60px;
-  line-height: 1;
-  letter-spacing: -1px;
-}
-
-/* line 166, main.scss */
-ul {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-  overflow-y: scroll;
-  list-style: none;
-  -webkit-perspective: 400px;
-  -moz-perspective: 400px;
-  -ms-perspective: 400px;
-  -o-perspective: 400px;
-  perspective: 400px;
-}
-
-/* line 182, main.scss */
-ul li {
-  position: relative;
-  background: #eee;
-  color: #252525;
-  font-size: 18px;
-  z-index: 2;
-  -webkit-transform: translateZ(0px);
-  -moz-transform: translateZ(0px);
-  -ms-transform: translateZ(0px);
-  -o-transform: translateZ(0px);
-  transform: translateZ(0px);
-}
-
-/* line 196, main.scss */
+/* line 170, main.scss */
 #registers .reg_row:nth-child(odd), .secInst:nth-child(odd), .hero-unit .inst_row:nth-child(odd) {
   background: rgba(220, 220, 220, 0.35);
 }
 
-/* line 200, main.scss */
+/* line 174, main.scss */
 .inst_row_current {
   margin-left: -15px;
   margin-right: -15px;
-  background: rgba(0, 220, 0, 0.05);
+  background: rgba(0, 0, 220, 0.33);
 }
 /* line 21, ../bower_components/bootstrap-sass/lib/_mixins.scss */
 .inst_row_current:before, .inst_row_current:after {
@@ -8034,13 +7989,22 @@ ul li {
   clear: both;
 }
 
-/* line 205, main.scss */
+/*   /debug view     */
+/* line 180, main.scss */
+#holder {
+  height: 900px;
+  position: absolute;
+  width: 1200px;
+}
+
+/* linkify  */
+/* line 191, main.scss */
 a {
   text-decoration: none;
   color: #198de6;
 }
 
-/* line 210, main.scss */
+/* line 196, main.scss */
 .roll {
   display: inline-block;
   overflow: hidden;
@@ -8051,7 +8015,7 @@ a {
   -moz-perspective-origin: 50% 50%;
 }
 
-/* line 222, main.scss */
+/* line 208, main.scss */
 .roll span {
   display: block;
   position: relative;
@@ -8064,14 +8028,14 @@ a {
   -moz-transform-style: preserve-3d;
 }
 
-/* line 236, main.scss */
+/* line 222, main.scss */
 .roll:hover span {
   background: #111;
   -webkit-transform: translate3d(0px, 0px, -30px) rotateX(90deg);
   -moz-transform: translate3d(0px, 0px, -30px) rotateX(90deg);
 }
 
-/* line 242, main.scss */
+/* line 228, main.scss */
 .roll span:after {
   content: attr(data-title);
   display: block;
@@ -8086,3 +8050,5 @@ a {
   -webkit-transform: translate3d(0px, 105%, 0px) rotateX(-90deg);
   -moz-transform: translate3d(0px, 105%, 0px) rotateX(-90deg);
 }
+
+/*  /linkify  */

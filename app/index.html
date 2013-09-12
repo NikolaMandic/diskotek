@@ -30,44 +30,49 @@
 
     <!-- Add your site or application content here -->
  <div id="debugMenu" ng-controller="MainCtrl">
-    
-  <div id="fileItem">
-    <label for="name">name</label>
-    <INPUT type="TEXT" ng-model="file" name="name" value="" id="name">
-    <a href="#/disas" ng-click="commandDissasemble()">dissasemble</a>|
-    <a ng-click="commandStart('gdb-multiarch '+$scope.file)">start debugging</a>|
-    <a ng-click="commandStartVM()">switch to vm</a>|
-    <a ng-click="stop()">stop</a>
-  </div>
-  <div id="controls">
-      <a ng-click="cont()">run </a> 
+   <div id="status" >
+     status: {{sharedData.dUI.statusLine}} 
+   </div>  
+   <div id="menuPanel">
+      
+     <div id="fileItem">
+       <label for="name">name</label>
+       <INPUT type="TEXT" ng-model="file" name="name" value="" id="name">
+       <a href="#/disas" ng-click="commandDissasemble()">dissasemble</a>|
+       <a ng-click="commandStart('gdb-multiarch '+$scope.file)">start debugging</a>|
+       <a ng-click="commandStartVM()">switch to vm</a>|
+       <a ng-click="stop()">stop</a>
+     </div>
+     <div id="controls">
+       <a ng-click="cont()">run </a> 
        
-    <a  ng-click="stepOver()">step over</a> 
-    <a ng-click="stepInto()">step into</a> 
+       <a  ng-click="stepOver()">step over</a> 
+       <a ng-click="stepInto()">step into</a> 
     
-  </div>
-  <div id="views">
-    views:
-    <a  href="#/">debug</a>
-    <a  href="#/disas">disassembly</a>
-    <a    href="#/ch">graph</a>
+     </div>
+     <div id="views">
+       views:
+       <a  href="#/">debug</a>
+       <a  href="#/disas">disassembly</a>
+       <a    href="#/ch">graph</a>
 
-  </div>
+     </div>
 
  
-  <div id="commandItem">
-    <INPUT type="TEXT" ng-model="command"/>
-    <a ng-click="commandExecL(command,'commandResult')">send command  </a>
+     <div id="commandItem">
+       <INPUT type="TEXT" ng-model="command"/>
+       <a ng-click="commandExecL(command,'commandResult')">send command  </a>
       
-  </div>
-</div>
+     </div>
+   </div>
+ </div>
 
-   <div class="container" ng-view="">
+ <div class="container" ng-view="">
     
 
     
     
-    </div>
+ </div>
 
 
 </body>
