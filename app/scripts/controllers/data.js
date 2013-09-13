@@ -427,11 +427,9 @@ angular.module('ldApp').factory('Data',function(){
               name:name
             });
             socket.on('debugInVMStatus',function(data){
-              if(data.data!=='[vagrant] \r\u001b[0K' && !data.data.match(/\s+/)){
-                obj.sharedData.dUI.statusLine=data.data;//(/\s*(.+?)\s*$/).exec(data.data)[1];///\s*([^\s]+)\s*/.exec(data.data)
-                if('scope' in obj){
-                  obj.scope.$apply();
-                }
+              obj.sharedData.dUI.statusLine=data.data;
+              if('scope' in obj){
+                obj.scope.$apply();
               }
             });
           }else{
