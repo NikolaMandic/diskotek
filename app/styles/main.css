@@ -7477,25 +7477,25 @@ body {
 
 /* line 16, main.scss */
 .container {
-  width: 1000px;
-  height: 1000px;
+  width: 100%;
+  height: 100%;
 }
 
 /*   top menu   */
 /* line 22, main.scss */
-#debugMenu {
+#debugMenu, #menuPanel, #status {
   margin-left: -15px;
   margin-right: -15px;
 }
 /* line 21, ../bower_components/bootstrap-sass/lib/_mixins.scss */
-#debugMenu:before, #debugMenu:after {
+#debugMenu:before, #debugMenu:after, #menuPanel:before, #menuPanel:after, #status:before, #status:after {
   content: " ";
   /* 1 */
   display: table;
   /* 2 */
 }
 /* line 25, ../bower_components/bootstrap-sass/lib/_mixins.scss */
-#debugMenu:after {
+#debugMenu:after, #menuPanel:after, #status:after {
   clear: both;
 }
 
@@ -7990,21 +7990,23 @@ body {
 }
 
 /*   /debug view     */
-/* line 180, main.scss */
+/*   graph view      */
+/* line 182, main.scss */
 #holder {
-  height: 900px;
-  position: absolute;
-  width: 1200px;
+  height: 2000px;
+  width: 100%;
+  left: 0px;
 }
 
+/*    /graph view     */
 /* linkify  */
-/* line 191, main.scss */
+/* line 190, main.scss */
 a {
   text-decoration: none;
   color: #198de6;
 }
 
-/* line 196, main.scss */
+/* line 195, main.scss */
 .roll {
   display: inline-block;
   overflow: hidden;
@@ -8015,7 +8017,7 @@ a {
   -moz-perspective-origin: 50% 50%;
 }
 
-/* line 208, main.scss */
+/* line 207, main.scss */
 .roll span {
   display: block;
   position: relative;
@@ -8028,14 +8030,14 @@ a {
   -moz-transform-style: preserve-3d;
 }
 
-/* line 222, main.scss */
+/* line 221, main.scss */
 .roll:hover span {
   background: #111;
   -webkit-transform: translate3d(0px, 0px, -30px) rotateX(90deg);
   -moz-transform: translate3d(0px, 0px, -30px) rotateX(90deg);
 }
 
-/* line 228, main.scss */
+/* line 227, main.scss */
 .roll span:after {
   content: attr(data-title);
   display: block;

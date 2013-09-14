@@ -14,8 +14,8 @@ body {
     color: #FFEEEE;
 }
 .container{
-width:1000px;
-height:1000px;
+width:100%;
+height:100%;
 }
 /*   top menu   */
 
@@ -177,15 +177,14 @@ background: rgba(0,0,220,0.33);
 }
 
 /*   /debug view     */
-#holder {
-    height: 900px;
-   // left: 50%;
-   // margin: -240px 0 0 -320px;
-    position: absolute;
-  //  top: 50%;
-    width: 1200px;
-}
 
+/*   graph view      */
+#holder {
+    height: 2000px;
+    width: 100%;
+    left:0px;
+}
+/*    /graph view     */
 
 /* linkify  */
 a {
