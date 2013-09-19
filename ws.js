@@ -134,6 +134,7 @@ console.log('echo "'+data.command+'" > aa.txt; arm-linux-gnueabi-as aa.txt; arm-
     socket.on('exec',function(data){
        cp.exec(data.ptyPayload, function(error,stdout,stderr) {
          socket.emit('execNews',{
+          //id:data.id,
           data:stdout
          });
        });    

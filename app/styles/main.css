@@ -7561,7 +7561,7 @@ body {
 
 /*   /top menu  */
 /*   disassembly view  */
-/* line 51, main.scss */
+/* line 49, main.scss */
 #dissasembly_wraper {
   margin-left: -15px;
   margin-right: -15px;
@@ -7580,7 +7580,7 @@ body {
   clear: both;
 }
 
-/* line 56, main.scss */
+/* line 54, main.scss */
 .menu {
   position: relative;
   min-height: 1px;
@@ -7588,14 +7588,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 56, main.scss */
+  /* line 54, main.scss */
   .menu {
     float: left;
     width: 16.66667%;
   }
 }
 
-/* line 59, main.scss */
+/* line 57, main.scss */
 #contentdump {
   position: relative;
   min-height: 1px;
@@ -7603,14 +7603,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 59, main.scss */
+  /* line 57, main.scss */
   #contentdump {
     float: left;
     width: 83.33333%;
   }
 }
 
-/* line 63, main.scss */
+/* line 61, main.scss */
 .category {
   margin-left: -15px;
   margin-right: -15px;
@@ -7627,7 +7627,7 @@ body {
   clear: both;
 }
 
-/* line 67, main.scss */
+/* line 65, main.scss */
 .secSymbol {
   margin-left: -15px;
   margin-right: -15px;
@@ -7644,7 +7644,7 @@ body {
   clear: both;
 }
 
-/* line 70, main.scss */
+/* line 68, main.scss */
 .secInst {
   margin-left: -15px;
   margin-right: -15px;
@@ -7661,7 +7661,7 @@ body {
   clear: both;
 }
 
-/* line 73, main.scss */
+/* line 71, main.scss */
 .secAddr {
   position: relative;
   min-height: 1px;
@@ -7669,14 +7669,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 73, main.scss */
+  /* line 71, main.scss */
   .secAddr {
     float: left;
     width: 8.33333%;
   }
 }
 
-/* line 76, main.scss */
+/* line 74, main.scss */
 .secRaw {
   position: relative;
   min-height: 1px;
@@ -7684,14 +7684,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 76, main.scss */
+  /* line 74, main.scss */
   .secRaw {
     float: left;
     width: 16.66667%;
   }
 }
 
-/* line 79, main.scss */
+/* line 77, main.scss */
 .secOp {
   position: relative;
   min-height: 1px;
@@ -7699,14 +7699,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 79, main.scss */
+  /* line 77, main.scss */
   .secOp {
     float: left;
     width: 25%;
   }
 }
 
-/* line 82, main.scss */
+/* line 80, main.scss */
 .secCom {
   position: relative;
   min-height: 1px;
@@ -7714,21 +7714,26 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 82, main.scss */
+  /* line 80, main.scss */
   .secCom {
     float: left;
     width: 50%;
   }
 }
 
-/* line 85, main.scss */
+/* line 83, main.scss */
 .visible {
   display: inline;
 }
 
-/* line 88, main.scss */
+/* line 86, main.scss */
 .hidden {
   display: none;
+}
+
+/* line 89, main.scss */
+#hld {
+  visibility: hidden;
 }
 
 /*   /disassembly view */

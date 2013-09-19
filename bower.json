@@ -17,7 +17,8 @@
     "socket.io":"0.9", 
     "socket.io-client":"0.9",
     "jqueryui": "http://code.jquery.com/ui/jquery-ui-git.js",
-    "jqueryuicss": "http://code.jquery.com/ui/jquery-ui-git.css"
+    "jqueryuicss": "http://code.jquery.com/ui/jquery-ui-git.css",
+    "d3":"latest"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.0",
