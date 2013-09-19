@@ -1,0 +1,64 @@
+<div id="dissasembly_wraper" ng-show="selected!=='none'">
+    
+  <div id="name" class="menu">
+    
+    <div id="headers" class="category">
+      <div class="categoryName" ng-click="headersC()">
+        headers
+      </div>
+    </div>
+    <div id="sections" class="category">
+      <div class="categoryName" ng-click='visibilitySect=((visibilitySect==="visible"|| visibilitySect==undefined)?"hidden":"visible")' ng-init='visibilitySect="hidden"'>
+        <a>sections</a>
+      </div>
+      <div id="sectionCont" class="{{visibilitySect}}">
+         
+     
+        <div ng-repeat="section in sharedData.disasViewData.sectionD" class="menuItem">
+          <a ng-click="selectSection(section)">{{section.sectionName}}</a>
+        </div>
+      </div>
+    </div>
+    <div id="relocati" class="category">
+      <div class="categoryName">
+        relocations
+      </div>
+  
+    </div>
+
+  </div>
+  <div id="contentdump">
+    <div ng-switch="selected">
+        <div ng-switch-when="section">
+            <div class="secSymbol" ng-repeat="symbol in selectedSection.sectionContent">
+                <div class="secSymbolName">
+                  {{symName}}
+                </div>
+                <div class="secInst" ng-repeat="instr in symbol.symContent">
+                    <div class="secAddr">
+                      {{instr.address}}
+                    </div>
+                    <div class="secRaw">
+                      {{instr.memraw}}
+                    </div>
+                    <div class="secOp">
+                      {{instr.op}}
+                    </div>
+                    <div class="secCom">
+                      {{instr.comments}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ng-switch-when="header">
+          <div id="holder">
+              
+          </div>
+            <div id="hld" draggable>
+                
+            </div>
+        </div>
+    </div>
+  </div>
+
+</div>
