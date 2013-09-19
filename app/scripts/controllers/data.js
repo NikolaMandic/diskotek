@@ -1,3 +1,7 @@
+'use strict';
+/*global _:false */
+/*global io:false */
+/*global confirm */
 angular.module('ldApp').factory('Data',['DisasData',function(DisasData){
   //gdb service
   var obj={
@@ -10,13 +14,12 @@ angular.module('ldApp').factory('Data',['DisasData',function(DisasData){
       breakpoints:[],
       disasViewData:{sectionD:[{}]}
     },
-    sock:socket
+    sock:null
   };
 
   obj.callbackQueue=[];
-  obj.bbfd=basicBlocksFromDisassembly;
-  function basicBlocksFromDisassembly(data){
-    obj.sharedData.dissasembly = data; 
+  obj.bbfd= function basicBlocksFromDisassembly(data){
+    obj.sharedData.dissasembly = data;
     var b = [];
     b.push([]);
     var basicBlocks=[];
@@ -27,30 +30,26 @@ angular.module('ldApp').factory('Data',['DisasData',function(DisasData){
     var branchPreviousInst=false;
     var branchArray=[];
     _.each(obj.sharedData.dissasembly,function(value){
-        if (branchPreviousInst){
+      if (branchPreviousInst){
+        value.uppperBoundary=true;
+        boundaries.push(value);
+        branchPreviousInst=false;
+      }
+      if(value.op.match(/^b.*/)){
+        branchPreviousInst=true;
+        value.bottomBoundary=true;
+        if(!branchPreviousInst){
+          boundaries.push(value);
+        }
+        branchArray.push(value);
+      }else{
+        if(boundaries.length===0){
           value.uppperBoundary=true;
           boundaries.push(value);
-          branchPreviousInst=false;
         }
-        if(value.op.match(/^b.*/)){
-          branchPreviousInst=true;
-          value.bottomBoundary=true;
-          if(!branchPreviousInst){
-            boundaries.push(value);
-          }
-          branchArray.push(value);
-        }else{
-          if(boundaries.length===0){
-            value.uppperBoundary=true;
-            boundaries.push(value);
-          }
-        }
-        disasArr.push(value);
-        disasObjArr.push(value);
-
-
-
-
+      }
+      disasArr.push(value);
+      disasObjArr.push(value);
     });
 
 
@@ -75,12 +74,12 @@ angular.module('ldApp').factory('Data',['DisasData',function(DisasData){
         if(value.uppperBoundary && value.bottomBoundary){
           basicBlocks.push([]);
           basicBlocks[basicBlocks.length-1].push(value);
-          
+
           basicBlocks.push([]);
         }else{
           if(value.uppperBoundary===true){
-            if(basicBlocks[basicBlocks.length-1].length!=0){
-            basicBlocks.push([]);
+            if(basicBlocks[basicBlocks.length-1].length!==0){
+              basicBlocks.push([]);
             }
             basicBlocks[basicBlocks.length-1].push(value);
 
@@ -96,9 +95,10 @@ angular.module('ldApp').factory('Data',['DisasData',function(DisasData){
       }
     });
 
-    return obj.data=basicBlocks;
+    obj.data=basicBlocks;
+    return basicBlocks;
 
-  }
+  };
 
   function dissasemblyCallback(){
     obj.sharedData.dissasembly= obj.sharedData.result.slice(0,-1);
@@ -212,29 +212,28 @@ angular.module('ldApp').factory('Data',['DisasData',function(DisasData){
 
   }
   obj.getHeaders = function (){
-    obj.commandExecO({
-      ptyPayload:'readelf -h -l proba',
-      callback:callbh,
-      msgType:'exec'
-    });
-    function callbh (data){ 
+    function callbh (data){
       obj.sharedData.disasViewData.headers=DisasData.parsers.parseHeaders(data);
+      function callbb (data){
+        obj.sharedData.disasViewData.sheaders=DisasData.parsers.parseSHeaders(data);
+      }
+
       obj.commandExecO({
         ptyPayload:'arm-linux-gnueabi-objdump -h proba',
         callback:callbb,
         msgType:'exec'
       });
-      function callbb (data){ 
-        obj.sharedData.disasViewData.sheaders=DisasData.parsers.parseSHeaders(data);
-      }
-
     }
-  },
-  obj.commandExecL=function(cmnd,resultVariable,splice1,splice2){
+    obj.commandExecO({
+      ptyPayload:'readelf -h -l proba',
+      callback:callbh,
+      msgType:'exec'
+    });
+  };
+  obj.commandExecL=function(cmnd,resultVariable/*,splice1,splice2*/){
     // $scope.result=cmnd;
     if(_.isFunction(resultVariable)){
-    
-        obj.callbackQueue.push(resultVariable);
+      obj.callbackQueue.push(resultVariable);
     }else{
       if(resultVariable){
         obj.callbackQueue.push(function putStuffinResultC() {
@@ -255,8 +254,8 @@ angular.module('ldApp').factory('Data',['DisasData',function(DisasData){
 
     // $scope.result=cmnd;
     if(_.isFunction(args.resultVariable)){
-    
-        obj.callbackQueue.push(args.resultVariable);
+
+      obj.callbackQueue.push(args.resultVariable);
     }else{
       if(args.resultVariable){
         obj.callbackQueue.push(function putStuffinResultC() {
@@ -268,7 +267,13 @@ angular.module('ldApp').factory('Data',['DisasData',function(DisasData){
         }
       }
     }
-    obj.sock.emit(args.msgType|'command',{
+    var commandType;
+    if(args.msgType){
+      commandType = args.msgType;
+    }else{
+      commandType= 'command';
+    }
+    obj.sock.emit(commandType,{
       ptyPayload:args.cmnd
     });
 
@@ -277,13 +282,13 @@ angular.module('ldApp').factory('Data',['DisasData',function(DisasData){
 
     // $scope.result=cmnd;
     if(_.isFunction(args.callback)){
-/*    
+/*
         obj.callbackQueue.push({
           id:obj.callbackQueue.length+1,
           c:args.callback
         });
         */
-       obj.callbackQueue.push(args.callback);
+      obj.callbackQueue.push(args.callback);
     }else{
       if(args.resultVariable){
         obj.callbackQueue.push(function putStuffinResultC() {
@@ -326,24 +331,24 @@ angular.module('ldApp').factory('Data',['DisasData',function(DisasData){
   };
   obj.setBreakpoint = function(address) {
     obj.callbackQueue.push(function setBreakpointC() {});
-    
+
     socket.emit('command',{
-      ptyPayload: 'break *' + address       
+      ptyPayload: 'break *' + address
     });
-    
+
   };
-  
+
   obj.removeBreakpoint = function(address) {
     obj.callbackQueue.push(function removeBreakpointC() {});
     socket.emit('command',{
       ptyPayload : 'clear *' + address
     });
-  
+
   };
   obj.disassemble = function(file) {
     function processData(data){
-      return _.map(data.split("\n\nD").splice(1),function(item,index){
-        var split = item.split("\n\n");
+      return _.map(data.split('\n\nD').splice(1),function(item,index){
+        var split = item.split('\n\n');
         //console.log("splited");
         //console.log(split);
         var re = /([\w\.\-]+)\:$/g;
@@ -392,16 +397,16 @@ angular.module('ldApp').factory('Data',['DisasData',function(DisasData){
           sectionContentRaw:sectionContentRaw,
           sectionContent:sectionContent
         };
-      })
+      });
     }
     obj.commandExecO({
       callback: function(result){
         obj.sharedData.disasViewData.sectionD=processData(result);
-         var texts = _.findWhere(obj.sharedData.disasViewData.sectionD,{sectionName:'.text'});
-         basicBlocksFromDisassembly(_.flatten(_.pluck(texts.sectionContent,'symContent')));
+        var texts = _.findWhere(obj.sharedData.disasViewData.sectionD,{sectionName:'.text'});
+        obj.bbfd(_.flatten(_.pluck(texts.sectionContent,'symContent')));
 
-    obj.getHeaders(); 
-        },
+        obj.getHeaders();
+      },
       msgType: 'exec',
       ptyPayload:'arm-linux-gnueabi-objdump -D proba'
 
@@ -410,7 +415,7 @@ angular.module('ldApp').factory('Data',['DisasData',function(DisasData){
   obj.infoBreakpoints = function(){
     obj.callbackQueue.push(function infoBreakpointsC() {
       if(obj.sharedData.result[0].match(/^No.*/)){
-      return;
+        return;
       }
       obj.sharedData.breakpoints = obj.sharedData.result.slice(1).map(function(value) {
         var split = value.split(/\s*(\w+)\s*(\w+)\s*(\w+)\s*(\w+)\s*(\w*)\s*/);
@@ -433,8 +438,8 @@ angular.module('ldApp').factory('Data',['DisasData',function(DisasData){
             }
           }
 
-    });
-      
+        });
+
       }
     });
     socket.emit('command',{
@@ -479,11 +484,12 @@ angular.module('ldApp').factory('Data',['DisasData',function(DisasData){
     obj.getDissasembly();
     obj.getRegisterInfo();
     obj.infoBreakpoints();
-    
+
   };
-  obj.sock=socket = io.connect('http://localhost:807');
+  var socket = io.connect('http://localhost:807');
+  obj.sock=socket;
   socket.on('execNews',function (data) {
-      var data = data.data;
+    var cdata = data.data;
 /*
  * if(data.id){
        var c = _.findWhere(obj.callbackQueue,{id:data.id});
@@ -491,17 +497,17 @@ angular.module('ldApp').factory('Data',['DisasData',function(DisasData){
        c.c();
       }
       */
-      var callback = obj.callbackQueue.shift();
-      
-      //if(typeof callback === "function"){
-      if(callback){
-        callback(data);
-      }else{
-      
-      }
+    var callback = obj.callbackQueue.shift();
+
+    //if(typeof callback === "function"){
+    if(callback){
+      callback(cdata);
+    }else{
+
+    }
   });
   socket.on('debugInVMNews',function (argument) {
-     window.location('localhost:8080/index.html#/'); 
+    window.location('localhost:8080/index.html#/');
   });
   socket.on('news', function (data) {
     console.log(data);

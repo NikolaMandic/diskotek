@@ -25,8 +25,9 @@ angular.module('ldApp')
           return v.VMA==='00000000';
         });
         $("#holder").html(''); //teardown
-        var rx=50;
-        var srx=50;
+
+        var srx=100;
+        var rx=srx;
         var uW=70;
         var spaceB=1;
         var height=40;
