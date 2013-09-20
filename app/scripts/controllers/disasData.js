@@ -114,7 +114,8 @@ angular.module('ldApp').factory('DisasData',['DataHeaders',function(dataHeaders)
 
   };
   obj.bbfd=function basicBlocksFromDisassembly(data){
-    obj.sharedData.dissasembly = data;
+    var disassembly = data;
+    //obj.sharedData.dissasembly = data;
     var b = [];
     b.push([]);
     var basicBlocks=[];
@@ -124,7 +125,8 @@ angular.module('ldApp').factory('DisasData',['DataHeaders',function(dataHeaders)
     var boundaries=[];
     var branchPreviousInst=false;
     var branchArray=[];
-    _.each(obj.sharedData.dissasembly,function(value){
+    
+    _.each(disassembly,function(value){
       if (branchPreviousInst){
         value.uppperBoundary=true;
         boundaries.push(value);
@@ -148,11 +150,11 @@ angular.module('ldApp').factory('DisasData',['DataHeaders',function(dataHeaders)
     });
 
 
-    obj.sharedData.disasArr=disasObjArr;
+    //obj.sharedData.disasArr=disasObjArr;
 
     //find instructions that are jumped on and put it in boundaries
     _.each(branchArray,function(value){
-      var elem = _.findWhere(disasObjArr,{'address':(/\s*(\w+).*/).exec(value.op)[1]});
+      var elem = _.findWhere(disasObjArr,{'address':(/\s*(\w+).*/).exec(value.operands)[1]});
       if(elem){
         var indexDest = _.indexOf(boundaries,elem);
         if(indexDest===-1){

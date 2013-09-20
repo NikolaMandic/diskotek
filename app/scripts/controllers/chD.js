@@ -73,7 +73,13 @@ angular.module('ldApp').factory('bboxF',function(){
 
       };
     },
-    move = function (dx, dy) {
+    move = function (dx, dy,ev) {
+      var e = arguments[4];
+
+      if (!e) var e = window.event;
+      e.cancelBubble = true;
+      if (e.stopPropagation) e.stopPropagation();
+
       if(this.type!='rect') return;
       var item = this;
       var i=0;

@@ -151,19 +151,19 @@ offc++;
             h:height,
             data:bboxes
           });
-          $("#hld").css({
+          $("#dwindow").css({
             position:'absolute',
             top:g.attrs.y,
             left: srx+8*uW+'px',
             background:'rgba(220,220,220,0.9)'
           });
-          if($("#hld").css('visibility')==='visible'){
-            $("#hld").css({
+          if($("#dwindow").css('visibility')==='visible'){
+            $("#dwindow").css({
               visibility:'hidden'
             });
           }else{
             
-            $("#hld").css({
+            $("#dwindow").css({
               visibility:'visible'
             });
           }
@@ -212,6 +212,7 @@ offc++;
 
       //$scope.$apply();
 
+      $("#dwindow").draggable({handle:'.whandle'});
     }
 
 

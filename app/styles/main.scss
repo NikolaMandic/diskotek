@@ -86,10 +86,18 @@ body {
 .hidden{
   display:none;
 }
-#hld{
+
+#dwindow{
 visibility:hidden;
 }
-
+.whandle{
+  width:100%;
+  height:20px;
+  position:'absolute';
+  top:0px;
+  left:0px;
+  background:rgba(0,220,0,0.9);
+}
 /*   /disassembly view */
 
 
