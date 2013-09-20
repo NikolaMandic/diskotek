@@ -19,6 +19,9 @@ angular.module('ldApp')
     };
     $scope.scrollToHeader = function (header) {
         // body...
+       $('html, body').animate({
+        scrollTop: header.position.y
+      }, 2000);
     }
     $scope.dViewSwitch = function(view,x,y){
       
@@ -119,14 +122,14 @@ angular.module('ldApp')
     
 
 
-        /**
-         * 
-         */
+        
+         
+// start of section header drawing
         rx=srx;
         ry+=51;
         offc++;
         r.text(srx/2,ry+1+fH/2,""+16*offc);
-        _.each(phdr,function(ii){
+        _.each(phdr,function(ii,index,list){
           //for each section header in file
           _.each(ii,function(i){
             //draw that section header by drawing all fields
@@ -141,6 +144,8 @@ angular.module('ldApp')
             });
             rect.attr({title:el.comment});
             var tel=r.text(rx+1+uW*t/2,ry+1+fH/2,el.fName);
+
+            sheaders[index].position={y:tel.attrs.y};
             var c = r.text(rx+1+uW*t/2,ry+height-3-fH/2,el.content);
             c.attr({editable:"simple"});
             //$(tel).attr({'text-anchor':'baseline'})
@@ -158,7 +163,7 @@ angular.module('ldApp')
           });
       });
 
-
+// end of section header drawing
 
 
       var sectionHeaders = Data.sharedData.disasViewData.sheaders;

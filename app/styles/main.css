@@ -7470,9 +7470,9 @@ html, body {
 
 /* line 11, main.scss */
 body {
-  background: rgba(0, 110, 0, 0.5);
+  background: #ffffff;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color: #FFEEEE;
+  color: #001100;
 }
 
 /* line 16, main.scss */
