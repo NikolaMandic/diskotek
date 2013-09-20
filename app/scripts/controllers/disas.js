@@ -15,7 +15,30 @@ angular.module('ldApp')
       $scope.selected='section';
 
     };
+    $scope.dViewSwitch = function(view,x,y){
+      
+      if (view===$scope.hldView){
+        if($("#dwindow").css('visibility')==='visible'){
+          $("#dwindow").css({
+            visibility:'hidden'
+          });
+        }else{
 
+          $("#dwindow").css({
+            visibility:'visible'
+          });
+        }
+      }else{
+        $scope.hldView=view;
+      }
+      $("#dwindow").css({
+        position:'absolute',
+        top:y,//g.attrs.y,
+        left:x,// srx+8*uW+'px',
+        background:'rgba(0,110,0,0.9)'
+      });
+         
+    };
     $scope.renderDisasembly=function(){
      // Data.getHeaders();
       $scope.selected='header';
@@ -146,14 +169,11 @@ angular.module('ldApp')
         r.text(srx/2,ry+1+fH/2,""+16*offc);
         var d = r.text(srx/2+10,ry+height/2,"D");
         d.click(function(){
-          v.view='D';
-         // $scope.headerC();
-        });
-        var h = r.text(srx/2,ry+height/2,"H");
-        h.click(function(){
-          v.view='H';
 
-          $scope.hldView='H';
+         // $scope.head,
+          // erC();,
+
+          $scope.dViewSwitch(v.view='D',srx+8*uW-500,g.attrs.y );
           var sections= Data.sharedData.disasViewData.sectionD;
           $scope.selectedSection=_.findWhere(sections,{sectionName:v.name});
           $scope.$apply();
@@ -162,27 +182,28 @@ angular.module('ldApp')
           //
           // $('#hld').html();
           //window handling 
-          $("#dwindow").css({
-            position:'absolute',
-            top:g.attrs.y,
-            left: srx+8*uW+'px',
-            background:'rgba(220,220,220,0.9)'
-          });
-          if($("#dwindow").css('visibility')==='visible'){
-            $("#dwindow").css({
-              visibility:'hidden'
-            });
-          }else{
 
-            $("#dwindow").css({
-              visibility:'visible'
-            });
-          }
+        });
+        var h = r.text(srx/2,ry+height/2,"H");
+        h.click(function(){
+          v.view='H';
+
+          $scope.dViewSwitch(v.view='H');
+          var sections= Data.sharedData.disasViewData.sectionD;
+          $scope.selectedSection=_.findWhere(sections,{sectionName:v.name});
+          $scope.$apply();
+
+         // $scope.headerC();
+          //
+          // $('#hld').html();
+          //window handling 
         });
         var g = r.text(srx/2-10,ry+height/2,"G");
         g.click(function(){
           v.view='G';
-          $scope.hldView='G';
+
+          $scope.dViewSwitch(v.view='G',srx+8*uW-500,g.attrs.y );
+
           $scope.hldViewSection=v.name;
           $scope.$apply();
           //$scope.headerC();,
@@ -198,23 +219,6 @@ angular.module('ldApp')
           });
 
 
-          //window handling 
-          $("#dwindow").css({
-            position:'absolute',
-            top:g.attrs.y,
-            left: srx+8*uW+'px',
-            background:'rgba(220,220,220,0.9)'
-          });
-          if($("#dwindow").css('visibility')==='visible'){
-            $("#dwindow").css({
-              visibility:'hidden'
-            });
-          }else{
-
-            $("#dwindow").css({
-              visibility:'visible'
-            });
-          }
         });
         var s = _.findWhere(ss,{sectionName:v.name});
         var fa = _.flatten(_.pluck(s.sectionContent,'symContent'));
