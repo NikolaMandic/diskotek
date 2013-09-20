@@ -3,13 +3,21 @@
   <div id="name" class="menu">
     
     <div id="headers" class="category">
-      <div class="categoryName" ng-click="headersC()">
+      <div class="categoryName" ng-click='visibilityHeaders=((visibilityHeaders==="visible"|| visibilityHeaders==undefined)?"hidden":"visible")' ng-init='visibilityHeaders="hidden"'>
         headers
       </div>
+      <div id="headersCont" class="{{visibilityHeaders}}">
+         
+     
+        <div ng-repeat="header in sharedData.disasViewData.sheaders" class="menuItem">
+          <a >{{header.name}}</a>
+        </div>
+      </div>
+
     </div>
     <div id="sections" class="category">
       <div class="categoryName" ng-click='visibilitySect=((visibilitySect==="visible"|| visibilitySect==undefined)?"hidden":"visible")' ng-init='visibilitySect="hidden"'>
-        <a>sections</a>
+        sections
       </div>
       <div id="sectionCont" class="{{visibilitySect}}">
          
@@ -60,10 +68,34 @@
 
             </div>                  
 
-            <div id="hld" >
-                             
+            <div id="hld" ng-switch="hldView">
+                <div id="hldd" ng-switch-when="H">
+                    
+                </div>        
+                <div id="D" ng-switch-when="G">
 
 
+                  <div class="secSymbol" ng-repeat="symbol in selectedSection.sectionContent">
+                    <div class="secSymbolName">
+                      {{symName}}
+                    </div>
+                    <div class="secInst" ng-repeat="instr in symbol.symContent">
+                      <div class="secAddr">
+                        {{instr.address}}
+                      </div>
+                      <div class="secRaw">
+                        {{instr.memraw}}
+                      </div>
+                      <div class="secOp">
+                        {{instr.op}}
+                      </div>
+                      <div class="secCom">
+                        {{instr.comments}}
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
             </div>
           </div>
 

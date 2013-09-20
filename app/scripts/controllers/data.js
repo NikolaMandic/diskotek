@@ -2,7 +2,8 @@
 /*global _:false */
 /*global io:false */
 /*global confirm:false */
-angular.module('ldApp').factory('Data',['DisasData',function(DisasData){
+angular.module('ldApp')
+.factory('Data',['$rootScope','DisasData',function($rootScope,DisasData){
   //gdb service
   var obj={
     data:[],
@@ -24,6 +25,7 @@ angular.module('ldApp').factory('Data',['DisasData',function(DisasData){
       obj.sharedData.disasViewData.headers=DisasData.parsers.parseHeaders(data);
       function callbb (data){
         obj.sharedData.disasViewData.sheaders=DisasData.parsers.parseSHeaders(data);
+        $rootScope.$emit("disassemblyDataLoaded");
       }
 
       obj.commandExecO({
