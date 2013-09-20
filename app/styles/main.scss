@@ -61,7 +61,9 @@ body {
 .category{
   @include make-row();
 }
-
+#D{
+  padding:30px;
+}
 .secSymbol{
   @include make-row();
 }
@@ -88,7 +90,7 @@ body {
 }
 
 #dwindow{
-visibility:hidden;
+  visibility:hidden;
 }
 .whandle{
   width:100%;

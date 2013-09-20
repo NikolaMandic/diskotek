@@ -10,7 +10,7 @@
          
      
         <div ng-repeat="header in sharedData.disasViewData.sheaders" class="menuItem">
-          <a >{{header.name}}</a>
+          <a ng-click="scrollToHeader(header)" >{{header.name}}</a>
         </div>
       </div>
 
@@ -23,7 +23,7 @@
          
      
         <div ng-repeat="section in sharedData.disasViewData.sectionD" class="menuItem">
-          <a ng-click="selectSection(section)">{{section.sectionName}}</a>
+          <a ng-click="scrollToSection(section)">{{section.sectionName}}</a>
         </div>
       </div>
     </div>

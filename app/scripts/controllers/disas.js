@@ -10,11 +10,16 @@ angular.module('ldApp')
     });
     $scope.selectSection={};
     $scope.selected='none';
-    $scope.selectSection = function(section) {
-      $scope.selectedSection=section;
-      $scope.selected='section';
-
+    $scope.scrollToSection = function(section) {
+     // $scope.selectedSection=section;
+     // $scope.selected='section';
+     $('html, body').animate({
+        scrollTop: section.position.y
+      }, 2000);
     };
+    $scope.scrollToHeader = function (header) {
+        // body...
+    }
     $scope.dViewSwitch = function(view,x,y){
       
       if (view===$scope.hldView){
@@ -30,8 +35,14 @@ angular.module('ldApp')
         }
       }else{
         $scope.hldView=view;
+
+        $("#dwindow").css({
+          visibility:'visible'
+        });
+
       }
       $("#dwindow").css({
+        width:'1000px',
         position:'absolute',
         top:y,//g.attrs.y,
         left:x,// srx+8*uW+'px',
@@ -164,7 +175,15 @@ angular.module('ldApp')
         //if(i==0){
         rx=srx;
         ry+=51;
-        r.text(srx/2,ry+1-fH/2+height,v.name);
+        var sectionNameDrawed=r.text(srx/2,ry+1-fH/2+height,v.name);
+        
+
+        var sections = Data.sharedData.disasViewData.sectionD;
+        _.findWhere(sections,{sectionName:v.name}).position={
+          //x:,
+          y:sectionNameDrawed.attrs.y
+        };
+
         offc++;
         r.text(srx/2,ry+1+fH/2,""+16*offc);
         var d = r.text(srx/2+10,ry+height/2,"D");
@@ -268,11 +287,14 @@ angular.module('ldApp')
     };
 
 
-
+    $scope.postRenderSetup=function(){
+   // renderDisasembly
+    };
 
 
     $rootScope.$on("disassemblyDataLoaded",$scope.renderDisasembly);
 
+    $rootScope.$on("disassemblyDataLoaded",$scope.postRenderSetup);
 
 
 });
