@@ -47,7 +47,7 @@ angular.module('ldApp')
       });
 
     };
-    $scope.file='proba';
+    $scope.file=Data.sharedData.fileName;
     $scope.sharedData=Data.sharedData;
     Data.scope=$scope;
     

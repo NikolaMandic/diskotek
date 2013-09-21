@@ -8,6 +8,7 @@ angular.module('ldApp')
   var obj={
     data:[],
     sharedData:{
+      fileName:'proba',
       dUI:{statusLine:''},
       result:[],
       resultRaw:[],
@@ -33,7 +34,7 @@ angular.module('ldApp')
           obj.sharedData.disasViewData.sectionD[i].hexDump=DisasData.parsers.parseXD(data.split("\n").slice(2,-2));
         }
           obj.commandExecO({
-            ptyPayload:'readelf -x '+v.name+' proba',
+            ptyPayload:'readelf -x '+v.name+' '+obj.sharedData.fileName,
             callback:hd,
             msgType:'exec'
           });
@@ -43,13 +44,13 @@ angular.module('ldApp')
       }
 
       obj.commandExecO({
-        ptyPayload:'arm-linux-gnueabi-objdump -h proba',
+        ptyPayload:'arm-linux-gnueabi-objdump -h ' + obj.sharedData.fileName,
         callback:callbb,
         msgType:'exec'
       });
     }
     obj.commandExecO({
-      ptyPayload:'readelf -h -l proba',
+      ptyPayload:'readelf -h -l ' + obj.sharedData.fileName ,
       callback:callbh,
       msgType:'exec'
     });
@@ -233,7 +234,7 @@ angular.module('ldApp')
         obj.getHeaders();
       },
       msgType: 'exec',
-      ptyPayload:'arm-linux-gnueabi-objdump -D proba'
+      ptyPayload:'arm-linux-gnueabi-objdump -D '+obj.sharedData.fileName
 
     });
   };
