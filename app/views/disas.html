@@ -62,7 +62,82 @@
           <div id="holder">
               
           </div>
-          
+          <div id="sectionContainer">
+              <div class="sectionP" id = "{{section.sectionName}}" ng-repeat="section in sharedData.disasViewData.sectionD">
+                <div class='sectionS'>
+                  <div >
+                      
+                   {{section.sectionName}}
+                  </div>
+                   <div ng-click="disasView(section)" >
+                       disassembly view
+                   </div>
+                   <div  ng-click="hexView(section)" >
+                       hex view
+                   </div>
+                   <div ng-click="graphView(section,$index)">
+                       graph view
+                   </div>
+
+                </div>
+                <div class="sectionView" ng-switch="section.view">
+                  <div id="graphViewPlace{{$index}}" ng-switch-when="G">
+                      
+                  </div>        
+                  <div class="disasViewPlace" ng-switch-when="D">
+
+
+                    <div class="secSymbol" ng-repeat="symbol in section.sectionContent">
+                      <div class="secSymbolName">
+                        {{symName}}
+                      </div>
+                      <div class="secInst" ng-repeat="instr in symbol.symContent">
+                        <div class="secAddr">
+                          {{instr.address}}
+                        </div>
+                        <div class="secRaw">
+                          {{instr.memraw}}
+                        </div>
+                        <div class="secOp">
+                          {{instr.op}}
+                        </div>
+                        <div class="secCom">
+                          {{instr.comments}}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="hexViewPlace" ng-switch-when="H">
+                    <div class="hexDumpLine" ng-repeat="line in section.hexDump">
+                      <div class="hexDumpAddress">
+                        {{line.address}}
+                          
+                      </div>
+                      <div class="hexDumpHex">
+                        {{line.hex}}
+                          
+                      </div>
+
+                      <div class="hexDumpStrDump">
+                        {{line.stringDump}}
+                          
+                      </div>
+                    </div>
+                      
+                  </div>
+                  <div  ng-switch-when="hidden">
+                      
+                  </div>
+
+
+
+
+                </div>
+     
+              </div>
+
+          </div>
+        <!--
           <div id="dwindow">
             <div class="whandle">
 
@@ -98,6 +173,7 @@
                 </div>
             </div>
           </div>
+-->
 
         </div>
     </div>

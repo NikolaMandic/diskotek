@@ -7,6 +7,16 @@
  */
 angular.module('ldApp').factory('DataHeaders',function(){
   var parsers = {};
+  parsers.parseXD = function (data){
+    return _.map(data,function(v){
+      var s = (/\s+(\w+)\s*((\w+\s+){1,4})(.*)/).exec(v);
+      return {
+        address:s[1],
+        hex:s[2],
+        stringDump:s[4]
+      }
+    });
+  };
   parsers.parseHeaders = function parseHeaders(data){
     var parsedHeaders={};
     var elfH = data.split("\n");

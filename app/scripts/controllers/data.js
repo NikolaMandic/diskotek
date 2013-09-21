@@ -20,11 +20,25 @@ angular.module('ldApp')
 
   obj.callbackQueue=[];
   obj.bbfd=DisasData.bbfd;
+  obj.getHexDump=function(name){
+  
+  }
   obj.getHeaders = function (){
     function callbh (data){
       obj.sharedData.disasViewData.headers=DisasData.parsers.parseHeaders(data);
       function callbb (data){
-        obj.sharedData.disasViewData.sheaders=DisasData.parsers.parseSHeaders(data);
+        var sh=obj.sharedData.disasViewData.sheaders=DisasData.parsers.parseSHeaders(data);
+        _.each(sh,function(v,i){
+        function hd(data){
+          obj.sharedData.disasViewData.sectionD[i].hexDump=DisasData.parsers.parseXD(data.split("\n").slice(2,-2));
+        }
+          obj.commandExecO({
+            ptyPayload:'readelf -x '+v.name+' proba',
+            callback:hd,
+            msgType:'exec'
+          });
+ 
+        });
         $rootScope.$emit("disassemblyDataLoaded");
       }
 

@@ -1,3 +1,5 @@
+
+
 angular.module('ldApp')
   .controller('Disas', function ($rootScope,$scope,$http,Data,bboxF) {
 
@@ -53,6 +55,57 @@ angular.module('ldApp')
       });
          
     };
+    $scope.graphView=function(section,index){
+       if(section.view==='G'){
+        section.view='hidden';
+       }else{   
+          section.view='G';
+
+          $scope.$apply();
+          //$scope.dViewSwitch(section.view='G',srx+8*uW-500,g.attrs.y );
+
+          //$scope.hldViewSection=section.name;
+          //$scope.$apply();
+          //$scope.headerC();,
+          var disas=_.flatten(_.pluck(section.sectionContent,'symContent'));
+          var bboxes=Data.bbfd(disas);
+          var height=disas.length*15+bboxes.length*50+200;
+          $('#graphViewPlace'+index).html('');
+          bboxF.r({
+            id:'graphViewPlace'+index,
+            w:$("#sectionContainer").width(),
+            h:height,
+            data:bboxes
+          });
+       }
+        
+    };
+    $scope.disasView=function(section){
+      if(section.view==='D'){
+        section.view='hidden';
+
+      }else{
+        section.view="D";
+
+        //$scope.$apply();
+      }
+      //$scope.dViewSwitch(v.view='D',srx+8*uW-500,g.attrs.y );
+      //var sections= Data.sharedData.disasViewData.sectionD;
+      //$scope.selectedSection=section;//_.findWhere(sections,{sectionName:v.name});
+    };
+    $scope.hexView=function(section){
+      if(section.view==='H'){
+        section.view='hidden';
+
+       // $scope.$apply();
+      }else{
+        section.view="H";
+
+       // $scope.$apply();
+      }
+   
+      
+    };
     $scope.renderDisasembly=function(){
      // Data.getHeaders();
       $scope.selected='header';
@@ -76,7 +129,7 @@ angular.module('ldApp')
         var phdr = Data.sharedData.disasViewData.headers.phdr;
         var r;
 
-        r = Raphael('holder',1500,9000);
+        r = Raphael('holder',1500,50*3+phdr.length*(50*2)+200);
         /** 
          * this part will render ehdr structure
          *
@@ -135,10 +188,10 @@ angular.module('ldApp')
             //draw that section header by drawing all fields
             var el = i;
             var t = el.size;
-            r.setStart();
+            //r.setStart();
             rect = r.rect(rx,ry,uW*t,height).attr({
-              fill:Raphael.getColor(),
-              stroke:Raphael.getColor(),
+              fill:'#ff00ff',//Raphael.getColor(),
+              stroke:'#00ff00',//Raphael.getColor(),
               'fill-opacity':0,
               'stroke-width':2
             });
@@ -158,7 +211,7 @@ angular.module('ldApp')
               offc++;
               r.text(srx/2,ry+1+fH/2,""+16*offc);
             }
-            r.setFinish();
+            //r.setFinish();
 
           });
       });
@@ -175,6 +228,7 @@ angular.module('ldApp')
       _.each(sectionHeadersSorted,function(v){v.view='D'});
 
       // draw each section in file
+      /*
       _.each(sectionHeadersSorted,function(v,i,l){
 
         //if(i==0){
@@ -249,10 +303,10 @@ angular.module('ldApp')
 
         _.each(fa,function(v){
           var t = 4;
-          r.setStart();
+          //r.setStart();
           rect = r.rect(rx,ry,uW*t,height).attr({
-            fill:Raphael.getColor(),
-            stroke:Raphael.getColor(),
+            fill:'#ff00ff',//Raphael.getColor(),
+            stroke:'#00FF00',//Raphael.getColor(),
             'fill-opacity':0,
             'stroke-width':2
           });
@@ -270,25 +324,20 @@ angular.module('ldApp')
             offc++;
             r.text(srx/2,ry+1+fH/2,""+16*offc);
           }
-          r.setFinish();
+          //r.setFinish();
         });
         //}
 
-        /* $("#holder").append("div").attr({"id":"hld"}).css({
-              position:'absolute',
-              left:'0px',
-              right:'0px',
-            });
-            */
-       });
+              });
 
-
+*/
 
      // });
 
       //$scope.$apply();
 
       $("#dwindow").draggable({handle:'.whandle'});
+      $scope.$apply();
     };
 
 

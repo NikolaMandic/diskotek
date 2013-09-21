@@ -23,7 +23,8 @@ var gdb;
 var started=0;
 var commandStack=[];
 var command_count=1;
-
+var execCommandCount=0;
+var execCommandStack=[];
 //io.set('log level',1);
   io.sockets.on('connection', function (socket) {
    // socket.emit('news', { hello: 'world' });
@@ -132,12 +133,35 @@ console.log('echo "'+data.command+'" > aa.txt; arm-linux-gnueabi-as aa.txt; arm-
       }
     });
     socket.on('exec',function(data){
-       cp.exec(data.ptyPayload, function(error,stdout,stderr) {
-         socket.emit('execNews',{
-          //id:data.id,
-          data:stdout
-         });
-       });    
+      execCommandCount+=1;
+      if(execCommandCount>1){
+        execCommandStack.push(function(){
+       
+          cp.exec(data.ptyPayload, function(error,stdout,stderr) {
+            socket.emit('execNews',{
+              data:stdout
+            });
+
+            if(execCommandStack.length){
+              execCommandStack.shift()();
+              execCommandCount--;
+            }
+          });    
+        });
+      }else{
+        cp.exec(data.ptyPayload, function(error,stdout,stderr) {
+          socket.emit('execNews',{
+            data:stdout
+          });
+          execCommandCount--;
+          if(execCommandStack.length){
+            execCommandStack.shift()();
+            execCommandCount--;
+          }
+        });   
+        
+
+      }
     });
     socket.on('debugInVM',function(data){
       var name = data.name;
