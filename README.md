@@ -37,9 +37,8 @@ Pictures
 ==
 ![](https://raw.github.com/NikolaMandic/ld/master/a.png)
 ![](https://raw.github.com/NikolaMandic/ld/master/aa.png)
-![](https://raw.github.com/NikolaMandic/ld/master/bb.png)
-![](https://raw.github.com/NikolaMandic/ld/master/bbc.png)
-![](https://raw.github.com/NikolaMandic/ld/master/bba.png)
-![](https://raw.github.com/NikolaMandic/ld/master/c.png)
+![](https://raw.github.com/NikolaMandic/ld/master/qb.png)
+![](https://raw.github.com/NikolaMandic/ld/master/qq.png)
+![](https://raw.github.com/NikolaMandic/ld/master/qa.png)
 
 
