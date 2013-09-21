@@ -7475,8 +7475,25 @@ body {
   color: #001100;
 }
 
+/* line 16, main.scss */
+.container {
+  margin-left: -15px;
+  margin-right: -15px;
+}
+/* line 21, ../bower_components/bootstrap-sass/lib/_mixins.scss */
+.container:before, .container:after {
+  content: " ";
+  /* 1 */
+  display: table;
+  /* 2 */
+}
+/* line 25, ../bower_components/bootstrap-sass/lib/_mixins.scss */
+.container:after {
+  clear: both;
+}
+
 /*   top menu   */
-/* line 20, main.scss */
+/* line 21, main.scss */
 #debugMenu, #menuPanel, #status, .container {
   margin-left: -15px;
   margin-right: -15px;
@@ -7493,7 +7510,7 @@ body {
   clear: both;
 }
 
-/* line 25, main.scss */
+/* line 26, main.scss */
 #fileItem {
   position: relative;
   min-height: 1px;
@@ -7501,14 +7518,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 1200px) {
-  /* line 25, main.scss */
+  /* line 26, main.scss */
   #fileItem {
     float: left;
     width: 41.66667%;
   }
 }
 
-/* line 29, main.scss */
+/* line 30, main.scss */
 #controls {
   position: relative;
   min-height: 1px;
@@ -7516,14 +7533,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 1200px) {
-  /* line 29, main.scss */
+  /* line 30, main.scss */
   #controls {
     float: left;
     width: 16.66667%;
   }
 }
 
-/* line 33, main.scss */
+/* line 34, main.scss */
 #commandItem {
   position: relative;
   min-height: 1px;
@@ -7531,14 +7548,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 1200px) {
-  /* line 33, main.scss */
+  /* line 34, main.scss */
   #commandItem {
     float: left;
     width: 25%;
   }
 }
 
-/* line 37, main.scss */
+/* line 38, main.scss */
 #views {
   position: relative;
   min-height: 1px;
@@ -7546,7 +7563,7 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 1200px) {
-  /* line 37, main.scss */
+  /* line 38, main.scss */
   #views {
     float: left;
     width: 16.66667%;
@@ -7554,7 +7571,7 @@ body {
 }
 
 /*   /top menu  */
-/* line 43, main.scss */
+/* line 44, main.scss */
 .sectionS, .sectionView {
   margin-left: -15px;
   margin-right: -15px;
@@ -7571,7 +7588,7 @@ body {
   clear: both;
 }
 
-/* line 49, main.scss */
+/* line 50, main.scss */
 .hexDumpAddress {
   position: relative;
   min-height: 1px;
@@ -7579,14 +7596,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 49, main.scss */
+  /* line 50, main.scss */
   .hexDumpAddress {
     float: left;
     width: 25%;
   }
 }
 
-/* line 53, main.scss */
+/* line 54, main.scss */
 .hexDumpHex {
   position: relative;
   min-height: 1px;
@@ -7594,14 +7611,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 53, main.scss */
+  /* line 54, main.scss */
   .hexDumpHex {
     float: left;
     width: 50%;
   }
 }
 
-/* line 57, main.scss */
+/* line 58, main.scss */
 .hexDumpStrDump {
   position: relative;
   min-height: 1px;
@@ -7609,14 +7626,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 57, main.scss */
+  /* line 58, main.scss */
   .hexDumpStrDump {
     float: left;
     width: 25%;
   }
 }
 
-/* line 60, main.scss */
+/* line 61, main.scss */
 .hexDumpLine {
   margin-left: -15px;
   margin-right: -15px;
@@ -7634,7 +7651,7 @@ body {
 }
 
 /*   disassembly view  */
-/* line 66, main.scss */
+/* line 67, main.scss */
 #dissasembly_wraper {
   margin-left: -15px;
   margin-right: -15px;
@@ -7651,7 +7668,7 @@ body {
   clear: both;
 }
 
-/* line 69, main.scss */
+/* line 70, main.scss */
 .menu {
   position: relative;
   min-height: 1px;
@@ -7659,14 +7676,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 69, main.scss */
+  /* line 70, main.scss */
   .menu {
     float: left;
     width: 16.66667%;
   }
 }
 
-/* line 72, main.scss */
+/* line 73, main.scss */
 #contentdump {
   position: relative;
   min-height: 1px;
@@ -7674,14 +7691,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 72, main.scss */
+  /* line 73, main.scss */
   #contentdump {
     float: left;
     width: 83.33333%;
   }
 }
 
-/* line 76, main.scss */
+/* line 77, main.scss */
 .category {
   margin-left: -15px;
   margin-right: -15px;
@@ -7698,12 +7715,12 @@ body {
   clear: both;
 }
 
-/* line 79, main.scss */
+/* line 80, main.scss */
 #D {
   padding: 30px;
 }
 
-/* line 82, main.scss */
+/* line 83, main.scss */
 .secSymbol {
   margin-left: -15px;
   margin-right: -15px;
@@ -7720,7 +7737,7 @@ body {
   clear: both;
 }
 
-/* line 85, main.scss */
+/* line 86, main.scss */
 .secInst {
   margin-left: -15px;
   margin-right: -15px;
@@ -7737,7 +7754,7 @@ body {
   clear: both;
 }
 
-/* line 88, main.scss */
+/* line 89, main.scss */
 .secAddr {
   position: relative;
   min-height: 1px;
@@ -7745,14 +7762,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 88, main.scss */
+  /* line 89, main.scss */
   .secAddr {
     float: left;
     width: 8.33333%;
   }
 }
 
-/* line 91, main.scss */
+/* line 92, main.scss */
 .secRaw {
   position: relative;
   min-height: 1px;
@@ -7760,14 +7777,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 91, main.scss */
+  /* line 92, main.scss */
   .secRaw {
     float: left;
     width: 16.66667%;
   }
 }
 
-/* line 94, main.scss */
+/* line 95, main.scss */
 .secOp {
   position: relative;
   min-height: 1px;
@@ -7775,14 +7792,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 94, main.scss */
+  /* line 95, main.scss */
   .secOp {
     float: left;
     width: 25%;
   }
 }
 
-/* line 97, main.scss */
+/* line 98, main.scss */
 .secCom {
   position: relative;
   min-height: 1px;
@@ -7790,29 +7807,29 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 97, main.scss */
+  /* line 98, main.scss */
   .secCom {
     float: left;
     width: 50%;
   }
 }
 
-/* line 100, main.scss */
+/* line 101, main.scss */
 .visible {
   display: inline;
 }
 
-/* line 103, main.scss */
+/* line 104, main.scss */
 .hidden {
   display: none;
 }
 
-/* line 107, main.scss */
+/* line 108, main.scss */
 #dwindow {
   visibility: hidden;
 }
 
-/* line 110, main.scss */
+/* line 111, main.scss */
 .whandle {
   width: 100%;
   height: 20px;
@@ -7824,7 +7841,7 @@ body {
 
 /*   /disassembly view */
 /*   debug view      */
-/* line 124, main.scss */
+/* line 125, main.scss */
 #wrapermain {
   margin-left: -15px;
   margin-right: -15px;
@@ -7841,12 +7858,12 @@ body {
   clear: both;
 }
 
-/* line 127, main.scss */
+/* line 128, main.scss */
 .breakpoint {
   background: rgba(220, 0, 0, 0.3);
 }
 
-/* line 131, main.scss */
+/* line 132, main.scss */
 #registers {
   position: relative;
   min-height: 1px;
@@ -7865,14 +7882,14 @@ body {
 */
 }
 @media (min-width: 992px) {
-  /* line 131, main.scss */
+  /* line 132, main.scss */
   #registers {
     float: left;
     width: 25%;
   }
 }
 
-/* line 145, main.scss */
+/* line 146, main.scss */
 #commandResult {
   position: relative;
   min-height: 1px;
@@ -7880,19 +7897,19 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 145, main.scss */
+  /* line 146, main.scss */
   #commandResult {
     float: left;
     width: 25%;
   }
 }
 
-/* line 150, main.scss */
+/* line 151, main.scss */
 #registers li:nth-child(16) {
   background: rgba(192, 57, 43, 0.09);
 }
 
-/* line 154, main.scss */
+/* line 155, main.scss */
 .hero-unit {
   position: relative;
   min-height: 1px;
@@ -7910,14 +7927,14 @@ body {
     */
 }
 @media (min-width: 992px) {
-  /* line 154, main.scss */
+  /* line 155, main.scss */
   .hero-unit {
     float: left;
     width: 50%;
   }
 }
 
-/* line 167, main.scss */
+/* line 168, main.scss */
 .inst_row {
   margin-left: -15px;
   margin-right: -15px;
@@ -7934,7 +7951,7 @@ body {
   clear: both;
 }
 
-/* line 170, main.scss */
+/* line 171, main.scss */
 .inst_addr {
   position: relative;
   min-height: 1px;
@@ -7942,14 +7959,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 170, main.scss */
+  /* line 171, main.scss */
   .inst_addr {
     float: left;
     width: 25%;
   }
 }
 
-/* line 173, main.scss */
+/* line 174, main.scss */
 .inst_opcode {
   position: relative;
   min-height: 1px;
@@ -7957,14 +7974,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 173, main.scss */
+  /* line 174, main.scss */
   .inst_opcode {
     float: left;
     width: 16.66667%;
   }
 }
 
-/* line 176, main.scss */
+/* line 177, main.scss */
 .inst_operands {
   position: relative;
   min-height: 1px;
@@ -7972,14 +7989,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 176, main.scss */
+  /* line 177, main.scss */
   .inst_operands {
     float: left;
     width: 33.33333%;
   }
 }
 
-/* line 179, main.scss */
+/* line 180, main.scss */
 .inst_comment {
   position: relative;
   min-height: 1px;
@@ -7988,14 +8005,14 @@ body {
   color: #00AA00;
 }
 @media (min-width: 992px) {
-  /* line 179, main.scss */
+  /* line 180, main.scss */
   .inst_comment {
     float: left;
     width: 25%;
   }
 }
 
-/* line 183, main.scss */
+/* line 184, main.scss */
 .reg_row {
   margin-left: -15px;
   margin-right: -15px;
@@ -8012,7 +8029,7 @@ body {
   clear: both;
 }
 
-/* line 186, main.scss */
+/* line 187, main.scss */
 .reg_name {
   position: relative;
   min-height: 1px;
@@ -8020,14 +8037,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 186, main.scss */
+  /* line 187, main.scss */
   .reg_name {
     float: left;
     width: 16.66667%;
   }
 }
 
-/* line 189, main.scss */
+/* line 190, main.scss */
 .reg_value1 {
   position: relative;
   min-height: 1px;
@@ -8035,14 +8052,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 189, main.scss */
+  /* line 190, main.scss */
   .reg_value1 {
     float: left;
     width: 41.66667%;
   }
 }
 
-/* line 192, main.scss */
+/* line 193, main.scss */
 .reg_value2 {
   position: relative;
   min-height: 1px;
@@ -8050,19 +8067,19 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 192, main.scss */
+  /* line 193, main.scss */
   .reg_value2 {
     float: left;
     width: 41.66667%;
   }
 }
 
-/* line 195, main.scss */
+/* line 196, main.scss */
 #registers .reg_row:nth-child(odd), .secInst:nth-child(odd), .hero-unit .inst_row:nth-child(odd) {
   background: rgba(220, 220, 220, 0.35);
 }
 
-/* line 199, main.scss */
+/* line 200, main.scss */
 .inst_row_current {
   margin-left: -15px;
   margin-right: -15px;
@@ -8080,7 +8097,7 @@ body {
   clear: both;
 }
 
-/* line 203, main.scss */
+/* line 204, main.scss */
 .sectionS div {
   position: relative;
   min-height: 1px;
@@ -8088,7 +8105,7 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 203, main.scss */
+  /* line 204, main.scss */
   .sectionS div {
     float: left;
     width: 25%;
@@ -8097,7 +8114,7 @@ body {
 
 /*   /debug view     */
 /*   graph view      */
-/* line 210, main.scss */
+/* line 211, main.scss */
 #holder, .sectionP, .sectionS, .sectionView {
   margin-left: -15px;
   margin-right: -15px;
@@ -8116,13 +8133,13 @@ body {
 
 /*    /graph view     */
 /* linkify  */
-/* line 216, main.scss */
+/* line 217, main.scss */
 a {
   text-decoration: none;
   color: #198de6;
 }
 
-/* line 221, main.scss */
+/* line 222, main.scss */
 .roll {
   display: inline-block;
   overflow: hidden;
@@ -8133,7 +8150,7 @@ a {
   -moz-perspective-origin: 50% 50%;
 }
 
-/* line 233, main.scss */
+/* line 234, main.scss */
 .roll span {
   display: block;
   position: relative;
@@ -8146,14 +8163,14 @@ a {
   -moz-transform-style: preserve-3d;
 }
 
-/* line 247, main.scss */
+/* line 248, main.scss */
 .roll:hover span {
   background: #111;
   -webkit-transform: translate3d(0px, 0px, -30px) rotateX(90deg);
   -moz-transform: translate3d(0px, 0px, -30px) rotateX(90deg);
 }
 
-/* line 253, main.scss */
+/* line 254, main.scss */
 .roll span:after {
   content: attr(data-title);
   display: block;
