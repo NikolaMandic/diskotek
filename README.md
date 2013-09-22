@@ -1,9 +1,13 @@
-ld
+diskotek
 ==
 early development version of ui for gdb debugger for arm on linux !!!
 some code is not as it should be right now because I wanted to implement some features faster.
-unstable now but in active development
-docs in the making http://nikolamandic.github.io/diskotek/
+unstable now but in active development<br/>
+
+docs
+--
+http://nikolamandic.github.io/diskotek/
+
 ubuntu setup
 ==
 
