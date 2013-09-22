@@ -2,6 +2,10 @@
 /*global _:false */
 /*global io:false */
 /*global confirm:false */
+/*
+ * this is the main module that keeps state of the application on the frontend
+ *
+ */
 angular.module('ldApp')
 .factory('Data',['$rootScope','command','DataDebug','DataDisassembly',
          function($rootScope,command,DataDebug,DataDisassembly){
@@ -26,7 +30,6 @@ angular.module('ldApp')
     sock:null
   };
 
-  //obj.bbfd=DisasData.bbfd;
 
   
 

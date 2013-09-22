@@ -1,12 +1,33 @@
+/*
+ * command is a module that enables other components to comunicate to 
+ * a server on top of socket.io
+ *
+ * main function used is commandExecO. 
+ * It works by: 
+ * 1. sending command 
+ * 2. registering a callback that will be put in callback queue
+ * and that callback will be called on latter when the result comes
+ *
+ * */
 angular.module('ldApp').factory('command',[
                                 function(){
   var obj={
     resultRaw:[],
     result:'',
   };
+  /* 
+   * this is array where callbacks will be pushed for each command a callback 
+   * is expected so if callback is not specified anonimous callback will be 
+   * pushed 
+   * */
   obj.callbackQueue=[];
-  obj.commandExecL=function(cmnd,resultVariable/*,splice1,splice2*/){
-    // $scope.result=cmnd;
+
+
+
+  /* old function variation of commandExecO
+   * not to be used. 
+   * */
+  obj.commandExecL=function(cmnd,resultVariable){
     if(_.isFunction(resultVariable)){
       obj.callbackQueue.push(resultVariable);
     }else{
@@ -25,9 +46,14 @@ angular.module('ldApp').factory('command',[
     });
 
   };
-  obj.commandExecLO=function(args){//cmnd,resultVariable,splice1,splice2){
 
-    // $scope.result=cmnd;
+  /* old function variation of commandExecO
+   * not to be used. maybe commandExecO will evolve more so looks better
+   * if this stays here 
+   *
+   * */
+  obj.commandExecLO=function(args){
+
     if(_.isFunction(args.resultVariable)){
 
       obj.callbackQueue.push(args.resultVariable);
@@ -43,12 +69,6 @@ angular.module('ldApp').factory('command',[
       }
     }
     var commandType = args.msgType || 'command';
-    /*
-    if(args.msgType){
-      commandType = args.msgType;
-    }else{
-      commandType= 'command';
-    }*/
     if(args.ptyPayload){
       obj.sock.emit(commandType,{
         ptyPayload:args.cmnd
@@ -57,31 +77,48 @@ angular.module('ldApp').factory('command',[
       obj.sock.emit(commandType,payload);
     }
   };
-  obj.commandExecO=function(args){//cmnd,resultVariable,splice1,splice2){
 
-    // $scope.result=cmnd;
+  /**
+   * this function accepts object as argument that can have following fields:
+   * [callback]: represents callback that is invoked on result 
+   *    it is passed one parametar that is result splited by newline
+   *    example:
+   *    function (data){
+   *        data is array of lines 
+   *    }
+   *    if omitted empty callback will be inserted in callback queue
+   * [resultVariable]: this 
+   *
+   *    if omitted 'result' variable will be used
+   *
+   * [scope]:
+   *    if present $apply will be called on that scope after callback
+   *    if callback argument is not present then it will still be called
+   *
+   * [msgType]:
+   *    this is string that what will go in socket.emit(msgType...)
+   *    if omitted default is 'command'
+   * [payload]:
+   *    if present this is the object/data sent in socket.emit(msgType,cmd)
+   *    if omited ptyPayload is used
+   * [ptyPayload] alias [cmnd]
+   *    if present data that is sent trough socket io 
+   *    is socket.emit(msgType,{ptyPayload:ptyPayload})
+   *
+   * */
+  obj.commandExecO=function(args){
+
     var callback;
     if(_.isFunction(args.callback)){
-/*
-        obj.callbackQueue.push({
-          id:obj.callbackQueue.length+1,
-          c:args.callback
-        });
-        */
-      //obj.callbackQueue.push(args.callback);
       callback = args.callback;
     }else{
       if(args.resultVariable){
-          // obj.callbackQueue.push(
           callback=function putStuffinResultC() {
           obj.sharedData[args.resultVariable]=obj.sharedData.result;
         };
-        //);
       }else{
         if(args.resultVariable!==null ){
-          //obj.callbackQueue.push(
             callback=function anonCallback() {};
-          //);
         }
       }
     }
@@ -95,7 +132,6 @@ angular.module('ldApp').factory('command',[
     var msgType = (args.msgType)?args.msgType : 'command';
     var cmd = (args.ptyPayload)?args.ptyPayload : args.cmnd;
     obj.sock.emit(msgType,{
-      //id:obj.callbackQueue.length,
       ptyPayload:cmd
     });
 
@@ -103,28 +139,45 @@ angular.module('ldApp').factory('command',[
   var socket = io.connect('http://localhost:807');
   obj.sock=socket;
 
-
+  /*
+   * this is a 'channel' that recives results of commands executed on shell
+   * for example someone sends a command to be executed on shell
+   * and registers a callback
+   * and when the result returns this function triggers that callback
+   * and passes the result to function
+   *
+   * */
   socket.on('execNews',function (data) {
     var cdata = data.data;
-/*
- * if(data.id){
-       var c = _.findWhere(obj.callbackQueue,{id:data.id});
-       _.without(obj.callbackQueue,c);
-       c.c();
-      }
-      */
     var callback = obj.callbackQueue.shift();
 
-    //if(typeof callback === "function"){
     if(callback){
       callback(cdata);
     }else{
 
     }
   });
+  /*
+   * when vm is fully bootstraped and everything is up and runnig
+   * server will push a message trough this 'debugInVMNews' channel
+   * as a signal to switch to server running inside a VM that was just started
+   * it runs on the same ports but vagrant is configured to forward them
+   * to different ones so port 3000 in VM is 8080 on the host
+   *
+   * */
   socket.on('debugInVMNews',function (argument) {
     window.location('localhost:8080/index.html#/');
   });
+  /*
+   * this is channel to which result of 'command's are pushed
+   * everything that is sent as 'command' command is what gets
+   * executed in gdb and the result of that pops up here.
+   * Also callback is called.
+   * since data is pushed in chunks it is stored in resultRaw
+   * until '(gdb) ' is found. Then everything that was recived so far
+   * is transfered in result and resultRaw is reseted.
+   *
+   * */
   socket.on('news', function (data) {
     console.log(data);
     var dataSplited = data.data.split('\n') ;

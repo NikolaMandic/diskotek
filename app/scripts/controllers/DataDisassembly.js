@@ -149,48 +149,11 @@ angular.module('ldApp').factory('DataDisassembly',['$rootScope','command','DataD
 
     });
    disassemblyData.disassembly=disasObjArr;
-/* 
-    disassemblyData.sharedData.disasArr=disasObjArr;
-
-    //find instructions that are jumped on and put it in boundaries
-    _.each(branchArray,function(value){
-      var elem = _.findWhere(disasObjArr,{'address':value.operands.substring(1)});
-      if(elem){
-        var indexDest = _.indexOf(boundaries,elem);
-        if(indexDest===-1){
-          elem.up=true;
-          boundaries.push(elem);
-        }
-      }
-
-    });
-    var boundariesSorted=_.sortBy(boundaries,'address');
-    var boundaryArrC=0;
-    _.each(disasObjArr,function(value){
-      if(value===boundariesSorted[boundaryArrC]){
-        if(value.uppperBoundary===true){
-          basicBlocks.push([]);
-          basicBlocks[basicBlocks.length-1].push(value);
-
-        }
-        if(value.bottomBoundary===true){
-          basicBlocks[basicBlocks.length-1].push(value);
-        }
-        boundaryArrC+=1;
-
-      }else{
-        basicBlocks[basicBlocks.length-1].push(value);
-      }
-    });
-
-    disassemblyData.data=basicBlocks;
-*/
   };
 
   //return array of basic blocks from array of instructions
   disassemblyData.bbfd=function basicBlocksFromDisassembly(data){
     var disassembly = data;
-    //disassemblyData.sharedData.dissasembly = data;
     var b = [];
     b.push([]);
     var basicBlocks=[];
@@ -224,8 +187,6 @@ angular.module('ldApp').factory('DataDisassembly',['$rootScope','command','DataD
       disasObjArr.push(value);
     });
 
-
-    //disassemblyData.sharedData.disasArr=disasObjArr;
 
     //find instructions that are jumped on and put it in boundaries
     _.each(branchArray,function(value){
@@ -266,10 +227,7 @@ angular.module('ldApp').factory('DataDisassembly',['$rootScope','command','DataD
         basicBlocks[basicBlocks.length-1].push(value);
       }
     });
-
-  //  disassemblyData.data=basicBlocks;
     return basicBlocks;
-
   };
 
   return disassemblyData;
