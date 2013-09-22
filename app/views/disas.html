@@ -9,7 +9,7 @@
       <div id="headersCont" class="{{visibilityHeaders}}">
          
      
-        <div ng-repeat="header in sharedData.disasViewData.sheaders" class="menuItem">
+        <div ng-repeat="header in data.disassemblyData.sectionHeaders" class="menuItem">
           <a ng-click="scrollToHeader(header)" >{{header.name}}</a>
         </div>
       </div>
@@ -22,7 +22,7 @@
       <div id="sectionCont" class="{{visibilitySect}}">
          
      
-        <div ng-repeat="section in sharedData.disasViewData.sectionD" class="menuItem">
+        <div ng-repeat="section in data.disassemblyData.sectionData" class="menuItem">
           <a ng-click="scrollToSection(section)">{{section.sectionName}}</a>
         </div>
       </div>
@@ -63,7 +63,7 @@
               
           </div>
           <div id="sectionContainer">
-              <div class="sectionP" id = "{{section.sectionName}}" ng-repeat="section in sharedData.disasViewData.sectionD">
+              <div class="sectionP" id = "{{section.sectionName}}" ng-repeat="section in data.disassemblyData.sectionData">
                 <div class='sectionS'>
                   <div >
                       

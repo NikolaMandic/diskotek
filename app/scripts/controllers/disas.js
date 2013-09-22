@@ -5,7 +5,7 @@ angular.module('ldApp')
 
 
     $scope.sharedData=Data.sharedData;
-
+    $scope.data=Data;
     $scope.$watch('Data.sharedData.disasViewData.sectionD[0]',function(n,o){
       $scope.selectedSection=n;
       $scope.selected='section';
@@ -68,7 +68,7 @@ angular.module('ldApp')
           //$scope.$apply();
           //$scope.headerC();,
           var disas=_.flatten(_.pluck(section.sectionContent,'symContent'));
-          var bboxes=Data.bbfd(disas);
+          var bboxes=Data.disassemblyData.bbfd(disas);
           var height=disas.length*15+bboxes.length*50+200;
           $('#graphViewPlace'+index).html('');
           bboxF.r({
@@ -106,12 +106,13 @@ angular.module('ldApp')
    
       
     };
-    $scope.renderDisasembly=function(){
+    $scope.renderDisasembly=function(disassembly){
      // Data.getHeaders();
+      var disassemblyData=Data.disassemblyData;
       $scope.selected='header';
       $scope.$apply();
      // $scope.$watch('Data.sharedData.disasViewData.sheaders',function(n,o){
-        var sheaders = Data.sharedData.disasViewData.sheaders;
+        var sheaders = disassemblyData.sectionHeaders;
         var tsheaders = _.reject(_.sortBy(sheaders,'VMA'),function(v){
           return v.VMA==='00000000';
         });
@@ -125,8 +126,8 @@ angular.module('ldApp')
         var ry=50;
         var fH=10;
         var offc =-1;
-        var ehdr =Data.sharedData.disasViewData.headers.ehdr;
-        var phdr = Data.sharedData.disasViewData.headers.phdr;
+        var ehdr = disassemblyData.fileHeaders.ehdr;
+        var phdr = disassemblyData.fileHeaders.phdr;
         var r;
 
         r = Raphael('holder',1500,50*3+phdr.length*(50*2)+200);
@@ -219,8 +220,8 @@ angular.module('ldApp')
 // end of section header drawing
 
 
-      var sectionHeaders = Data.sharedData.disasViewData.sheaders;
-      var ss = Data.sharedData.disasViewData.sectionD;
+      var sectionHeaders = disassemblyData.sectionHeaders;
+      var ss = disassemblyData.sectionD;
 
       //sort sections by offset in file
       var sectionHeadersSorted=_.sortBy(sectionHeaders,'fOff');

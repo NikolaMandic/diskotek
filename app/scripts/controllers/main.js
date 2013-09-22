@@ -62,7 +62,7 @@ angular.module('ldApp')
 
     };
     $scope.commandDissasemble = function() {
-      Data.disassemble($scope.file);
+      Data.disassemblyData.disassemble($scope.file);
     };
     $scope.stop = function() {
       $scope.commandExecL('detach',function detachC(){
