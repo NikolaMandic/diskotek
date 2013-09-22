@@ -59,17 +59,36 @@ angular.module('ldApp')
   obj.startCommand = function (name) {
 
 
-    obj.callbackQueue.push(function callbackForStart() {});
-    obj.callbackQueue.push(function callbackForArchSet() {});
-    obj.callbackQueue.push(function callbackForTarget() {});
-    socket.emit('start', { name: name });
-    socket.emit('command', { ptyPayload: 'set arch arm' });
-    socket.emit('command', { ptyPayload: 'target remote :12345' });
-    obj.getDissasembly();
-    obj.getRegisterInfo();
-    obj.infoBreakpoints();
+    command.commandExecO({
+      msgType:'start',
+      payload:{name:name}
+    });
+    command.commandExecO({
+      ptyPayload:'set arch arm'
+    });
+    command.commandExecO({
+      ptyPayload:'target remote :12345'
+    });
+    obj.debugData.getDissasembly();
+    obj.debugData.getRegisterInfo();
+    obj.debugData.infoBreakpoints();
 
   };
+  obj.stop = function(){
+  
+    command.commandExecO({
+      ptyPayload:'detach',
+      callback:function detachC(){
+      obj.debugData.disassembly=['detached'];
+      obj.debugData.registers=[];
+      obj.data=[];
+      }
+    });
+    command.commandExecO({
+      ptyPayload:'quit'
+    });
+    //$scope.commandExecL('quit',null);
+  }
   return obj;
 }]);
 

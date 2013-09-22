@@ -2,8 +2,9 @@
     
   <div id="dissasembly" class="hero-unit" draggable resizable>
 
-    <div class="{{thing.current?'inst_row_current':'inst_row'}}" ng-repeat="thing in sharedData.disasArr">
+    <div class="{{thing.current?'inst_row_current':'inst_row'}}" ng-repeat="thing in data.debugData.disassembly">
       <div class="inst_addr {{thing.hasBreakpoint?'breakpoint':'' }}" ng-click="toggleBreakpoint(thing.address,thing)">
+        
           {{thing.address}}
         </div>
         
@@ -29,7 +30,7 @@
     <h3>  </h3>
     -->
   <div id="registers" draggable resizable>
-    <div class="reg_row" ng-repeat="register in sharedData.registers">
+    <div class="reg_row" ng-repeat="register in data.debugData.registers">
         <div class="reg_name">
           {{register.name}}
         </div>
@@ -44,7 +45,7 @@
   </div>
   <div commandWind draggable resizable ></div>
   <div id="commandResult" draggable resizable>
-      <div id="crrow" ng-repeat="row in sharedData.commandResult">
+      <div id="crrow" ng-repeat="row in data.debugData.commandResult">
         {{row}}
       </div>
   </div>

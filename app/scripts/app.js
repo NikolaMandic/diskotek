@@ -5,7 +5,7 @@ angular.module('ldApp', ['ngRoute'])
     $routeProvider
       .when('/', {
         templateUrl: 'views/main.html',
-        controller: 'MainCtrl2'
+        controller: 'debugController'
       }).when('/ch',{
         templateUrl: 'views/ch.html',
         controller: 'Ch'

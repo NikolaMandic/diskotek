@@ -1,6 +1,9 @@
 angular.module('ldApp').factory('command',[
                                 function(){
-  var obj={};
+  var obj={
+    resultRaw:[],
+    result:'',
+  };
   obj.callbackQueue=[];
   obj.commandExecL=function(cmnd,resultVariable/*,splice1,splice2*/){
     // $scope.result=cmnd;
@@ -46,14 +49,18 @@ angular.module('ldApp').factory('command',[
     }else{
       commandType= 'command';
     }*/
-    obj.sock.emit(commandType,{
-      ptyPayload:args.cmnd
-    });
-
+    if(args.ptyPayload){
+      obj.sock.emit(commandType,{
+        ptyPayload:args.cmnd
+      });
+    }else{
+      obj.sock.emit(commandType,payload);
+    }
   };
   obj.commandExecO=function(args){//cmnd,resultVariable,splice1,splice2){
 
     // $scope.result=cmnd;
+    var callback;
     if(_.isFunction(args.callback)){
 /*
         obj.callbackQueue.push({
@@ -61,18 +68,30 @@ angular.module('ldApp').factory('command',[
           c:args.callback
         });
         */
-      obj.callbackQueue.push(args.callback);
+      //obj.callbackQueue.push(args.callback);
+      callback = args.callback;
     }else{
       if(args.resultVariable){
-        obj.callbackQueue.push(function putStuffinResultC() {
+          // obj.callbackQueue.push(
+          callback=function putStuffinResultC() {
           obj.sharedData[args.resultVariable]=obj.sharedData.result;
-        });
+        };
+        //);
       }else{
         if(args.resultVariable!==null ){
-          obj.callbackQueue.push(function anonCallback() {});
+          //obj.callbackQueue.push(
+            callback=function anonCallback() {};
+          //);
         }
       }
     }
+    if(args.scope){
+      callback = _.wrap(callback,function(f){
+        f();
+        scope.$apply();
+      });
+    }
+    obj.callbackQueue.push(callback);
     var msgType = (args.msgType)?args.msgType : 'command';
     var cmd = (args.ptyPayload)?args.ptyPayload : args.cmnd;
     obj.sock.emit(msgType,{
@@ -109,15 +128,15 @@ angular.module('ldApp').factory('command',[
   socket.on('news', function (data) {
     console.log(data);
     var dataSplited = data.data.split('\n') ;
-    obj.sharedData.resultRaw = obj.sharedData.resultRaw.concat(dataSplited);
-    obj.sharedData.result=obj.sharedData.resultRaw;
-    var last = obj.sharedData.resultRaw[obj.sharedData.resultRaw.length-1];
+    obj.resultRaw = obj.resultRaw.concat(dataSplited);
+    obj.result=obj.resultRaw;
+    var last = obj.resultRaw[obj.resultRaw.length-1];
     if(last ==='(gdb) '){
       var callback = obj.callbackQueue.shift();
       if(callback){
-        callback(obj.sharedData.result);
+        callback(obj.result);
       }
-      obj.sharedData.resultRaw=[];
+      obj.resultRaw=[];
 
     }
     if('scope' in obj){

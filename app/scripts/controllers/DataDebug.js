@@ -1,6 +1,6 @@
 
-angular.module('ldApp').factory('DataDebug',['command','DataDisassemblyParsers',
-                                function(command,dataParsers){
+angular.module('ldApp').factory('DataDebug',['$rootScope','command','DataDisassemblyParsers',
+                                function($rootScope,command,dataParsers){
  var debugData = {};
   //transforms command output recived from server into array of instructions
   debugData.dissasemblyCallback= function dissasemblyCallback(disassemblyRaw){
@@ -117,73 +117,99 @@ angular.module('ldApp').factory('DataDebug',['command','DataDisassemblyParsers',
   };
  debugData.getDissasembly = function getDissasembly () {
 
-    obj.callbackQueue.push(debugData.dissasemblyCallback);
-    socket.emit('command', { ptyPayload: 'disas $pc-80,$pc+80' });
-  };
-  debugData.getRegisterInfo = function (){
-    debugData.callbackQueue.push(function getRegInfoC(result){
+   command.commandExecO({
+     ptyPayload:'disas $pc-80,$pc+80',
+     callback:debugData.dissasemblyCallback
+   });
+   /*
+   obj.callbackQueue.push(debugData.dissasemblyCallback);
+   socket.emit('command', { ptyPayload: 'disas $pc-80,$pc+80' });
+   */
+ };
+ debugData.getRegisterInfo = function (){
+   command.commandExecO({
+     callback:function getRegInfoC(result){
        debugData.registers = result.slice(0,-1).map(function(value){
-        var s=value.split(/(\w+)\s*(\w+)\s*(\w+)/);
-        return {
-          name:s[1],
-          value1:s[2],
-          value2:s[3],
+         var s=value.split(/(\w+)\s*(\w+)\s*(\w+)/);
+         return {
+           name:s[1],
+           value1:s[2],
+           value2:s[3],
+         };
+       });
+     },
+     ptyPayload:'info registers'
+   });
+    //debugData.callbackQueue.push();
 
-        };
-      });
-    });
-
-    socket.emit('command', { ptyPayload: 'info registers' });
+    //socket.emit('command', { ptyPayload: 'info registers' });
   };
   debugData.setBreakpoint = function(address) {
-    obj.callbackQueue.push(function setBreakpointC() {});
-
+    //obj.callbackQueue.push(function setBreakpointC() {});
+    command.commandExecO({
+      ptyPayload:'break *' + address
+    });
+    /*
     socket.emit('command',{
       ptyPayload: 'break *' + address
     });
-
+    */
   };
 
   debugData.removeBreakpoint = function(address) {
-    obj.callbackQueue.push(function removeBreakpointC() {});
-    socket.emit('command',{
-      ptyPayload : 'clear *' + address
-    });
+    //obj.callbackQueue.push(function removeBreakpointC() {});
+    command.commandExecO({
+      ptyPayload: 'clear *' + address
 
+    });
+    /*
+    socket.emit('command',{
+      ptyPayload :    });
+    */
   };
   debugData.infoBreakpoints = function(){
-    command.callbackQueue.push(function infoBreakpointsC(result) {
+    //command.callbackQueue.push(
+    function infoBreakpointsC(result) {
       if(result[0].match(/^No.*/)){
-        return;
-      }
-      debugData.breakpoints = result.slice(1).map(function(value) {
-        var split = value.split(/\s*(\w+)\s*(\w+)\s*(\w+)\s*(\w+)\s*(\w*)\s*/);
-        return{
-          num:split[1],
-          type:split[2],
-          disp:split[3],
-          enb:split[4],
-          address:split[5],
-          what:split[6]
-        };
-      });
-      if(debugData.disassembly){
-        _.each(debugData.breakpoints,function(value){
-          var elem = _.findWhere(debugData.disassembly,{'address':value.address});
-          if(elem){
-            var indexDest = _.indexOf(debugData.disassembly,elem);
-            if(indexDest!==-1){
-              elem.hasBreakpoint=true;
-            }
-          }
+       
+      }else{
 
+        debugData.breakpoints = result.slice(1).map(function(value) {
+          var split = value.split(/\s*(\w+)\s*(\w+)\s*(\w+)\s*(\w+)\s*(\w*)\s*/);
+          return{
+            num:split[1],
+            type:split[2],
+            disp:split[3],
+            enb:split[4],
+            address:split[5],
+            what:split[6]
+          };
         });
+        if(debugData.disassembly){
+          _.each(debugData.breakpoints,function(value){
+            var elem = _.findWhere(debugData.disassembly,{'address':value.address});
+            if(elem){
+              var indexDest = _.indexOf(debugData.disassembly,elem);
+              if(indexDest!==-1){
+                elem.hasBreakpoint=true;
+              }
+            }
 
+          });
+
+        }
       }
-     });
-    socket.emit('command',{
-      ptyPayload : 'info break'
+      $rootScope.$emit('debugDataLoaded');
+    };
+    command.commandExecO({
+      callback:infoBreakpointsC,
+      ptyPayload:'info break'
+
     });
+                               //);
+    //    socket.emit('command',{
+    //  ptyPayload : 'info break'
+    //});
     
   };
   return debugData;
