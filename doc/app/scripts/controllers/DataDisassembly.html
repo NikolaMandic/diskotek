@@ -1,0 +1,233 @@
+<!DOCTYPE html><html lang="en"><head><title>app/scripts/controllers/DataDisassembly</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../../../"><meta name="groc-document-path" content="app/scripts/controllers/DataDisassembly"><meta name="groc-project-path" content="app/scripts/controllers/DataDisassembly.js"><link rel="stylesheet" type="text/css" media="all" href="../../../assets/style.css"><script type="text/javascript" src="../../../assets/behavior.js"></script><body><div id="meta"><div class="file-path">app/scripts/controllers/DataDisassembly.js</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">&#39;ldApp&#39;</span><span class="p">).</span><span class="nx">factory</span><span class="p">(</span><span class="s1">&#39;DataDisassembly&#39;</span><span class="p">,[</span><span class="s1">&#39;$rootScope&#39;</span><span class="p">,</span><span class="s1">&#39;command&#39;</span><span class="p">,</span><span class="s1">&#39;DataDisassemblyParsers&#39;</span><span class="p">,</span>
+                                <span class="kd">function</span><span class="p">(</span><span class="nx">$rootScope</span><span class="p">,</span><span class="nx">command</span><span class="p">,</span><span class="nx">dataParsers</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">disassemblyData</span><span class="o">=</span><span class="p">{};</span>
+  <span class="kd">var</span> <span class="nx">parsers</span><span class="o">=</span><span class="nx">dataParsers</span><span class="p">;</span>
+  
+  <span class="nx">disassemblyData</span><span class="p">.</span><span class="nx">getFileHeaders</span><span class="o">=</span><span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">){</span>
+    <span class="c1">//get file headers</span>
+    <span class="kd">function</span> <span class="nx">fileHeadersC</span> <span class="p">(</span><span class="nx">data</span><span class="p">){</span>
+      <span class="nx">disassemblyData</span><span class="p">.</span><span class="nx">fileHeaders</span><span class="o">=</span><span class="nx">parsers</span><span class="p">.</span><span class="nx">parseHeaders</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="nx">command</span><span class="p">.</span><span class="nx">commandExecO</span><span class="p">({</span>
+      <span class="nx">ptyPayload</span><span class="o">:</span><span class="s1">&#39;readelf -h -l &#39;</span> <span class="o">+</span> <span class="nx">file</span><span class="p">,</span>
+      <span class="nx">callback</span><span class="o">:</span><span class="nx">fileHeadersC</span><span class="p">,</span>
+      <span class="nx">msgType</span><span class="o">:</span><span class="s1">&#39;exec&#39;</span>
+    <span class="p">});</span>
+  <span class="p">};</span>
+  <span class="nx">disassemblyData</span><span class="p">.</span><span class="nx">getSectionHeaders</span><span class="o">=</span><span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">){</span>
+    <span class="c1">//get section headers</span>
+    <span class="kd">function</span> <span class="nx">sectionHeadersC</span> <span class="p">(</span><span class="nx">data</span><span class="p">){</span>
+      <span class="nx">disassemblyData</span><span class="p">.</span><span class="nx">sectionHeaders</span><span class="o">=</span><span class="nx">parsers</span><span class="p">.</span><span class="nx">parseSHeaders</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+
+      <span class="nx">disassemblyData</span><span class="p">.</span><span class="nx">getHexDump</span><span class="p">(</span><span class="nx">file</span><span class="p">,</span><span class="nx">disassemblyData</span><span class="p">.</span><span class="nx">sectionHeaders</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="nx">command</span><span class="p">.</span><span class="nx">commandExecO</span><span class="p">({</span>
+      <span class="nx">ptyPayload</span><span class="o">:</span><span class="s1">&#39;arm-linux-gnueabi-objdump -h &#39;</span> <span class="o">+</span> <span class="nx">file</span><span class="p">,</span>
+      <span class="nx">callback</span><span class="o">:</span><span class="nx">sectionHeadersC</span><span class="p">,</span>
+      <span class="nx">msgType</span><span class="o">:</span><span class="s1">&#39;exec&#39;</span>
+    <span class="p">});</span>
+  <span class="p">};</span>
+  <span class="nx">disassemblyData</span><span class="p">.</span><span class="nx">getHeaders</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">file</span><span class="p">){</span>
+    <span class="nx">disassemblyData</span><span class="p">.</span><span class="nx">getFileHeaders</span><span class="p">(</span><span class="nx">file</span><span class="p">);</span>
+    <span class="nx">disassemblyData</span><span class="p">.</span><span class="nx">getSectionHeaders</span><span class="p">(</span><span class="nx">file</span><span class="p">);</span>
+  <span class="p">};</span>
+  <span class="nx">disassemblyData</span><span class="p">.</span><span class="nx">getSectionDisassembly</span><span class="o">=</span><span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">){</span>
+    <span class="nx">command</span><span class="p">.</span><span class="nx">commandExecO</span><span class="p">({</span>
+      <span class="nx">callback</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">result</span><span class="p">){</span>
+        <span class="c1">//parse result of a -D command</span>
+        <span class="nx">disassemblyData</span><span class="p">.</span><span class="nx">sectionData</span><span class="o">=</span><span class="nx">parsers</span><span class="p">.</span><span class="nx">processData</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
+        <span class="c1">//var texts = _.findWhere(obj.sharedData.disasViewData.sectionD,{sectionName:&#39;.text&#39;});</span>
+        <span class="c1">//obj.bbfd(_.flatten(_.pluck(texts.sectionContent,&#39;symContent&#39;)));</span>
+      <span class="p">},</span>
+      <span class="nx">msgType</span><span class="o">:</span> <span class="s1">&#39;exec&#39;</span><span class="p">,</span>
+      <span class="nx">ptyPayload</span><span class="o">:</span><span class="s1">&#39;arm-linux-gnueabi-objdump -D &#39;</span> <span class="o">+</span> <span class="nx">file</span>
+
+    <span class="p">});</span>
+  <span class="p">};</span>
+  <span class="nx">disassemblyData</span><span class="p">.</span><span class="nx">getHexDump</span><span class="o">=</span><span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">,</span><span class="nx">sectionHeaders</span><span class="p">){</span>
+    <span class="nx">_</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">sectionHeaders</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">v</span><span class="p">,</span><span class="nx">i</span><span class="p">){</span>
+      <span class="kd">function</span> <span class="nx">hd</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
+        <span class="nx">disassemblyData</span><span class="p">.</span><span class="nx">sectionData</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">hexDump</span><span class="o">=</span><span class="nx">parsers</span><span class="p">.</span><span class="nx">parseXD</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s2">&quot;\n&quot;</span><span class="p">).</span><span class="nx">slice</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">2</span><span class="p">));</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">i</span><span class="o">==</span><span class="nx">sectionHeaders</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">){</span>
+          <span class="nx">disassemblyData</span><span class="p">.</span><span class="nx">doneLoading</span><span class="p">();</span> 
+        <span class="p">}</span>
+      <span class="p">}</span>
+      <span class="nx">command</span><span class="p">.</span><span class="nx">commandExecO</span><span class="p">({</span>
+        <span class="nx">ptyPayload</span><span class="o">:</span><span class="s1">&#39;readelf -x &#39;</span><span class="o">+</span><span class="nx">v</span><span class="p">.</span><span class="nx">name</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="nx">file</span><span class="p">,</span>
+        <span class="nx">callback</span><span class="o">:</span><span class="nx">hd</span><span class="p">,</span>
+        <span class="nx">msgType</span><span class="o">:</span><span class="s1">&#39;exec&#39;</span>
+      <span class="p">});</span>
+    <span class="p">});</span>
+ 
+  <span class="p">};</span>
+  <span class="nx">disassemblyData</span><span class="p">.</span><span class="nx">doneLoading</span><span class="o">=</span><span class="kd">function</span><span class="p">(){</span>
+    
+    <span class="nx">$rootScope</span><span class="p">.</span><span class="nx">$emit</span><span class="p">(</span><span class="s2">&quot;disassemblyDataLoaded&quot;</span><span class="p">,{</span>
+      <span class="nx">disassemblyData</span><span class="o">:</span><span class="nx">disassemblyData</span>
+    <span class="p">});</span>
+  <span class="p">};</span>
+  <span class="nx">disassemblyData</span><span class="p">.</span><span class="nx">disassemble</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">disassemblyData</span><span class="p">.</span><span class="nx">getSectionDisassembly</span><span class="p">(</span><span class="nx">file</span><span class="p">);</span>
+    <span class="nx">disassemblyData</span><span class="p">.</span><span class="nx">getHeaders</span><span class="p">(</span><span class="nx">file</span><span class="p">);</span>
+  <span class="p">};</span>
+  
+  <span class="c1">//transforms command output recived from server into array of instructions</span>
+  <span class="nx">disassemblyData</span><span class="p">.</span><span class="nx">dissasemblyCallback</span><span class="o">=</span> <span class="kd">function</span> 
+    <span class="nx">dissasemblyCallback</span><span class="p">(</span><span class="nx">disassemblyRaw</span><span class="p">){</span>
+    
+    <span class="kd">var</span> <span class="nx">dissasembly</span><span class="o">=</span> <span class="nx">disassemblyRaw</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">b</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="nx">b</span><span class="p">.</span><span class="nx">push</span><span class="p">([]);</span>
+    <span class="kd">var</span> <span class="nx">basicBlocks</span><span class="o">=</span><span class="p">[];</span>
+    <span class="nx">basicBlocks</span><span class="p">.</span><span class="nx">push</span><span class="p">([]);</span>
+
+    <span class="kd">var</span> <span class="nx">disasArr</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="kd">var</span> <span class="nx">disasObjArr</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="c1">//bbBoundaryArr.push({from:0,to:0});</span>
+    <span class="kd">var</span> <span class="nx">boundaries</span><span class="o">=</span><span class="p">[];</span>
+    <span class="kd">var</span> <span class="nx">branchPreviousInst</span><span class="o">=</span><span class="kc">false</span><span class="p">;</span>
+
+    <span class="kd">var</span> <span class="nx">branchArray</span><span class="o">=</span><span class="p">[];</span>
+    <span class="nx">_</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">dissasembly</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">){</span>
+      <span class="c1">//detects disassembly line with =&gt; in it</span>
+      <span class="kd">var</span> <span class="nx">disasLineCurrent</span><span class="o">=</span><span class="sr">/^\=\&gt;\s*(.*):\s+(\w+)([^;]*)(;(.*))?$/</span><span class="p">;</span>
+      <span class="c1">//detects line from gdb output</span>
+      <span class="kd">var</span> <span class="nx">disasLine</span><span class="o">=</span><span class="sr">/^\s*(.*):\s+(\w+)([^;]*)(;(.*))?$/</span><span class="p">;</span>
+
+      <span class="kd">var</span> <span class="nx">splitedInstruction</span><span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">typeOfReg</span> <span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">instObj</span> <span class="p">;</span>
+      <span class="k">if</span><span class="p">(</span><span class="nx">value</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="nx">disasLineCurrent</span><span class="p">)){</span>
+        <span class="nx">splitedInstruction</span> <span class="o">=</span>  <span class="nx">value</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="nx">disasLineCurrent</span><span class="p">);</span>
+        <span class="nx">typeOfReg</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+        <span class="nx">instObj</span> <span class="o">=</span><span class="p">{</span>
+          <span class="nx">current</span><span class="o">:</span><span class="kc">true</span><span class="p">,</span>
+          <span class="nx">address</span><span class="o">:</span> <span class="nx">splitedInstruction</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+          <span class="nx">opcode</span><span class="o">:</span>  <span class="nx">splitedInstruction</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+          <span class="nx">operands</span><span class="o">:</span><span class="nx">splitedInstruction</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+          <span class="nx">comment</span><span class="o">:</span> <span class="nx">splitedInstruction</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+        <span class="p">};</span>
+      <span class="p">}</span><span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">value</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="nx">disasLine</span><span class="p">)){</span>
+        <span class="nx">splitedInstruction</span> <span class="o">=</span>  <span class="nx">value</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="nx">disasLine</span><span class="p">);</span>
+        <span class="nx">typeOfReg</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span>
+        <span class="nx">instObj</span> <span class="o">=</span><span class="p">{</span>
+          <span class="nx">current</span><span class="o">:</span><span class="kc">false</span><span class="p">,</span>
+          <span class="nx">address</span><span class="o">:</span> <span class="nx">splitedInstruction</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+          <span class="nx">opcode</span><span class="o">:</span>  <span class="nx">splitedInstruction</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+          <span class="nx">operands</span><span class="o">:</span><span class="nx">splitedInstruction</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+          <span class="nx">comment</span><span class="o">:</span> <span class="nx">splitedInstruction</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+          <span class="nx">uppperBoundary</span><span class="o">:</span><span class="kc">false</span><span class="p">,</span><span class="c1">//true if it is upper boundary of basic block</span>
+          <span class="nx">downBoundary</span><span class="o">:</span><span class="kc">false</span><span class="p">,</span><span class="c1">//bottom boundary</span>
+        <span class="p">};</span>
+      <span class="p">}</span>
+
+      <span class="k">if</span><span class="p">(</span><span class="nx">splitedInstruction</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">branchPreviousInst</span><span class="p">){</span>
+          <span class="nx">instObj</span><span class="p">.</span><span class="nx">uppperBoundary</span><span class="o">=</span><span class="kc">true</span><span class="p">;</span>
+          <span class="nx">boundaries</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">instObj</span><span class="p">);</span>
+          <span class="nx">branchPreviousInst</span><span class="o">=</span><span class="kc">false</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">splitedInstruction</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="nx">match</span><span class="p">(</span><span class="sr">/^b.*/</span><span class="p">)){</span>
+          <span class="nx">branchPreviousInst</span><span class="o">=</span><span class="kc">true</span><span class="p">;</span>
+          <span class="nx">instObj</span><span class="p">.</span><span class="nx">bottomBoundary</span><span class="o">=</span><span class="kc">true</span><span class="p">;</span>
+          <span class="nx">boundaries</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">instObj</span><span class="p">);</span>
+          <span class="nx">branchArray</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">instObj</span><span class="p">);</span>
+        <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+          <span class="k">if</span><span class="p">(</span><span class="nx">boundaries</span><span class="p">.</span><span class="nx">length</span><span class="o">===</span><span class="mi">0</span><span class="p">){</span>
+            <span class="nx">instObj</span><span class="p">.</span><span class="nx">uppperBoundary</span><span class="o">=</span><span class="kc">true</span><span class="p">;</span>
+            <span class="nx">boundaries</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">instObj</span><span class="p">);</span>
+          <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="nx">disasArr</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">splitedInstruction</span><span class="p">);</span>
+        <span class="nx">disasObjArr</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">instObj</span><span class="p">);</span>
+
+      <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+
+      <span class="p">}</span>
+
+
+    <span class="p">});</span>
+   <span class="nx">disassemblyData</span><span class="p">.</span><span class="nx">disassembly</span><span class="o">=</span><span class="nx">disasObjArr</span><span class="p">;</span>
+  <span class="p">};</span>
+
+  <span class="c1">//return array of basic blocks from array of instructions</span>
+  <span class="nx">disassemblyData</span><span class="p">.</span><span class="nx">bbfd</span><span class="o">=</span><span class="kd">function</span> <span class="nx">basicBlocksFromDisassembly</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
+    <span class="kd">var</span> <span class="nx">disassembly</span> <span class="o">=</span> <span class="nx">data</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">b</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="nx">b</span><span class="p">.</span><span class="nx">push</span><span class="p">([]);</span>
+    <span class="kd">var</span> <span class="nx">basicBlocks</span><span class="o">=</span><span class="p">[];</span>
+    <span class="nx">basicBlocks</span><span class="p">.</span><span class="nx">push</span><span class="p">([]);</span>
+    <span class="kd">var</span> <span class="nx">disasArr</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="kd">var</span> <span class="nx">disasObjArr</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="kd">var</span> <span class="nx">boundaries</span><span class="o">=</span><span class="p">[];</span>
+    <span class="kd">var</span> <span class="nx">branchPreviousInst</span><span class="o">=</span><span class="kc">false</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">branchArray</span><span class="o">=</span><span class="p">[];</span>
+    
+    <span class="nx">_</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">disassembly</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">){</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">branchPreviousInst</span><span class="p">){</span>
+        <span class="nx">value</span><span class="p">.</span><span class="nx">uppperBoundary</span><span class="o">=</span><span class="kc">true</span><span class="p">;</span>
+        <span class="nx">boundaries</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">value</span><span class="p">);</span>
+        <span class="nx">branchPreviousInst</span><span class="o">=</span><span class="kc">false</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="k">if</span><span class="p">(</span><span class="nx">value</span><span class="p">.</span><span class="nx">op</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="sr">/^b.*/</span><span class="p">)){</span>
+        <span class="nx">branchPreviousInst</span><span class="o">=</span><span class="kc">true</span><span class="p">;</span>
+        <span class="nx">value</span><span class="p">.</span><span class="nx">bottomBoundary</span><span class="o">=</span><span class="kc">true</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">branchPreviousInst</span><span class="p">){</span>
+          <span class="nx">boundaries</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">value</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="nx">branchArray</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">value</span><span class="p">);</span>
+      <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">boundaries</span><span class="p">.</span><span class="nx">length</span><span class="o">===</span><span class="mi">0</span><span class="p">){</span>
+          <span class="nx">value</span><span class="p">.</span><span class="nx">uppperBoundary</span><span class="o">=</span><span class="kc">true</span><span class="p">;</span>
+          <span class="nx">boundaries</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">value</span><span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+      <span class="nx">disasArr</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">value</span><span class="p">);</span>
+      <span class="nx">disasObjArr</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">value</span><span class="p">);</span>
+    <span class="p">});</span>
+
+
+    <span class="c1">//find instructions that are jumped on and put it in boundaries</span>
+    <span class="nx">_</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">branchArray</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">){</span>
+      <span class="kd">var</span> <span class="nx">elem</span> <span class="o">=</span> <span class="nx">_</span><span class="p">.</span><span class="nx">findWhere</span><span class="p">(</span><span class="nx">disasObjArr</span><span class="p">,{</span><span class="s1">&#39;address&#39;</span><span class="o">:</span><span class="p">(</span><span class="sr">/\s*(\w+).*/</span><span class="p">).</span><span class="nx">exec</span><span class="p">(</span><span class="nx">value</span><span class="p">.</span><span class="nx">operands</span><span class="p">)[</span><span class="mi">1</span><span class="p">]});</span>
+      <span class="k">if</span><span class="p">(</span><span class="nx">elem</span><span class="p">){</span>
+        <span class="kd">var</span> <span class="nx">indexDest</span> <span class="o">=</span> <span class="nx">_</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">boundaries</span><span class="p">,</span><span class="nx">elem</span><span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">indexDest</span><span class="o">===-</span><span class="mi">1</span><span class="p">){</span>
+          <span class="nx">elem</span><span class="p">.</span><span class="nx">up</span><span class="o">=</span><span class="kc">true</span><span class="p">;</span>
+          <span class="nx">boundaries</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">elem</span><span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+
+    <span class="p">});</span>
+    <span class="kd">var</span> <span class="nx">boundariesSorted</span><span class="o">=</span><span class="nx">_</span><span class="p">.</span><span class="nx">sortBy</span><span class="p">(</span><span class="nx">boundaries</span><span class="p">,</span><span class="s1">&#39;address&#39;</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">boundaryArrC</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+    <span class="nx">_</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">disasObjArr</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">){</span>
+      <span class="k">if</span><span class="p">(</span><span class="nx">value</span><span class="o">===</span><span class="nx">boundariesSorted</span><span class="p">[</span><span class="nx">boundaryArrC</span><span class="p">]){</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">value</span><span class="p">.</span><span class="nx">uppperBoundary</span> <span class="o">&amp;&amp;</span> <span class="nx">value</span><span class="p">.</span><span class="nx">bottomBoundary</span><span class="p">){</span>
+          <span class="nx">basicBlocks</span><span class="p">.</span><span class="nx">push</span><span class="p">([]);</span>
+          <span class="nx">basicBlocks</span><span class="p">[</span><span class="nx">basicBlocks</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nx">push</span><span class="p">(</span><span class="nx">value</span><span class="p">);</span>
+
+          <span class="nx">basicBlocks</span><span class="p">.</span><span class="nx">push</span><span class="p">([]);</span>
+        <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+          <span class="k">if</span><span class="p">(</span><span class="nx">value</span><span class="p">.</span><span class="nx">uppperBoundary</span><span class="o">===</span><span class="kc">true</span><span class="p">){</span>
+            <span class="k">if</span><span class="p">(</span><span class="nx">basicBlocks</span><span class="p">[</span><span class="nx">basicBlocks</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nx">length</span><span class="o">!==</span><span class="mi">0</span><span class="p">){</span>
+              <span class="nx">basicBlocks</span><span class="p">.</span><span class="nx">push</span><span class="p">([]);</span>
+            <span class="p">}</span>
+            <span class="nx">basicBlocks</span><span class="p">[</span><span class="nx">basicBlocks</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nx">push</span><span class="p">(</span><span class="nx">value</span><span class="p">);</span>
+
+          <span class="p">}</span>
+          <span class="k">if</span><span class="p">(</span><span class="nx">value</span><span class="p">.</span><span class="nx">bottomBoundary</span><span class="o">===</span><span class="kc">true</span><span class="p">){</span>
+            <span class="nx">basicBlocks</span><span class="p">[</span><span class="nx">basicBlocks</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nx">push</span><span class="p">(</span><span class="nx">value</span><span class="p">);</span>
+          <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="nx">boundaryArrC</span><span class="o">+=</span><span class="mi">1</span><span class="p">;</span>
+
+      <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+        <span class="nx">basicBlocks</span><span class="p">[</span><span class="nx">basicBlocks</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nx">push</span><span class="p">(</span><span class="nx">value</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">});</span>
+    <span class="k">return</span> <span class="nx">basicBlocks</span><span class="p">;</span>
+  <span class="p">};</span>
+
+  <span class="k">return</span> <span class="nx">disassemblyData</span><span class="p">;</span>
+<span class="p">}]);</span></div></div></div></div></body></html>
