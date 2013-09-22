@@ -1,9 +1,43 @@
-
+/*
+ * this is a disassembly module that contains state for disassembly of 
+ * a target also contains commands for disassembling a target
+ *
+ * it returns an object with following fields:
+ * fileHeaders: contains elf header and program header
+ *    { ehdr //elfheader
+ *      phdr //program header
+ *    }
+ * sectionHeaders: // this is array of section headers
+ * [
+ *  //fields correspond to the output of objdump command
+ *   { 
+ *       name:, name of a section
+ *       size:,
+ *       VMA:,  //virtual mem addr
+ *       LMA:,  //load addr 
+ *       fOff:, //file offset
+ *       align:,
+ *       flags:,       
+ *  
+ *   },
+ *   {
+ *      name
+ *      ....
+ *   },
+ * ]
+ * */
 angular.module('ldApp').factory('DataDisassembly',['$rootScope','command','DataDisassemblyParsers',
                                 function($rootScope,command,dataParsers){
   var disassemblyData={};
+  /*
+   * variable parsers is put there to make writing shorter   
+   * it is a collection of functions for parsing output of 
+   * utilities that do the work 
+   * * */
   var parsers=dataParsers;
-  
+  /*
+   * this command gets elf and program headers
+   * */
   disassemblyData.getFileHeaders=function(file){
     //get file headers
     function fileHeadersC (data){
@@ -15,8 +49,16 @@ angular.module('ldApp').factory('DataDisassembly',['$rootScope','command','DataD
       msgType:'exec'
     });
   };
+
+  /*
+   * sends command to invoke objdump to get headers
+   * registers a callback that will call the parser function to parse output
+   * and put everything in an array called sectionHeaders 
+   * also calls function that will get hexdump and that is the last function
+   * called when getting disassembly 
+   * 
+   * */
   disassemblyData.getSectionHeaders=function(file){
-    //get section headers
     function sectionHeadersC (data){
       disassemblyData.sectionHeaders=parsers.parseSHeaders(data);
 
@@ -28,23 +70,37 @@ angular.module('ldApp').factory('DataDisassembly',['$rootScope','command','DataD
       msgType:'exec'
     });
   };
+
+  /*
+   *
+   * */
   disassemblyData.getHeaders = function (file){
     disassemblyData.getFileHeaders(file);
     disassemblyData.getSectionHeaders(file);
   };
+
+  /*
+   *get disassembly function
+   * */
   disassemblyData.getSectionDisassembly=function(file){
     command.commandExecO({
       callback: function(result){
         //parse result of a -D command
         disassemblyData.sectionData=parsers.processData(result);
-        //var texts = _.findWhere(obj.sharedData.disasViewData.sectionD,{sectionName:'.text'});
-        //obj.bbfd(_.flatten(_.pluck(texts.sectionContent,'symContent')));
       },
       msgType: 'exec',
       ptyPayload:'arm-linux-gnueabi-objdump -D ' + file
 
     });
   };
+
+  /*
+   * gets output of hex dump from readelf utility
+   * and puts result in hexDump field of every section in sectionData array
+   * since this is the last function called in getting disassembly 
+   * it will call the doneLoading function
+   * it it stops being last function than this will have to change
+   * */
   disassemblyData.getHexDump=function(file,sectionHeaders){
     _.each(sectionHeaders,function(v,i){
       function hd(data){
@@ -61,12 +117,19 @@ angular.module('ldApp').factory('DataDisassembly',['$rootScope','command','DataD
     });
  
   };
+  /*
+   * triggers event that signals that a view should be updated since
+   * data arived
+   * */
   disassemblyData.doneLoading=function(){
-    
-    $rootScope.$emit("disassemblyDataLoaded",{
+     $rootScope.$emit("disassemblyDataLoaded",{
       disassemblyData:disassemblyData
     });
   };
+  /*
+   * this function calls functions that get data from backend
+   * 
+   * */
   disassemblyData.disassemble = function(file) {
     disassemblyData.getSectionDisassembly(file);
     disassemblyData.getHeaders(file);

@@ -5,7 +5,10 @@
 var supports3DTransforms =  document.body.style.webkitPerspective !== undefined ||
                             document.body.style.MozPerspective !== undefined;
 
-
+/*
+ * this is a linkify function from hakim.se site
+ * it enables cool looking anchor tags but is commented out for now
+ * */
 function linkify( selector ) {
   if( supports3DTransforms ) {
 
@@ -21,12 +24,18 @@ function linkify( selector ) {
 }
 
 var socket;
+/*
+ * main controller is used to control the header of the page and controlls 
+ * that are on display there
+ * */
 angular.module('ldApp')
-  .controller('MainCtrl', function ($rootScope,$scope,$http,Data) {
+  .controller('MainCtrl', function (command,$rootScope,$scope,$http,Data) {
     // linkify('a');
 
-    $scope.dUI=Data.sharedData.dUI;
     $scope.data=Data;
+    /*
+     * old function not to be used
+     * */
     $scope.commandExecL=function(cmnd,resultVariable,splice1,splice2){
      // $scope.result=cmnd;
       if(_.isFunction(resultVariable)){
@@ -48,10 +57,18 @@ angular.module('ldApp')
       });
 
     };
+
+    /*
+     * this is targets name as observable
+     * following code should change
+     * */
     $scope.file=Data.sharedData.fileName;
     $scope.sharedData=Data.sharedData;
     Data.scope=$scope;
     
+    /*
+     * following scope functions just forward to functions on data module
+     * */
     $scope.commandStart=function(){
       Data.startCommand($scope.file);
     };
@@ -69,18 +86,18 @@ angular.module('ldApp')
       Data.stop();
     };
     $scope.stepOver = function  () {
-      $scope.commandExecL('ni');
+      command.commandExecO({ptyPayload:'ni'});
       Data.getDissasembly();
       Data.getRegisterInfo();
     };
     $scope.cont = function  () {
-      $scope.commandExecL('c');
+      command.commandExecO({ptyPayload:'c'});
       Data.getDissasembly();
       Data.getRegisterInfo();
       Data.infoBreakpoints();
     };
     $scope.stepInto = function  () {
-      $scope.commandExecL('si');
+      command.commandExecO({ptyPayload:'si'});
       Data.getDissasembly();
       Data.getRegisterInfo();
     };
