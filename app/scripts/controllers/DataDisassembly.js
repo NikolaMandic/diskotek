@@ -4,27 +4,28 @@
  *
  * it returns an object with following fields:<br/>
  * fileHeaders: contains elf header and program header<br/>
- *    { ehdr //elfheader<br/>
- *      phdr //program header<br/>
- *    }<br/>
+ * &nbsp; &nbsp; {<br/>
+ * &nbsp; &nbsp;&nbsp; &nbsp;ehdr //elfheader<br/>
+ * &nbsp; &nbsp; &nbsp; &nbsp;  phdr //program header<br/>
+ *  &nbsp; &nbsp;  }<br/>
  * sectionHeaders: // this is array of section headers<br/>
- * [<br/>
- *  //fields correspond to the output of objdump command<br/>
- *   { <br/>
- *       name:, name of a section<br/>
- *       size:,<br/>
- *       VMA:,  //virtual mem addr<br/>
- *       LMA:,  //load addr <br/>
- *       fOff:, //file offset<br/>
- *       align:,<br/>
- *       flags:,       <br/>
+ * &nbsp; &nbsp;[<br/>
+ * &nbsp; &nbsp;&nbsp; &nbsp;//fields correspond to the output of objdump command<br/>
+ * &nbsp; &nbsp;&nbsp; &nbsp;{ <br/>
+ *  &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;name:, name of a section<br/>
+ * &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;size:,<br/>
+ * &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;VMA:,  //virtual mem addr<br/>
+ *  &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;LMA:,  //load addr <br/>
+ *  &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;fOff:, //file offset<br/>
+ * &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;align:,<br/>
+ * &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;flags:,       <br/>
  *  <br/>
- *   },<br/>
- *   {<br/>
- *      name<br/>
- *      ....<br/>
- *   },<br/>
- * ]<br/>
+ *  &nbsp; &nbsp;&nbsp; &nbsp; },<br/>
+ *  &nbsp; &nbsp; &nbsp; &nbsp;{<br/>
+ *  &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;    name<br/>
+ *   &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;   ....<br/>
+ *  &nbsp; &nbsp;&nbsp; &nbsp; },<br/>
+ * &nbsp; &nbsp;]<br/>
  * */
 angular.module('ldApp').factory('DataDisassembly',['$rootScope','command','DataDisassemblyParsers',
                                 function($rootScope,command,dataParsers){
@@ -39,7 +40,7 @@ angular.module('ldApp').factory('DataDisassembly',['$rootScope','command','DataD
    * this command gets elf and program headers
    * */
   disassemblyData.getFileHeaders=function(file){
-    //get file headers
+    // get file headers
     function fileHeadersC (data){
       disassemblyData.fileHeaders=parsers.parseHeaders(data);
     }
@@ -80,12 +81,12 @@ angular.module('ldApp').factory('DataDisassembly',['$rootScope','command','DataD
   };
 
   /*
-   *get disassembly function
+   * get disassembly function
    * */
   disassemblyData.getSectionDisassembly=function(file){
     command.commandExecO({
       callback: function(result){
-        //parse result of a -D command
+        // parse result of a -D command
         disassemblyData.sectionData=parsers.processData(result);
       },
       msgType: 'exec',
@@ -135,7 +136,7 @@ angular.module('ldApp').factory('DataDisassembly',['$rootScope','command','DataD
     disassemblyData.getHeaders(file);
   };
   
-  //transforms command output recived from server into array of instructions
+  // transforms command output recived from server into array of instructions
   disassemblyData.dissasemblyCallback= function 
     dissasemblyCallback(disassemblyRaw){
     
@@ -147,23 +148,26 @@ angular.module('ldApp').factory('DataDisassembly',['$rootScope','command','DataD
 
     var disasArr = [];
     var disasObjArr = [];
-    //bbBoundaryArr.push({from:0,to:0});
+    // bbBoundaryArr.push({from:0,to:0});
     var boundaries=[];
     var branchPreviousInst=false;
 
     var branchArray=[];
+    //f or each disassembly line 
     _.each(dissasembly,function(value){
-      //detects disassembly line with => in it
+      // detects disassembly line with => in it
       var disasLineCurrent=/^\=\>\s*(.*):\s+(\w+)([^;]*)(;(.*))?$/;
-      //detects line from gdb output
+      // detects line from gdb output
       var disasLine=/^\s*(.*):\s+(\w+)([^;]*)(;(.*))?$/;
 
       var splitedInstruction;
       var typeOfReg ;
       var instObj ;
+      // if line has =>
       if(value.match(disasLineCurrent)){
         splitedInstruction =  value.split(disasLineCurrent);
         typeOfReg=1;
+        // create object representing instruction
         instObj ={
           current:true,
           address: splitedInstruction[1],
@@ -174,39 +178,20 @@ angular.module('ldApp').factory('DataDisassembly',['$rootScope','command','DataD
       }else if(value.match(disasLine)){
         splitedInstruction =  value.split(disasLine);
         typeOfReg=2;
+        // create object representing instruction
         instObj ={
           current:false,
           address: splitedInstruction[1],
           opcode:  splitedInstruction[2],
           operands:splitedInstruction[3],
           comment: splitedInstruction[4],
-          uppperBoundary:false,//true if it is upper boundary of basic block
-          downBoundary:false,//bottom boundary
+          uppperBoundary:false,// true if it is upper boundary of basic block
+          downBoundary:false,// bottom boundary
         };
       }
-
+      // if instructon detected
       if(splitedInstruction){
-        if (branchPreviousInst){
-          instObj.uppperBoundary=true;
-          boundaries.push(instObj);
-          branchPreviousInst=false;
-        }
-        if(splitedInstruction[2].match(/^b.*/)){
-          branchPreviousInst=true;
-          instObj.bottomBoundary=true;
-          boundaries.push(instObj);
-          branchArray.push(instObj);
-        }else{
-          if(boundaries.length===0){
-            instObj.uppperBoundary=true;
-            boundaries.push(instObj);
-          }
-        }
-        disasArr.push(splitedInstruction);
         disasObjArr.push(instObj);
-
-      }else{
-
       }
 
 
@@ -214,7 +199,7 @@ angular.module('ldApp').factory('DataDisassembly',['$rootScope','command','DataD
    disassemblyData.disassembly=disasObjArr;
   };
 
-  //return array of basic blocks from array of instructions
+  // return array of basic blocks from array of instructions
   disassemblyData.bbfd=function basicBlocksFromDisassembly(data){
     var disassembly = data;
     var b = [];
@@ -226,32 +211,41 @@ angular.module('ldApp').factory('DataDisassembly',['$rootScope','command','DataD
     var boundaries=[];
     var branchPreviousInst=false;
     var branchArray=[];
-    
+    // for each instruction 
     _.each(disassembly,function(value){
+      // check if last instruction in loop was branch
       if (branchPreviousInst){
+        // if so then mark this instruction as first in basic block
         value.uppperBoundary=true;
+        // and push it in array of instructions that are boundaries of blocks
         boundaries.push(value);
+        // set this indicator to false; following part sets it right
         branchPreviousInst=false;
       }
+      // is it branch
       if(value.op.match(/^b.*/)){
+        // if it is set indicator for next time
         branchPreviousInst=true;
+        // if it is branch it means it is last in a  basic block
         value.bottomBoundary=true;
-        if(!branchPreviousInst){
-          boundaries.push(value);
-        }
+        // it is branch so put it in boundaries array
+        boundaries.push(value);
+        // and in special branch array to be used latter
         branchArray.push(value);
       }else{
+        // if it is first instruction mark it as boundary of block
         if(boundaries.length===0){
           value.uppperBoundary=true;
           boundaries.push(value);
         }
       }
+      // push instruction in arrays
       disasArr.push(value);
       disasObjArr.push(value);
     });
 
 
-    //find instructions that are jumped on and put it in boundaries
+    // find instructions that are jumped on and put it in boundaries
     _.each(branchArray,function(value){
       var elem = _.findWhere(disasObjArr,{'address':(/\s*(\w+).*/).exec(value.operands)[1]});
       if(elem){
@@ -263,30 +257,55 @@ angular.module('ldApp').factory('DataDisassembly',['$rootScope','command','DataD
       }
 
     });
+    // sort boundaries by addresses this is needed because
+    // maybe some are inserted in the last step
     var boundariesSorted=_.sortBy(boundaries,'address');
     var boundaryArrC=0;
+    /* now step trough each instruction and figure out 
+    * should a new basic be made or should it be put in current one
+    * algo goes instruction one by one while doing special work
+    * when it encounters boundary of basic block
+    */
     _.each(disasObjArr,function(value){
+      // if current instruction is the boundary we did not processed
       if(value===boundariesSorted[boundaryArrC]){
+        /* check to se if it is both upper and bottom boundary
+        * which is the case when a branch is jumped on by
+        * some other branch
+         */
         if(value.uppperBoundary && value.bottomBoundary){
+          // in that case just create new basic block put this one instruction 
           basicBlocks.push([]);
           basicBlocks[basicBlocks.length-1].push(value);
-
+          // and create new basic block
           basicBlocks.push([]);
         }else{
+          // if just upper boundary and not upper and bottom
           if(value.uppperBoundary===true){
+            /** this should check for edge case for like first block
+            * to make algorithm easier
+            * if upper boundary and last basic block not empty
+            * create new basic block where instructions will be put
+            */
             if(basicBlocks[basicBlocks.length-1].length!==0){
               basicBlocks.push([]);
             }
+            
             basicBlocks[basicBlocks.length-1].push(value);
 
           }
+          // if bottom boundary push it in current basic block
           if(value.bottomBoundary===true){
             basicBlocks[basicBlocks.length-1].push(value);
           }
         }
+        // increase counter that marks the boundary that is next to be 
+        // processed
+        
         boundaryArrC+=1;
 
       }else{
+        // non boundary instructions just go in current basic block
         basicBlocks[basicBlocks.length-1].push(value);
       }
     });

@@ -26,11 +26,12 @@
   <span class="p">};</span>
 
 
-  
-
-
-
-  <span class="nx">obj</span><span class="p">.</span><span class="nx">startCommandVM</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+  </div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>this command will switch to vagrant directory and
+check output of vagrant status if it's not created it will warn user
+that a vm should be first downloaded and then provisioned
+it can take a long time and can use up a lot of cpu installing
+all of the stuff needed on a clean system like node bower and
+modules and all of the components needed</p></div></div><div class="code"><div class="wrapper">  <span class="nx">obj</span><span class="p">.</span><span class="nx">startCommandVM</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">command</span><span class="p">.</span><span class="nx">commandExecO</span><span class="p">({</span>
       <span class="nx">msgType</span><span class="o">:</span><span class="s1">&#39;exec&#39;</span><span class="p">,</span>
       <span class="nx">ptyPayload</span><span class="o">:</span><span class="s1">&#39;cd vdir; vagrant status; cd ../&#39;</span><span class="p">,</span>
@@ -53,10 +54,11 @@
         <span class="p">}</span>
       <span class="p">}</span>
     <span class="p">});</span>
-  <span class="p">};</span>
-  <span class="nx">obj</span><span class="p">.</span><span class="nx">startCommand</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
-
-
+  <span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>start command is going to start qemu user emulator that will 
+run this target and wait for a debuger to attach on 12345 port 
+also it will start gdb that will load target from disk and then
+commands set arch arm will be sent to the gdb
+and target remote command to connect to the emulator</p></div></div><div class="code"><div class="wrapper">  <span class="nx">obj</span><span class="p">.</span><span class="nx">startCommand</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">command</span><span class="p">.</span><span class="nx">commandExecO</span><span class="p">({</span>
       <span class="nx">msgType</span><span class="o">:</span><span class="s1">&#39;start&#39;</span><span class="p">,</span>
       <span class="nx">payload</span><span class="o">:</span><span class="p">{</span><span class="nx">name</span><span class="o">:</span><span class="nx">name</span><span class="p">}</span>
@@ -71,8 +73,9 @@
     <span class="nx">obj</span><span class="p">.</span><span class="nx">debugData</span><span class="p">.</span><span class="nx">getRegisterInfo</span><span class="p">();</span>
     <span class="nx">obj</span><span class="p">.</span><span class="nx">debugData</span><span class="p">.</span><span class="nx">infoBreakpoints</span><span class="p">();</span>
 
-  <span class="p">};</span>
-  <span class="nx">obj</span><span class="p">.</span><span class="nx">stop</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+  <span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>stop command will send command to the gdb that will detach the debugger
+qemu emulator exits at that point
+then a quit command is sent and gdb exits</p></div></div><div class="code"><div class="wrapper">  <span class="nx">obj</span><span class="p">.</span><span class="nx">stop</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
   
     <span class="nx">command</span><span class="p">.</span><span class="nx">commandExecO</span><span class="p">({</span>
       <span class="nx">ptyPayload</span><span class="o">:</span><span class="s1">&#39;detach&#39;</span><span class="p">,</span>

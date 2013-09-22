@@ -286,7 +286,7 @@ angular.module('ldApp').factory('DataDisassemblyParsers',function(){
         basicBlocks[basicBlocks.length-1].push(value);
       }
     });
-
+    //legacy code :-D 
     obj.data=basicBlocks;
 
   };
