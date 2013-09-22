@@ -2,29 +2,29 @@
  * this is a disassembly module that contains state for disassembly of 
  * a target also contains commands for disassembling a target
  *
- * it returns an object with following fields:
- * fileHeaders: contains elf header and program header
- *    { ehdr //elfheader
- *      phdr //program header
- *    }
- * sectionHeaders: // this is array of section headers
- * [
- *  //fields correspond to the output of objdump command
- *   { 
- *       name:, name of a section
- *       size:,
- *       VMA:,  //virtual mem addr
- *       LMA:,  //load addr 
- *       fOff:, //file offset
- *       align:,
- *       flags:,       
- *  
- *   },
- *   {
- *      name
- *      ....
- *   },
- * ]
+ * it returns an object with following fields:<br/>
+ * fileHeaders: contains elf header and program header<br/>
+ *    { ehdr //elfheader<br/>
+ *      phdr //program header<br/>
+ *    }<br/>
+ * sectionHeaders: // this is array of section headers<br/>
+ * [<br/>
+ *  //fields correspond to the output of objdump command<br/>
+ *   { <br/>
+ *       name:, name of a section<br/>
+ *       size:,<br/>
+ *       VMA:,  //virtual mem addr<br/>
+ *       LMA:,  //load addr <br/>
+ *       fOff:, //file offset<br/>
+ *       align:,<br/>
+ *       flags:,       <br/>
+ *  <br/>
+ *   },<br/>
+ *   {<br/>
+ *      name<br/>
+ *      ....<br/>
+ *   },<br/>
+ * ]<br/>
  * */
 angular.module('ldApp').factory('DataDisassembly',['$rootScope','command','DataDisassemblyParsers',
                                 function($rootScope,command,dataParsers){
