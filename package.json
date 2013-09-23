@@ -39,7 +39,8 @@
     "grunt-karma": "~0.6.1",
     "jison": "0.4.10",
     "socket.io": "0.9.0",
-    "express": "3.x"
+    "express": "3.x",
+    "bower":"latest"
   },
   "engines": {
     "node": "~0.10.17"
