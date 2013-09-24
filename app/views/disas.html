@@ -1,14 +1,14 @@
 <div id="dissasembly_wraper" ng-show="selected!=='none'">
-    
+
   <div id="name" class="menu">
-    
+
     <div id="headers" class="category">
       <div class="categoryName" ng-click='visibilityHeaders=((visibilityHeaders==="visible"|| visibilityHeaders==undefined)?"hidden":"visible")' ng-init='visibilityHeaders="hidden"'>
         headers
       </div>
       <div id="headersCont" class="{{visibilityHeaders}}">
-         
-     
+
+
         <div ng-repeat="header in data.disassemblyData.sectionHeaders" class="menuItem">
           <a ng-click="scrollToHeader(header)" >{{header.name}}</a>
         </div>
@@ -20,8 +20,8 @@
         sections
       </div>
       <div id="sectionCont" class="{{visibilitySect}}">
-         
-     
+
+
         <div ng-repeat="section in data.disassemblyData.sectionData" class="menuItem">
           <a ng-click="scrollToSection(section)">{{section.sectionName}}</a>
         </div>
@@ -31,7 +31,7 @@
       <div class="categoryName">
         relocations
       </div>
-  
+
     </div>
 
   </div>
@@ -60,13 +60,13 @@
         </div>
         <div ng-switch-when="header">
           <div id="holder">
-              
+
           </div>
           <div id="sectionContainer">
               <div class="sectionP" id = "{{section.sectionName}}" ng-repeat="section in data.disassemblyData.sectionData">
                 <div class='sectionS'>
                   <div >
-                      
+
                    {{section.sectionName}}
                   </div>
                    <div ng-click="disasView(section)" >
@@ -82,8 +82,8 @@
                 </div>
                 <div class="sectionView" ng-switch="section.view">
                   <div id="graphViewPlace{{$index}}" ng-switch-when="G">
-                      
-                  </div>        
+
+                  </div>
                   <div class="disasViewPlace" ng-switch-when="D">
 
 
@@ -111,29 +111,29 @@
                     <div class="hexDumpLine" ng-repeat="line in section.hexDump">
                       <div class="hexDumpAddress">
                         {{line.address}}
-                          
+
                       </div>
                       <div class="hexDumpHex">
                         {{line.hex}}
-                          
+
                       </div>
 
                       <div class="hexDumpStrDump">
                         {{line.stringDump}}
-                          
+
                       </div>
                     </div>
-                      
+
                   </div>
                   <div  ng-switch-when="hidden">
-                      
+
                   </div>
 
 
 
 
                 </div>
-     
+
               </div>
 
           </div>
@@ -141,12 +141,12 @@
           <div id="dwindow">
             <div class="whandle">
 
-            </div>                  
+            </div>
 
             <div id="hld" ng-switch="hldView">
                 <div id="hldd" ng-switch-when="G">
-                    
-                </div>        
+
+                </div>
                 <div id="D" ng-switch-when="D">
 
 

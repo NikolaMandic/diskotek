@@ -1,4 +1,9 @@
 /*
+ *
+ * this code might be rewritten and documented
+ *
+ *
+ *
 var express = require('express');
 var app = express();
 app.get('/hello.txt', function(req, res){
@@ -22,77 +27,132 @@ var qemu_static; //= Ycp.fork('qemu-arm-static -g 12345 ,name,'-E QEMU_LD_PREFIX
 var gdb;
 var started=0;
 var commandStack=[];
-var command_count=1;
+var command_count=0;
 var execCommandCount=0;
 var execCommandStack=[];
-//io.set('log level',1);
-  io.sockets.on('connection', function (socket) {
-   // socket.emit('news', { hello: 'world' });
-    socket.on('start', function (data) {
-      if(started!=1){
-        started=1;
-      
-        //console.log(data);
-        try{
-          qemu_static = cp.fork('./sp.js');//cp.exec('qemu-arm-static',['-g','12345', data.name, '-E','QEMU_LD_PREFIX=/usr/arm-linux-gnueabi']);
-          //console.log('ovde');
-          gdb = cp.spawn('gdb-multiarch', [ data.name] );
-          gdb.stdout.setEncoding('utf-8');
+var initialisationStepCount=0;
+io.set('log level',1);
 
-          gdb.stdout.on('data',function(chunk) {
-            
-            socket.emit('news',{
-                        type:'output',
-                        data:chunk
-                        });
 
-            console.log('commandCount on sending output: '+command_count);
-            if(chunk.match(/.*\(gdb\)\s.*/g)){
-              if(command_count>1){
+io.sockets.on('connection', function (socket) {
+  var gdbStdoutCallback=function(chunk) {
+    console.log(chunk);
+    // if gdb is initialized
+    if(started===2){
+      socket.emit('news',{
+        type:'output',
+        data:chunk
+      });
+    }
+    console.log('commandCount on sending output: '+command_count);
+    if(chunk.match(/.*\(gdb\)\s.*/g)){
+      if(started===1){
+        initialisationStepCount++;
+        
+        if(initialisationStepCount==1){
+          gdb.stdin.write('set arch arm'+"\n");
+          gdb.stdin.write('target remote :12345'+"\n");
+        }
+        console.log('matched gdb initialisation step count '+ initialisationStepCount)
+        if(initialisationStepCount===3){
+          started=2;
+          console.log("initialisation finished");
+          //socket.emit('news',{data:'initialisation finished\n(gdb) '});
+          if(command_count>0){
+            console.log("found match and executing new command");
+            command_count--;
+            var c = commandStack.shift();
+            if (c!==undefined){
+              c();
+            }             
+          }       
+        }
+      }else{
+        
+        if(command_count>0){
+          console.log("found match and executing new command");
+          command_count--;
+          var c = commandStack.shift();
+          if (c!==undefined){
+            c();
+          }             
+        }
+        
+      }
+            /*
+            }else{
+              if(command_count<0){
+                command_count++;
+              }
+            }
+            */
+    }
+  }
+  var gdbstdErr=function(chunk) {
+    socket.emit('news',{
+      type:'output',
+      data:chunk
+    });
+  }
+  if (started==2){
+  
+    gdb.stdout.setEncoding('utf-8');
+    gdb.stdout.on('data',gdbStdoutCallback);
+    gdb.stderr.setEncoding('utf-8');
+    gdb.stderr.on('data',gdbstdErr);
+  }
+  socket.on('debuggerStatus',function(){
+    socket.emit('debuggerStatus',{started:started});
+  });
+  socket.on('start', function (data) {
+    if(started==0){
+      started=1;
+      try{
+        // start qemu that will wait for debugger
+        qemu_static = cp.fork('./sp.js');
+        // spawn gdb and load target
+        gdb = cp.spawn('gdb-multiarch', [ data.name] );
+
+        // on gdb output
+        gdb.stdout.setEncoding('utf-8');
+        gdb.stdout.on('data',gdbStdoutCallback);
+        gdb.stderr.setEncoding('utf-8');
+        gdb.stderr.on('data',gdbstdErr);
+      }catch(err){
+        console.log(err);
+      }
+    }else if(started===2){
+           /*
+       socket.emit('news',{data:'initialisation finished\n(gdb) '});
+          if(command_count>0){
                 console.log("found match and executing new command");
-                
                 command_count--;
                 var c = commandStack.shift();
                 if (c!==undefined){
                   c();
                 }             
-              }else{
-               if(command_count==1){
-                command_count--;
-               }
               }
-            }
-            
-          });
-          gdb.stderr.setEncoding('utf-8');
-          gdb.stderr.on('data',function(chunk) {
-            socket.emit('news',{
-                      type:'output',
-                      data:chunk
-                      });
-          });
-        }catch(err){
-          console.log(err);
-        }
-      }
-    });
-    socket.on('assemble',function(data){
-      var exec = require('child_process').exec,
-      child;
-console.log('echo "'+data.command+'" > aa.txt; arm-linux-gnueabi-as aa.txt; arm-linux-gnueabi-objdump -d a.out |grep -o -E -e "0:(\s*(\w+)\s*)" | cut -d ":" -f 2| grep -o -E -e "\w+"');
+*/
+    }
 
-      child = exec('echo "'+data.command+'" > aa.txt; arm-linux-gnueabi-as aa.txt; arm-linux-gnueabi-objdump -d a.out |grep -o -E -e "0:(\\s*(\\w+)\\s*)" | cut -d ":" -f 2| grep -o -E -e "\\w+"',
-                function (error, stdout, stderr) {
-                  socket.emit('assembleNews',{
-                    bin:stdout
-                  })
-                  console.log('stdout: ' + stdout);
-                  console.log('stderr: ' + stderr);
-                  if (error !== null) {
-                    console.log('exec error: ' + error);
-                  }
-                }); 
-    }); 
+  });
+  socket.on('assemble',function(data){
+    var exec = require('child_process').exec,
+    child;
+    console.log('echo "'+data.command+'" > aa.txt; arm-linux-gnueabi-as aa.txt; arm-linux-gnueabi-objdump -d a.out |grep -o -E -e "0:(\s*(\w+)\s*)" | cut -d ":" -f 2| grep -o -E -e "\w+"');
+
+    child = exec('echo "'+data.command+'" > aa.txt; arm-linux-gnueabi-as aa.txt; arm-linux-gnueabi-objdump -d a.out |grep -o -E -e "0:(\\s*(\\w+)\\s*)" | cut -d ":" -f 2| grep -o -E -e "\\w+"',
+                 function (error, stdout, stderr) {
+                   socket.emit('assembleNews',{
+                     bin:stdout
+                   })
+                   console.log('stdout: ' + stdout);
+                   console.log('stderr: ' + stderr);
+                   if (error !== null) {
+                     console.log('exec error: ' + error);
+                   }
+                 }); 
+  }); 
     /*
     socket.on('debugInVM',function(data){
       var exec = require('child_process').exec,
@@ -115,7 +175,7 @@ console.log('echo "'+data.command+'" > aa.txt; arm-linux-gnueabi-as aa.txt; arm-
       command_count+=1;
       console.log('info','command arrived: '+command_count);
       console.log(data);
-      if (command_count>1){
+      if (command_count>1 || started!==2){
         commandStack.push(function() {
           gdb.stdin.write(data.ptyPayload+"\n");
           if(data.ptyPayload==='quit'){

@@ -77,14 +77,17 @@ angular.module('ldApp')
   obj.startCommand = function (name) {
     command.commandExecO({
       msgType:'start',
-      payload:{name:name}
+      payload:{name:name},
+      callback:null
     });
+    /*
     command.commandExecO({
       ptyPayload:'set arch arm'
     });
     command.commandExecO({
       ptyPayload:'target remote :12345'
     });
+    */
     obj.debugData.getDissasembly();
     obj.debugData.getRegisterInfo();
     obj.debugData.infoBreakpoints();

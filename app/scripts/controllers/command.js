@@ -128,7 +128,9 @@ angular.module('ldApp').factory('command',[
         scope.$apply();
       });
     }
-    obj.callbackQueue.push(callback);
+    if(args.callback!==null){
+      obj.callbackQueue.push(callback);
+    }
     var msgType = (args.msgType)?args.msgType : 'command';
     var cmd = (args.ptyPayload)?args.ptyPayload : args.cmnd;
     obj.sock.emit(msgType,{
