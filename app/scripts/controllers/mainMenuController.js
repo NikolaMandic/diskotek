@@ -87,19 +87,19 @@ angular.module('ldApp')
     };
     $scope.stepOver = function  () {
       command.commandExecO({ptyPayload:'ni'});
-      Data.getDissasembly();
-      Data.getRegisterInfo();
+      Data.debugData.getDissasembly();
+      Data.debugData.getRegisterInfo();
     };
     $scope.cont = function  () {
       command.commandExecO({ptyPayload:'c'});
-      Data.getDissasembly();
-      Data.getRegisterInfo();
-      Data.infoBreakpoints();
+      Data.debugData.getDissasembly();
+      Data.debugData.getRegisterInfo();
+      Data.debugData.infoBreakpoints();
     };
     $scope.stepInto = function  () {
       command.commandExecO({ptyPayload:'si'});
-      Data.getDissasembly();
-      Data.getRegisterInfo();
+      Data.debugData.getDissasembly();
+      Data.debugData.getRegisterInfo();
     };
 
     $scope.command='';

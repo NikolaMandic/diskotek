@@ -137,6 +137,8 @@ angular.module('ldApp').factory('DataDebug',['$rootScope','command','DataDisasse
            value2:s[3],
          };
        });
+
+      $rootScope.$emit('debugDataLoaded');
      },
      ptyPayload:'info registers'
    });

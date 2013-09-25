@@ -157,9 +157,10 @@ function gdbstdErr(socket,chunk) {
 }
 // this instantates object responsible of multiplexing and runnig gdb commands
 function gdbCommandRunnerC(){
+
   this.commandStack=[],
   this.commandCount=0;
-  
+  var self=this; 
   this.initialisationState=1;
   this.runningState=2;
   this.stopedState=3;
@@ -173,40 +174,59 @@ function gdbCommandRunnerC(){
     console.log('command arrived '+ data.ptyPayload+'\n');
     this.commandCount+=1;
     this.commandStack.push(function() {
-      console.log('executing '+data.ptyPayload +'\n');
-      gdb.stdin.write(data.ptyPayload+"\n");
-      if(data.ptyPayload==='quit'){
-        this.status=this.stopedState;
-        // global state
-        started=0;
-      }
+        console.log('executing '+data.ptyPayload +'\n');
+        gdb.stdin.write(data.ptyPayload+"\n");
+        if(data.ptyPayload==='quit'){
+          self.status=self.stopedState;
+          // global state
+          started=0;
+        }
     });
+    
+    console.log('status ' + self.status);
+
+    console.log('command count '+ self.commandCount);
+    
+    if(self.status==self.runningState){
+      if (self.commandCount==1){
+        console.log('executing right away command');
+
+        self.commandNext();
+      }
+    }else{
+      console.log(' not executing');
+    }
+
   },
   this.commandFinished = function(){
-    if(this.status===0){
+    if(self.status===0){
       console.log('switching to initialistation\n');
-      this.status=this.initialisationState;    
+
+      self.status=1;    
+      console.log('status when in initialisation '+self.status);
     }
-    if(this.status === this.initialisationState){
-      if(this.initialisationSteps.length>0){
-        var nextStep = this.initialisationSteps.shift();
+    if(self.status === 1){
+      if(self.initialisationSteps.length>0){
+        var nextStep = self.initialisationSteps.shift();
         gdb.stdin.write(nextStep);
 
         console.log('executing init command: ' + nextStep  + '\n');
       }else{
 
         console.log('switching to running\n');
-        this.status=this.runnigState;
-        this.commandNext();
+        self.status=2;
+
+      console.log('status when running '+self.status);
+        self.commandNext();
       }
     }else{
-      this.commandNext();
+      self.commandNext();
     }
   },
   this.commandNext = function(){
-    if(this.commandCount>0){
-      this.commandCount--;
-      var c = this.commandStack.shift();
+    if(self.commandCount>0){
+      self.commandCount--;
+      var c = self.commandStack.shift();
       if (c!==undefined){
         c();
       }
@@ -217,7 +237,7 @@ function gdbCommandRunnerC(){
 var gdbStdoutCallback=function(socket,chunk) {
   console.log(chunk+'\n');
   // if gdb is initialized
-  if(gdbCommandRunner.status===gdbCommandRunner.runnigState){
+  if(gdbCommandRunner.status===2){
     console.log('this chunk is sent\n');
     socket.emit('news',{
       type:'output',
