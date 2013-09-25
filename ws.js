@@ -160,7 +160,6 @@ function gdbCommandRunnerC(){
 
   this.commandStack=[],
   this.commandCount=0;
-  var self=this; 
   this.initialisationState=1;
   this.runningState=2;
   this.stopedState=3;
@@ -177,21 +176,21 @@ function gdbCommandRunnerC(){
         console.log('executing '+data.ptyPayload +'\n');
         gdb.stdin.write(data.ptyPayload+"\n");
         if(data.ptyPayload==='quit'){
-          self.status=self.stopedState;
+          this.status=this.stopedState;
           // global state
           started=0;
         }
     });
     
-    console.log('status ' + self.status);
+    console.log('status ' + this.status);
 
-    console.log('command count '+ self.commandCount);
+    console.log('command count '+ this.commandCount);
     
-    if(self.status==self.runningState){
-      if (self.commandCount==1){
+    if(this.status==this.runningState){
+      if (this.commandCount==1){
         console.log('executing right away command');
 
-        self.commandNext();
+        this.commandNext();
       }
     }else{
       console.log(' not executing');
@@ -199,34 +198,34 @@ function gdbCommandRunnerC(){
 
   },
   this.commandFinished = function(){
-    if(self.status===0){
+    if(this.status===0){
       console.log('switching to initialistation\n');
 
-      self.status=1;    
-      console.log('status when in initialisation '+self.status);
+      this.status=1;    
+      console.log('status when in initialisation '+this.status);
     }
-    if(self.status === 1){
-      if(self.initialisationSteps.length>0){
-        var nextStep = self.initialisationSteps.shift();
+    if(this.status === 1){
+      if(this.initialisationSteps.length>0){
+        var nextStep = this.initialisationSteps.shift();
         gdb.stdin.write(nextStep);
 
         console.log('executing init command: ' + nextStep  + '\n');
       }else{
 
         console.log('switching to running\n');
-        self.status=2;
+        this.status=2;
 
-      console.log('status when running '+self.status);
-        self.commandNext();
+      console.log('status when running '+this.status);
+        this.commandNext();
       }
     }else{
-      self.commandNext();
+      this.commandNext();
     }
   },
   this.commandNext = function(){
-    if(self.commandCount>0){
-      self.commandCount--;
-      var c = self.commandStack.shift();
+    if(this.commandCount>0){
+      this.commandCount--;
+      var c = this.commandStack.shift();
       if (c!==undefined){
         c();
       }
