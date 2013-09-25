@@ -1,110 +1,42 @@
 /*
  *
- * this code might be rewritten and documented
+ * this module is the backend code for the gui
+ * it is a proxy that accepts commands from the frontend trough socket.io 
+ * invokes the utility
+ * and sends output back to the ui
  *
  *
- *
-var express = require('express');
-var app = express();
-app.get('/hello.txt', function(req, res){
-  var body = 'Hello World';
-  res.setHeader('Content-Type', 'text/plain');
-  res.setHeader('Content-Length', body.length);
-  res.end(body);
-});
-app.listen(807);
 */
+// express is used to serve static content for app and also for togetherjs
 var express = require('express');
 var app = express();
-
+var _=require('underscore');
 app.use(express.static('./' + '/app'));
+app.use(express.static('./' + '/app/static-myapp'));
 
 app.listen(process.env.PORT || 3000);
-var io = require('socket.io').listen(807);
+
+var io = require('socket.io').listen(8070);
 var cp = require('child_process');
-//['qemu-arm-static','-g','12345',name,'-E QEMU_LD_PREFIX=/usr/arm-linux-gnueabi'],close_fds=True,env=env)
-var qemu_static; //= Ycp.fork('qemu-arm-static -g 12345 ,name,'-E QEMU_LD_PREFIX=/usr/arm-linux-gnueabi']);
-var gdb;
-var started=0;
-var commandStack=[];
-var command_count=0;
-var execCommandCount=0;
-var execCommandStack=[];
-var initialisationStepCount=0;
 io.set('log level',1);
 
+// instance of emulator environment
+var qemu_static; 
+// instance of gdb that is used
+var gdb;
 
-io.sockets.on('connection', function (socket) {
-  var gdbStdoutCallback=function(chunk) {
-    console.log(chunk);
-    // if gdb is initialized
-    if(started===2){
-      socket.emit('news',{
-        type:'output',
-        data:chunk
-      });
-    }
-    console.log('commandCount on sending output: '+command_count);
-    if(chunk.match(/.*\(gdb\)\s.*/g)){
-      if(started===1){
-        initialisationStepCount++;
-        
-        if(initialisationStepCount==1){
-          gdb.stdin.write('set arch arm'+"\n");
-          gdb.stdin.write('target remote :12345'+"\n");
-        }
-        console.log('matched gdb initialisation step count '+ initialisationStepCount)
-        if(initialisationStepCount===3){
-          started=2;
-          console.log("initialisation finished");
-          //socket.emit('news',{data:'initialisation finished\n(gdb) '});
-          if(command_count>0){
-            console.log("found match and executing new command");
-            command_count--;
-            var c = commandStack.shift();
-            if (c!==undefined){
-              c();
-            }             
-          }       
-        }
-      }else{
-        
-        if(command_count>0){
-          console.log("found match and executing new command");
-          command_count--;
-          var c = commandStack.shift();
-          if (c!==undefined){
-            c();
-          }             
-        }
-        
-      }
-            /*
-            }else{
-              if(command_count<0){
-                command_count++;
-              }
-            }
-            */
-    }
-  }
-  var gdbstdErr=function(chunk) {
-    socket.emit('news',{
-      type:'output',
-      data:chunk
-    });
-  }
-  if (started==2){
-  
-    gdb.stdout.setEncoding('utf-8');
-    gdb.stdout.on('data',gdbStdoutCallback);
-    gdb.stderr.setEncoding('utf-8');
-    gdb.stderr.on('data',gdbstdErr);
-  }
-  socket.on('debuggerStatus',function(){
-    socket.emit('debuggerStatus',{started:started});
-  });
-  socket.on('start', function (data) {
+var started=0;
+
+var execCommandCount=0;
+var execCommandStack=[];
+
+// not only a runner but a multiplexer also :-D
+var gdbCommandRunner=new gdbCommandRunnerC();
+
+var backendState={
+
+};
+ function startCommandHandler(socket,data) {
     if(started==0){
       started=1;
       try{
@@ -114,89 +46,41 @@ io.sockets.on('connection', function (socket) {
         gdb = cp.spawn('gdb-multiarch', [ data.name] );
 
         // on gdb output
+        attachGDBtoPeer(socket);
+        /*
         gdb.stdout.setEncoding('utf-8');
-        gdb.stdout.on('data',gdbStdoutCallback);
+        gdb.stdout.on('data',function(data){ gdbStdoutCallback(socket,data)});
         gdb.stderr.setEncoding('utf-8');
         gdb.stderr.on('data',gdbstdErr);
+        */
       }catch(err){
         console.log(err);
       }
-    }else if(started===2){
-           /*
-       socket.emit('news',{data:'initialisation finished\n(gdb) '});
-          if(command_count>0){
-                console.log("found match and executing new command");
-                command_count--;
-                var c = commandStack.shift();
-                if (c!==undefined){
-                  c();
-                }             
-              }
-*/
     }
+  }
 
+function assemblerCommandHandler(socket,data){
+  var exec = require('child_process').exec,
+  child;
+  child = exec('echo "' +
+               data.command + 
+               '" > aa.txt; arm-linux-gnueabi-as aa.txt; arm-linux-gnueabi-objdump -d a.out |grep -o -E -e "0:(\\s*(\\w+)\\s*)" | cut -d ":" -f 2| grep -o -E -e "\\w+"',
+  function (error, stdout, stderr) {
+    socket.emit('assembleNews',{
+      bin:stdout
+    })
+    console.log('stdout: ' + stdout);
+    console.log('stderr: ' + stderr);
+    if (error !== null) {
+      console.log('exec error: ' + error);
+    }
   });
-  socket.on('assemble',function(data){
-    var exec = require('child_process').exec,
-    child;
-    console.log('echo "'+data.command+'" > aa.txt; arm-linux-gnueabi-as aa.txt; arm-linux-gnueabi-objdump -d a.out |grep -o -E -e "0:(\s*(\w+)\s*)" | cut -d ":" -f 2| grep -o -E -e "\w+"');
-
-    child = exec('echo "'+data.command+'" > aa.txt; arm-linux-gnueabi-as aa.txt; arm-linux-gnueabi-objdump -d a.out |grep -o -E -e "0:(\\s*(\\w+)\\s*)" | cut -d ":" -f 2| grep -o -E -e "\\w+"',
-                 function (error, stdout, stderr) {
-                   socket.emit('assembleNews',{
-                     bin:stdout
-                   })
-                   console.log('stdout: ' + stdout);
-                   console.log('stderr: ' + stderr);
-                   if (error !== null) {
-                     console.log('exec error: ' + error);
-                   }
-                 }); 
-  }); 
-    /*
-    socket.on('debugInVM',function(data){
-      var exec = require('child_process').exec,
-      child;
-      child = exec('cd vdir;vagrant up',
-                function (error, stdout, stderr) {
-                  socket.emit('debugInVMNews',{
-                    bin:stdout
-                  })
-                  console.log('stdout: ' + stdout);
-                  console.log('stderr: ' + stderr);
-                  if (error !== null) {
-                    console.log('exec error: ' + error);
-                  }
-                }); 
-     
-    });
-    */
-    socket.on('command',function(data) {
-      command_count+=1;
-      console.log('info','command arrived: '+command_count);
-      console.log(data);
-      if (command_count>1 || started!==2){
-        commandStack.push(function() {
-          gdb.stdin.write(data.ptyPayload+"\n");
-          if(data.ptyPayload==='quit'){
-            started=0;
-          }
-
-        //  console.log(data.ptyPayload);
-        });
-      }else{
-       console.log('info', "command executed right away")
-        gdb.stdin.write(data.ptyPayload+"\n");
-        if(data.ptyPayload==='quit'){
-          started=0;
-        }
-      }
-    });
-    socket.on('exec',function(data){
-      execCommandCount+=1;
+}
+function execCommandHandler(socket,data){
+    execCommandCount+=1;
       if(execCommandCount>1){
         execCommandStack.push(function(){
-       
+
           cp.exec(data.ptyPayload, function(error,stdout,stderr) {
             socket.emit('execNews',{
               data:stdout
@@ -206,7 +90,7 @@ io.sockets.on('connection', function (socket) {
               execCommandStack.shift()();
               execCommandCount--;
             }
-          });    
+          });
         });
       }else{
         cp.exec(data.ptyPayload, function(error,stdout,stderr) {
@@ -218,12 +102,12 @@ io.sockets.on('connection', function (socket) {
             execCommandStack.shift()();
             execCommandCount--;
           }
-        });   
-        
+        });
+
 
       }
-    });
-    socket.on('debugInVM',function(data){
+  }
+function debugInVMHandler(socket,data){
       var name = data.name;
       var sp = require('child_process');
       var vagrantp = sp.spawn('vagrant',['up'],{
@@ -236,15 +120,113 @@ io.sockets.on('connection', function (socket) {
       });
       vagrantp.on('close',function(code){
         socket.emit('debugInVMNews',{});
-        //if(code!==0) 
+        //if(code!==0)
       });
-    });
-
-       
-
-
+    }
+function setupSocketIOChannels(socket){
+  socket.on('debuggerStatus',function(){
+    socket.emit('debuggerStatus',{started:started});
   });
-  
-  
+  socket.on('start',function(data){startCommandHandler(socket,data)});
+  socket.on('assemble',function(data){assemblerCommandHandler(socket,data)});
+  socket.on('exec',function(data){execCommandHandler(socket,data)});
+  socket.on('command', function (data){gdbCommandRunner.commandPush(data)});
+  socket.on('debugInVM',function(data){debugInVMHandler(socket,data)});
+}
+function attachGDBtoPeer(socket){
+  gdb.stdout.setEncoding('utf-8');
+  gdb.stdout.on('data',function(data){ gdbStdoutCallback(socket,data) });
+  gdb.stderr.setEncoding('utf-8');
+  gdb.stderr.on('data',function(data){ gdbstdErr(socket,data)         });
+}
+io.sockets.on('connection', function (socket) {
 
+  // on connection make so that gdb output is sent to the new peer if gdb is started
+  if(started===1){
+    attachGDBtoPeer(socket);
+  }
+  // attach other services other than gdb
+  setupSocketIOChannels(socket);
 
+});
+function gdbstdErr(socket,chunk) {
+  socket.emit('news',{
+    type:'output',
+    data:chunk
+  });
+}
+// this instantates object responsible of multiplexing and runnig gdb commands
+function gdbCommandRunnerC(){
+  this.commandStack=[],
+  this.commandCount=0;
+  
+  this.initialisationState=1;
+  this.runningState=2;
+  this.stopedState=3;
+  this.status=0;
+  this.skipState=0;
+  this.initialisationSteps=[
+    'set arch arm'+"\n",
+    'target remote :12345'+"\n"
+  ];
+  this.commandPush = function (data){
+    console.log('command arrived '+ data.ptyPayload+'\n');
+    this.commandCount+=1;
+    this.commandStack.push(function() {
+      console.log('executing '+data.ptyPayload +'\n');
+      gdb.stdin.write(data.ptyPayload+"\n");
+      if(data.ptyPayload==='quit'){
+        this.status=this.stopedState;
+        // global state
+        started=0;
+      }
+    });
+  },
+  this.commandFinished = function(){
+    if(this.status===0){
+      console.log('switching to initialistation\n');
+      this.status=this.initialisationState;    
+    }
+    if(this.status === this.initialisationState){
+      if(this.initialisationSteps.length>0){
+        var nextStep = this.initialisationSteps.shift();
+        gdb.stdin.write(nextStep);
+
+        console.log('executing init command: ' + nextStep  + '\n');
+      }else{
+
+        console.log('switching to running\n');
+        this.status=this.runnigState;
+        this.commandNext();
+      }
+    }else{
+      this.commandNext();
+    }
+  },
+  this.commandNext = function(){
+    if(this.commandCount>0){
+      this.commandCount--;
+      var c = this.commandStack.shift();
+      if (c!==undefined){
+        c();
+      }
+    }
+  }
+}
+
+var gdbStdoutCallback=function(socket,chunk) {
+  console.log(chunk+'\n');
+  // if gdb is initialized
+  if(gdbCommandRunner.status===gdbCommandRunner.runnigState){
+    console.log('this chunk is sent\n');
+    socket.emit('news',{
+      type:'output',
+      data:chunk
+    });
+  }
+  
+  if(chunk.match(/.*\(gdb\)\s.*/g)){
+    console.log('found gdb string that is used as separator\n')
+    gdbCommandRunner.commandFinished();
+  }
+}

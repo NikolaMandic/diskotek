@@ -138,7 +138,7 @@ angular.module('ldApp').factory('command',[
     });
 
   };
-  var socket = io.connect('http://localhost:807');
+  var socket = io.connect('http://localhost:8070');
   obj.sock=socket;
 
   /*

@@ -57,6 +57,7 @@
        views:
        <a  href="#/">debug</a>
        <a  href="#/disas">disassembly</a>
+       <button onclick="TogetherJS(this); return false;">Start TogetherJS</button>
      <!--  
            <a    href="#/ch">graph</a>
            -->
@@ -82,7 +83,7 @@
 
 </body>
        <script src="bower_components/jquery/jquery.js"></script>
-       <script src="http://localhost:807/socket.io/socket.io.js"></script>
+       <script src="http://localhost:8070/socket.io/socket.io.js"></script>
    
         <script src="bower_components/stroll/js/stroll.js"></script>
         <script src="bower_components/raphael/raphael.js"></script>
@@ -90,6 +91,8 @@
         <script src="bower_components/d3/d3.js"></script>
 
         <script src="../flight.js"></script>
+
+        <script src="static-myapp/togetherjs.js"></script>
         <script src="bower_components/jqueryui/index.js"></script>
         <script src="bower_components/angular/angular.js"></script>
              <!-- build:js scripts/plugins.js -->
