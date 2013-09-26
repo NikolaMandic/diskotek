@@ -679,7 +679,11 @@
   $(document).on("routeChanged",function(data){
     //need to 
     //
-    TogetherJS.resyncSessions();
+    //TogetherJS.resyncSessions();
+  //  setTimeout()
+    if(TogetherJS.resyncSessions){
+      TogetherJS.resyncSessions();
+    }
     
 
   });

@@ -3,7 +3,7 @@
 angular.module('ldApp')
   .controller('Disas', function ($rootScope,$scope,$http,Data,bboxF) {
 
-    //$(document).trigger("routeChanged");
+    $(document).trigger("routeChanged");
 
     $scope.sharedData=Data.sharedData;
     $scope.data=Data;
