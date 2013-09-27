@@ -462,7 +462,12 @@
     // This is used to keep sessions from crossing over on the same
     // domain, if for some reason you want sessions that are limited
     // to only a portion of the domain:
-    storagePrefix: "togetherjs"
+    storagePrefix: "togetherjs",
+    // this is the option to enable for example single page app routes 
+    // as different pages
+    // url.com/index.html#/view1 will be used as one page
+    // defaults to disabled
+    includeHashInUrl:false
   };
   // FIXME: there's a point at which configuration can't be updated
   // (e.g., hubBase after the TogetherJS has loaded).  We should keep
@@ -510,6 +515,9 @@
       if (TogetherJS.running && attr == "toolName") {
         TogetherJS.require("ui").updateToolName();
       }
+      if(attr=="includeHashInUrl"){
+        TogetherJS.listenForHashChange(); 
+      }
       if (attr == "enableShortcut") {
         if (settings[attr]) {
           TogetherJS.listenForShortcut();
@@ -521,7 +529,17 @@
       // updated, especially when TogetherJS is running
     }
   };
-
+  TogetherJS.listenForHashChange = function(){
+    
+      
+    $(window).on("hashchange",function(){
+      if(session===null){
+      
+        session = TogetherJS.require("session");
+      }
+      session.synchroniseSessions();
+    }); 
+  };
   TogetherJS.reinitialize = function () {
     if (TogetherJS.running && typeof TogetherJS.require == "function") {
       TogetherJS.require(["session"], function (session) {
@@ -638,7 +656,10 @@
 
   // It's nice to replace this early, before the load event fires, so we conflict
   // as little as possible with the app we are embedded in:
-  var hash = location.hash.replace(/^#/, "");
+  if(!window.TogetherJSConfig_includeHashInUrl){
+    var hash = location.hash.replace(/^#/, "");
+  }
+
   var m = /&?togetherjs=([^&]*)/.exec(hash);
   if (m) {
     TogetherJS.startup._joinShareId = m[1];
@@ -676,18 +697,6 @@
 
   // FIXME: can we push this up before the load event?
   // Do we need to wait at all?
-  $(document).on("routeChanged",function(data){
-    //need to 
-    //
-    //TogetherJS.resyncSessions();
-  //  setTimeout()
-    if(TogetherJS.resyncSessions){
-      TogetherJS.resyncSessions();
-    }
-    
-
-  });
-
   function onload() {
     if (TogetherJS.startup._joinShareId) {
       TogetherJS();
