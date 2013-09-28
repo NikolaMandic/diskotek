@@ -74,10 +74,13 @@ angular.module('ldApp')
    * and target remote command to connect to the emulator
    *
    * */
-  obj.startCommand = function (name) {
+  obj.startCommand = function (name,architecture) {
     command.commandExecO({
       msgType:'start',
-      payload:{name:name},
+      payload:{
+        name:name,
+        architecture:architecture
+      },
       callback:null
     });
     /*

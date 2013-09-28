@@ -107,7 +107,7 @@ angular.module('ldApp').factory('command',[
    *
    * */
   obj.commandExecO=function(args){
-
+    console.log('send: ' ,args);
     var callback;
     if(_.isFunction(args.callback)){
       callback = args.callback;
@@ -132,7 +132,7 @@ angular.module('ldApp').factory('command',[
       obj.callbackQueue.push(callback);
     }
     var msgType = (args.msgType)?args.msgType : 'command';
-    var cmd = (args.ptyPayload)?args.ptyPayload : args.cmnd;
+    var cmd = (args.ptyPayload)?args.ptyPayload : args.payload;
     obj.sock.emit(msgType,{
       ptyPayload:cmd
     });
@@ -181,7 +181,7 @@ angular.module('ldApp').factory('command',[
    *
    * */
   socket.on('news', function (data) {
-    console.log(data);
+    console.log('in: ',data);
     var dataSplited = data.data.split('\n') ;
     obj.resultRaw = obj.resultRaw.concat(dataSplited);
     obj.result=obj.resultRaw;

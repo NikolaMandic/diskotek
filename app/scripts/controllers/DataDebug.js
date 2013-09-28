@@ -115,10 +115,18 @@ angular.module('ldApp').factory('DataDebug',['$rootScope','command','DataDisasse
     disassemblyData.data=basicBlocks;
 */
   };
- debugData.getDissasembly = function getDissasembly () {
-
+  debugData.commands = {
+    x86:{
+      disassembly:'disas '//$eip,$eip+40'
+    },
+    arm:{
+      disassembly:'disas $pc-80,$pc+80'
+    }
+  };
+  debugData.getDissasembly = function getDissasembly () {
+   
    command.commandExecO({
-     ptyPayload:'disas $pc-80,$pc+80',
+     ptyPayload:debugData.commands[debugData.arch].disassembly,
      callback:debugData.dissasemblyCallback
    });
    /*

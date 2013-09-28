@@ -65,12 +65,13 @@ angular.module('ldApp')
     $scope.file=Data.sharedData.fileName;
     $scope.sharedData=Data.sharedData;
     Data.scope=$scope;
-    
+    $scope.architecture ='arm elf';
     /*
      * following scope functions just forward to functions on data module
      * */
     $scope.commandStart=function(){
-      Data.startCommand($scope.file);
+      Data.debugData.arch='x86';
+      Data.startCommand($scope.file,$scope.architecture);
     };
     $scope.commandStartVM=function() {
       Data.startCommandVM($scope.file);
@@ -80,7 +81,7 @@ angular.module('ldApp')
 
     };
     $scope.commandDissasemble = function() {
-      Data.disassemblyData.disassemble($scope.file);
+      Data.disassemblyData.disassemble($scope.file,$scope.architecture);
     };
     $scope.stop = function() {
       Data.stop();

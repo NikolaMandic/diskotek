@@ -131,7 +131,7 @@ angular.module('ldApp').factory('DataDisassembly',['$rootScope','command','DataD
    * this function calls functions that get data from backend
    * 
    * */
-  disassemblyData.disassemble = function(file) {
+  disassemblyData.disassemble = function(file,architecture) {
     disassemblyData.getSectionDisassembly(file);
     disassemblyData.getHeaders(file);
   };

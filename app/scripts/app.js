@@ -12,7 +12,7 @@ angular.module('ldApp', ['ngRoute'])
       })
       .when('/disas',{
         templateUrl:'views/disas.html',
-        controller: 'Disas'
+        controller: 'disassemblyController'
       })
       .otherwise({
         redirectTo: '/'
