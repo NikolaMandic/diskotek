@@ -39,8 +39,7 @@ angular.module('ldApp')
     $scope.commandExecL=function(cmnd,resultVariable,splice1,splice2){
      // $scope.result=cmnd;
       if(_.isFunction(resultVariable)){
-      
-          Data.callbackQueue.push(resultVariable);
+        Data.callbackQueue.push(resultVariable);
       }else{
         if(resultVariable){
           Data.callbackQueue.push(function putStuffinResultC() {

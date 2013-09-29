@@ -13,12 +13,12 @@ body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: #001100;
 }
-.container{
+#container{
 @include make-row();
 }
 /*   top menu   */
 
-#debugMenu,#menuPanel,#status,.container{
+#debugMenu,#menuPanel,#status{
   @include make-row();
 
 }
@@ -124,11 +124,14 @@ body {
 
 #wrapermain{
   @include make-row();
+  @include make-md-column(12);
 }
 .breakpoint{
   background: rgba(220,00,00,0.3);
 }
-
+#disassembly{
+  @include make-md-column(9);
+}
 #registers{
   @include make-md-column(3);
   /*
@@ -153,7 +156,7 @@ body {
 } 
 
 .hero-unit {
-  @include make-md-column(6);
+  @include make-md-column(9);
   /*
     margin: auto 0 auto;
     //width: 600px;
@@ -169,13 +172,16 @@ body {
   @include make-row();
 }
 .inst_addr{
-  @include make-md-column(3);
+  @include make-md-column(2);
+}
+.inst_raw{
+  @include make-md-column(2);
 }
 .inst_opcode{
   @include make-md-column(2);
 }
 .inst_operands{
-  @include make-md-column(4);
+  @include make-md-column(3);
 }
 .inst_comment{
   @include make-md-column(3);

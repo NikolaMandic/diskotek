@@ -6,7 +6,10 @@
  *
  */
 angular.module('ldApp').factory('DataDisassemblyParsers',function(){
-  var parsers = {};
+  var parsers = {
+    x86:{},
+    arm:{}
+  };
   parsers.parseXD = function (data){
     return _.map(data,function(v){
       var s = (/\s+(\w+)\s*((\w+\s+){1,4})(.*)/).exec(v);
@@ -179,8 +182,38 @@ angular.module('ldApp').factory('DataDisassemblyParsers',function(){
       };
     });
   };
+  parsers['x86'].disassemblyParser= function dissasemblyx86Callback(disassemblyRaw){
+    
+    var dissasembly= disassemblyRaw.slice(1,-2);
+
+    var instructions = [];
+    _.each(dissasembly,function(value){
+      //detects line from gdb output
+      var disasLine=/^(\s*\=\>\s*)?\s*([^<]+)\s+(<[^>]*>):\s+((\w{2}\s+)*)\s*(\w+)\s+([^<;]+)?(<[^>]*>)?\s*(;(.*))?$/;
+      var splitedInstruction;
+      var instruction;
+      if(value.match(disasLine)){
+        splitedInstruction =  value.split(disasLine);
+        instruction ={
+          current:splitedInstruction[1]!==undefined,
+          address: splitedInstruction[2],
+          addressr: splitedInstruction[3],
+          memraw:  splitedInstruction[4],
+          opcode:  splitedInstruction[6],
+          operands:splitedInstruction[7],
+          symbolOperands: splitedInstruction[8],
+          comment: splitedInstruction[9],
+        };
+      }
+      //console.log(instruction);
+      instructions.push(instruction);
+
+    });
+    return instructions;
+   //console.log(instructions);
+  };
   parsers.disassemblyParser=function dissasemblyCallback(){
-    obj.sharedData.dissasembly= obj.sharedData.result.slice(0,-1);
+   obj.sharedData.dissasembly= obj.sharedData.result.slice(0,-1);
     var b = [];
     b.push([]);
     var basicBlocks=[];

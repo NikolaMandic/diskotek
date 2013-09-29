@@ -139,6 +139,9 @@ angular.module('ldApp').factory('command',[
 
   };
   var socket = io.connect('http://localhost:8070');
+  // for debugging and rad
+  window.socket=socket;
+  window.command = obj.commandExecO;
   obj.sock=socket;
 
   /*

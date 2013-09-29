@@ -1,21 +1,25 @@
 <div id="wrapermain">
     
-  <div id="dissasembly" class="hero-unit" draggable resizable>
+  <div id="disassembly" draggable resizable>
 
     <div class="{{thing.current?'inst_row_current':'inst_row'}}" ng-repeat="thing in data.debugData.disassembly">
       <div class="inst_addr {{thing.hasBreakpoint?'breakpoint':'' }}" ng-click="toggleBreakpoint(thing.address,thing)">
         
-          {{thing.address}}
+        {{thing.address}} {{thing.addressr}}
+
         </div>
-        
+
+        <div class="inst_raw">
+          {{thing.memraw}}
+        </div>
+       
         <div class="inst_opcode">
           {{thing.opcode}}
         </div>
   
         <div class="inst_operands">
-          {{thing.operands}}
+          {{thing.operands}} {{thing.symbolOperands}}
         </div>
-
 
         <div class="inst_comment">
           {{thing.comment}}

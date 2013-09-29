@@ -7476,37 +7476,37 @@ body {
 }
 
 /* line 16, main.scss */
-.container {
+#container {
   margin-left: -15px;
   margin-right: -15px;
 }
 /* line 21, ../bower_components/bootstrap-sass/lib/_mixins.scss */
-.container:before, .container:after {
+#container:before, #container:after {
   content: " ";
   /* 1 */
   display: table;
   /* 2 */
 }
 /* line 25, ../bower_components/bootstrap-sass/lib/_mixins.scss */
-.container:after {
+#container:after {
   clear: both;
 }
 
 /*   top menu   */
 /* line 21, main.scss */
-#debugMenu, #menuPanel, #status, .container {
+#debugMenu, #menuPanel, #status {
   margin-left: -15px;
   margin-right: -15px;
 }
 /* line 21, ../bower_components/bootstrap-sass/lib/_mixins.scss */
-#debugMenu:before, #debugMenu:after, #menuPanel:before, #menuPanel:after, #status:before, #status:after, .container:before, .container:after {
+#debugMenu:before, #debugMenu:after, #menuPanel:before, #menuPanel:after, #status:before, #status:after {
   content: " ";
   /* 1 */
   display: table;
   /* 2 */
 }
 /* line 25, ../bower_components/bootstrap-sass/lib/_mixins.scss */
-#debugMenu:after, #menuPanel:after, #status:after, .container:after {
+#debugMenu:after, #menuPanel:after, #status:after {
   clear: both;
 }
 
@@ -7845,6 +7845,10 @@ body {
 #wrapermain {
   margin-left: -15px;
   margin-right: -15px;
+  position: relative;
+  min-height: 1px;
+  padding-left: 15px;
+  padding-right: 15px;
 }
 /* line 21, ../bower_components/bootstrap-sass/lib/_mixins.scss */
 #wrapermain:before, #wrapermain:after {
@@ -7857,13 +7861,35 @@ body {
 #wrapermain:after {
   clear: both;
 }
+@media (min-width: 992px) {
+  /* line 125, main.scss */
+  #wrapermain {
+    float: left;
+    width: 100%;
+  }
+}
 
-/* line 128, main.scss */
+/* line 129, main.scss */
 .breakpoint {
   background: rgba(220, 0, 0, 0.3);
 }
 
 /* line 132, main.scss */
+#disassembly {
+  position: relative;
+  min-height: 1px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+@media (min-width: 992px) {
+  /* line 132, main.scss */
+  #disassembly {
+    float: left;
+    width: 75%;
+  }
+}
+
+/* line 135, main.scss */
 #registers {
   position: relative;
   min-height: 1px;
@@ -7882,14 +7908,14 @@ body {
 */
 }
 @media (min-width: 992px) {
-  /* line 132, main.scss */
+  /* line 135, main.scss */
   #registers {
     float: left;
     width: 25%;
   }
 }
 
-/* line 146, main.scss */
+/* line 149, main.scss */
 #commandResult {
   position: relative;
   min-height: 1px;
@@ -7897,19 +7923,19 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 146, main.scss */
+  /* line 149, main.scss */
   #commandResult {
     float: left;
     width: 25%;
   }
 }
 
-/* line 151, main.scss */
+/* line 154, main.scss */
 #registers li:nth-child(16) {
   background: rgba(192, 57, 43, 0.09);
 }
 
-/* line 155, main.scss */
+/* line 158, main.scss */
 .hero-unit {
   position: relative;
   min-height: 1px;
@@ -7927,14 +7953,14 @@ body {
     */
 }
 @media (min-width: 992px) {
-  /* line 155, main.scss */
+  /* line 158, main.scss */
   .hero-unit {
     float: left;
-    width: 50%;
+    width: 75%;
   }
 }
 
-/* line 168, main.scss */
+/* line 171, main.scss */
 .inst_row {
   margin-left: -15px;
   margin-right: -15px;
@@ -7951,7 +7977,7 @@ body {
   clear: both;
 }
 
-/* line 171, main.scss */
+/* line 174, main.scss */
 .inst_addr {
   position: relative;
   min-height: 1px;
@@ -7959,30 +7985,15 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 171, main.scss */
-  .inst_addr {
-    float: left;
-    width: 25%;
-  }
-}
-
-/* line 174, main.scss */
-.inst_opcode {
-  position: relative;
-  min-height: 1px;
-  padding-left: 15px;
-  padding-right: 15px;
-}
-@media (min-width: 992px) {
   /* line 174, main.scss */
-  .inst_opcode {
+  .inst_addr {
     float: left;
     width: 16.66667%;
   }
 }
 
 /* line 177, main.scss */
-.inst_operands {
+.inst_raw {
   position: relative;
   min-height: 1px;
   padding-left: 15px;
@@ -7990,13 +8001,43 @@ body {
 }
 @media (min-width: 992px) {
   /* line 177, main.scss */
-  .inst_operands {
+  .inst_raw {
     float: left;
-    width: 33.33333%;
+    width: 16.66667%;
   }
 }
 
 /* line 180, main.scss */
+.inst_opcode {
+  position: relative;
+  min-height: 1px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+@media (min-width: 992px) {
+  /* line 180, main.scss */
+  .inst_opcode {
+    float: left;
+    width: 16.66667%;
+  }
+}
+
+/* line 183, main.scss */
+.inst_operands {
+  position: relative;
+  min-height: 1px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+@media (min-width: 992px) {
+  /* line 183, main.scss */
+  .inst_operands {
+    float: left;
+    width: 25%;
+  }
+}
+
+/* line 186, main.scss */
 .inst_comment {
   position: relative;
   min-height: 1px;
@@ -8005,14 +8046,14 @@ body {
   color: #00AA00;
 }
 @media (min-width: 992px) {
-  /* line 180, main.scss */
+  /* line 186, main.scss */
   .inst_comment {
     float: left;
     width: 25%;
   }
 }
 
-/* line 184, main.scss */
+/* line 190, main.scss */
 .reg_row {
   margin-left: -15px;
   margin-right: -15px;
@@ -8029,7 +8070,7 @@ body {
   clear: both;
 }
 
-/* line 187, main.scss */
+/* line 193, main.scss */
 .reg_name {
   position: relative;
   min-height: 1px;
@@ -8037,14 +8078,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 187, main.scss */
+  /* line 193, main.scss */
   .reg_name {
     float: left;
     width: 16.66667%;
   }
 }
 
-/* line 190, main.scss */
+/* line 196, main.scss */
 .reg_value1 {
   position: relative;
   min-height: 1px;
@@ -8052,14 +8093,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 190, main.scss */
+  /* line 196, main.scss */
   .reg_value1 {
     float: left;
     width: 41.66667%;
   }
 }
 
-/* line 193, main.scss */
+/* line 199, main.scss */
 .reg_value2 {
   position: relative;
   min-height: 1px;
@@ -8067,19 +8108,19 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 193, main.scss */
+  /* line 199, main.scss */
   .reg_value2 {
     float: left;
     width: 41.66667%;
   }
 }
 
-/* line 196, main.scss */
+/* line 202, main.scss */
 #registers .reg_row:nth-child(odd), .secInst:nth-child(odd), .hero-unit .inst_row:nth-child(odd) {
   background: rgba(220, 220, 220, 0.35);
 }
 
-/* line 200, main.scss */
+/* line 206, main.scss */
 .inst_row_current {
   margin-left: -15px;
   margin-right: -15px;
@@ -8097,7 +8138,7 @@ body {
   clear: both;
 }
 
-/* line 204, main.scss */
+/* line 210, main.scss */
 .sectionS div {
   position: relative;
   min-height: 1px;
@@ -8105,7 +8146,7 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 204, main.scss */
+  /* line 210, main.scss */
   .sectionS div {
     float: left;
     width: 25%;
@@ -8114,7 +8155,7 @@ body {
 
 /*   /debug view     */
 /*   graph view      */
-/* line 211, main.scss */
+/* line 217, main.scss */
 #holder, .sectionP, .sectionS, .sectionView {
   margin-left: -15px;
   margin-right: -15px;
@@ -8133,13 +8174,13 @@ body {
 
 /*    /graph view     */
 /* linkify  */
-/* line 217, main.scss */
+/* line 223, main.scss */
 a {
   text-decoration: none;
   color: #198de6;
 }
 
-/* line 222, main.scss */
+/* line 228, main.scss */
 .roll {
   display: inline-block;
   overflow: hidden;
@@ -8150,7 +8191,7 @@ a {
   -moz-perspective-origin: 50% 50%;
 }
 
-/* line 234, main.scss */
+/* line 240, main.scss */
 .roll span {
   display: block;
   position: relative;
@@ -8163,14 +8204,14 @@ a {
   -moz-transform-style: preserve-3d;
 }
 
-/* line 248, main.scss */
+/* line 254, main.scss */
 .roll:hover span {
   background: #111;
   -webkit-transform: translate3d(0px, 0px, -30px) rotateX(90deg);
   -moz-transform: translate3d(0px, 0px, -30px) rotateX(90deg);
 }
 
-/* line 254, main.scss */
+/* line 260, main.scss */
 .roll span:after {
   content: attr(data-title);
   display: block;
