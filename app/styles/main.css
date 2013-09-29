@@ -7890,6 +7890,51 @@ body {
 }
 
 /* line 135, main.scss */
+.lineNumber {
+  position: relative;
+  min-height: 1px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+@media (min-width: 992px) {
+  /* line 135, main.scss */
+  .lineNumber {
+    float: left;
+    width: 16.66667%;
+  }
+}
+
+/* line 138, main.scss */
+.srcCode {
+  position: relative;
+  min-height: 1px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+@media (min-width: 992px) {
+  /* line 138, main.scss */
+  .srcCode {
+    float: left;
+    width: 83.33333%;
+  }
+}
+
+/* line 141, main.scss */
+.blank {
+  position: relative;
+  min-height: 1px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+@media (min-width: 992px) {
+  /* line 141, main.scss */
+  .blank {
+    float: left;
+    width: 100%;
+  }
+}
+
+/* line 144, main.scss */
 #registers {
   position: relative;
   min-height: 1px;
@@ -7908,14 +7953,14 @@ body {
 */
 }
 @media (min-width: 992px) {
-  /* line 135, main.scss */
+  /* line 144, main.scss */
   #registers {
     float: left;
     width: 25%;
   }
 }
 
-/* line 149, main.scss */
+/* line 158, main.scss */
 #commandResult {
   position: relative;
   min-height: 1px;
@@ -7923,19 +7968,19 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 149, main.scss */
+  /* line 158, main.scss */
   #commandResult {
     float: left;
     width: 25%;
   }
 }
 
-/* line 154, main.scss */
+/* line 163, main.scss */
 #registers li:nth-child(16) {
   background: rgba(192, 57, 43, 0.09);
 }
 
-/* line 158, main.scss */
+/* line 167, main.scss */
 .hero-unit {
   position: relative;
   min-height: 1px;
@@ -7953,14 +7998,14 @@ body {
     */
 }
 @media (min-width: 992px) {
-  /* line 158, main.scss */
+  /* line 167, main.scss */
   .hero-unit {
     float: left;
     width: 75%;
   }
 }
 
-/* line 171, main.scss */
+/* line 180, main.scss */
 .inst_row {
   margin-left: -15px;
   margin-right: -15px;
@@ -7977,7 +8022,7 @@ body {
   clear: both;
 }
 
-/* line 174, main.scss */
+/* line 183, main.scss */
 .inst_addr {
   position: relative;
   min-height: 1px;
@@ -7985,14 +8030,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 174, main.scss */
+  /* line 183, main.scss */
   .inst_addr {
     float: left;
     width: 16.66667%;
   }
 }
 
-/* line 177, main.scss */
+/* line 186, main.scss */
 .inst_raw {
   position: relative;
   min-height: 1px;
@@ -8000,14 +8045,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 177, main.scss */
+  /* line 186, main.scss */
   .inst_raw {
     float: left;
     width: 16.66667%;
   }
 }
 
-/* line 180, main.scss */
+/* line 189, main.scss */
 .inst_opcode {
   position: relative;
   min-height: 1px;
@@ -8015,14 +8060,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 180, main.scss */
+  /* line 189, main.scss */
   .inst_opcode {
     float: left;
     width: 16.66667%;
   }
 }
 
-/* line 183, main.scss */
+/* line 192, main.scss */
 .inst_operands {
   position: relative;
   min-height: 1px;
@@ -8030,14 +8075,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 183, main.scss */
+  /* line 192, main.scss */
   .inst_operands {
     float: left;
     width: 25%;
   }
 }
 
-/* line 186, main.scss */
+/* line 195, main.scss */
 .inst_comment {
   position: relative;
   min-height: 1px;
@@ -8046,14 +8091,14 @@ body {
   color: #00AA00;
 }
 @media (min-width: 992px) {
-  /* line 186, main.scss */
+  /* line 195, main.scss */
   .inst_comment {
     float: left;
     width: 25%;
   }
 }
 
-/* line 190, main.scss */
+/* line 199, main.scss */
 .reg_row {
   margin-left: -15px;
   margin-right: -15px;
@@ -8070,7 +8115,7 @@ body {
   clear: both;
 }
 
-/* line 193, main.scss */
+/* line 202, main.scss */
 .reg_name {
   position: relative;
   min-height: 1px;
@@ -8078,14 +8123,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 193, main.scss */
+  /* line 202, main.scss */
   .reg_name {
     float: left;
     width: 16.66667%;
   }
 }
 
-/* line 196, main.scss */
+/* line 205, main.scss */
 .reg_value1 {
   position: relative;
   min-height: 1px;
@@ -8093,14 +8138,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 196, main.scss */
+  /* line 205, main.scss */
   .reg_value1 {
     float: left;
     width: 41.66667%;
   }
 }
 
-/* line 199, main.scss */
+/* line 208, main.scss */
 .reg_value2 {
   position: relative;
   min-height: 1px;
@@ -8108,19 +8153,19 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 199, main.scss */
+  /* line 208, main.scss */
   .reg_value2 {
     float: left;
     width: 41.66667%;
   }
 }
 
-/* line 202, main.scss */
+/* line 211, main.scss */
 #registers .reg_row:nth-child(odd), .secInst:nth-child(odd), .hero-unit .inst_row:nth-child(odd) {
   background: rgba(220, 220, 220, 0.35);
 }
 
-/* line 206, main.scss */
+/* line 215, main.scss */
 .inst_row_current {
   margin-left: -15px;
   margin-right: -15px;
@@ -8138,7 +8183,7 @@ body {
   clear: both;
 }
 
-/* line 210, main.scss */
+/* line 219, main.scss */
 .sectionS div {
   position: relative;
   min-height: 1px;
@@ -8146,7 +8191,7 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 210, main.scss */
+  /* line 219, main.scss */
   .sectionS div {
     float: left;
     width: 25%;
@@ -8155,7 +8200,7 @@ body {
 
 /*   /debug view     */
 /*   graph view      */
-/* line 217, main.scss */
+/* line 226, main.scss */
 #holder, .sectionP, .sectionS, .sectionView {
   margin-left: -15px;
   margin-right: -15px;
@@ -8174,13 +8219,13 @@ body {
 
 /*    /graph view     */
 /* linkify  */
-/* line 223, main.scss */
+/* line 232, main.scss */
 a {
   text-decoration: none;
   color: #198de6;
 }
 
-/* line 228, main.scss */
+/* line 237, main.scss */
 .roll {
   display: inline-block;
   overflow: hidden;
@@ -8191,7 +8236,7 @@ a {
   -moz-perspective-origin: 50% 50%;
 }
 
-/* line 240, main.scss */
+/* line 249, main.scss */
 .roll span {
   display: block;
   position: relative;
@@ -8204,14 +8249,14 @@ a {
   -moz-transform-style: preserve-3d;
 }
 
-/* line 254, main.scss */
+/* line 263, main.scss */
 .roll:hover span {
   background: #111;
   -webkit-transform: translate3d(0px, 0px, -30px) rotateX(90deg);
   -moz-transform: translate3d(0px, 0px, -30px) rotateX(90deg);
 }
 
-/* line 260, main.scss */
+/* line 269, main.scss */
 .roll span:after {
   content: attr(data-title);
   display: block;

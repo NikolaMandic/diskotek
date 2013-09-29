@@ -2,32 +2,67 @@
     
   <div id="disassembly" draggable resizable>
 
-    <div class="{{thing.current?'inst_row_current':'inst_row'}}" ng-repeat="thing in data.debugData.disassembly">
-      <div class="inst_addr {{thing.hasBreakpoint?'breakpoint':'' }}" ng-click="toggleBreakpoint(thing.address,thing)">
-        
-        {{thing.address}} {{thing.addressr}}
+    <div ng-switch="thing.type" class="{{thing.current?'inst_row_current':'inst_row'}}" ng-repeat="thing in data.debugData.disassembly">
 
-        </div>
+          <div ng-switch-when="instruction" class="inst_addr {{thing.hasBreakpoint?'breakpoint':'' }}" ng-click="toggleBreakpoint(thing.address,thing)">
+           <span> 
+           {{thing.address}} {{thing.addressr}}
+           </span>
+          </div>
 
-        <div class="inst_raw">
-          {{thing.memraw}}
-        </div>
+          <div  ng-switch-when="instruction" class="inst_raw">
+
+           <span> 
+            {{thing.memraw}}
+
+           </span> 
+          </div>
        
-        <div class="inst_opcode">
-          {{thing.opcode}}
-        </div>
+          <div  ng-switch-when="instruction" class="inst_opcode">
+
+           <span> 
+            {{thing.opcode}}
+
+           </span> 
+          </div>
   
-        <div class="inst_operands">
-          {{thing.operands}} {{thing.symbolOperands}}
-        </div>
+          <div  ng-switch-when="instruction" class="inst_operands">
 
-        <div class="inst_comment">
-          {{thing.comment}}
-        </div>
+           <span> 
+            {{thing.operands}} {{thing.symbolOperands}}
 
+           </span> 
+          </div>
+
+          <div  ng-switch-when="instruction" class="inst_comment">
+
+           <span> 
+            {{thing.comment}}
+
+           </span> 
+          </div>
+
+          <div ng-switch-when="src" class="lineNumber">
+
+           <span> 
+            {{thing.lineNumber}}
+
+           </span> 
+          </div>
+
+          <div ng-switch-when="src" class="srcCode">
+
+           <span> 
+            {{thing.code}}
+
+           </span> 
+          </div>
+
+          <div ng-switch-when="blank" class="blankRow">
+          </div>
 
     </div>
-   </div>
+  </div>
    <!--
    <p ng-bind="command">instlλaslaled.</p>
    

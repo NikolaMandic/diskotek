@@ -132,6 +132,15 @@ body {
 #disassembly{
   @include make-md-column(9);
 }
+.lineNumber{
+  @include make-md-column(2);
+}
+.srcCode{
+  @include make-md-column(10);
+}
+.blank{
+  @include make-md-column(12);
+}
 #registers{
   @include make-md-column(3);
   /*

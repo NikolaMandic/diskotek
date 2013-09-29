@@ -5,10 +5,10 @@ angular.module('ldApp').factory('DataDebug',['$rootScope','command','DataDisasse
   //transforms command output recived from server into array of instructions
   debugData.commands = {
     x86:{
-      disassembly:'disas /rm'//$eip,$eip+40'
+      disassembly:'disas /rm $eip-80,$eip+80'//$eip,$eip+40'
     },
     arm:{
-      disassembly:'disas $pc-80,$pc+80'
+      disassembly:'disas /rm $pc-80,$pc+80'
     }
   };
   debugData.getDissasembly = function getDissasembly () {
@@ -16,7 +16,7 @@ angular.module('ldApp').factory('DataDebug',['$rootScope','command','DataDisasse
    command.commandExecO({
      ptyPayload:debugData.commands[debugData.arch].disassembly,
      callback:function(data){
-       debugData.disassembly=dataParsers[debugData.arch].disassemblyParser(data);
+       debugData.disassembly=dataParsers[debugData.arch].disassemblyParser(data).combined;
      }
 
    });

@@ -14,6 +14,19 @@ angular.module('ldApp')
 
     $rootScope.$on("debugDataLoaded",function(){
       $scope.$apply();
+      $("#disassembly span").on("mousemove",function(e){
+        e.stopPropagation();
+      });
+      $("#disassembly span").on("click",function(e){
+        e.stopPropagation();
+      });
+      $("#disassembly span").on("mousedown",function(e){
+        e.stopPropagation();
+      });
+      $("#disassembly span").on("mouseup",function(e){
+        e.stopPropagation();
+      });
+
     });
   });
 
