@@ -25,6 +25,9 @@ angular.module('ldApp').factory('DataDebug',['$rootScope','command','DataDisasse
    socket.emit('command', { ptyPayload: 'disas $pc-80,$pc+80' });
    */
  };
+ debugData.patch = function(thing){
+   console.log('patch',thing);
+ };
  debugData.getRegisterInfo = function (){
    command.commandExecO({
      callback:function getRegInfoC(result){
