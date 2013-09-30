@@ -191,6 +191,8 @@ angular.module('ldApp').factory('command',[
     var last = obj.resultRaw[obj.resultRaw.length-1];
     if(last ==='(gdb) '){
       var callback = obj.callbackQueue.shift();
+      console.log('callbackQueue length: ',obj.callbackQueue.length);
+      console.log(callback);
       if(callback){
         callback(obj.result);
       }

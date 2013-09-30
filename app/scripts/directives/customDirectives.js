@@ -37,7 +37,7 @@ angular.module('ldApp').directive('editable',function(){
         console.log("console edited",content);
       }
       
-      $('#instInput').keypress(function(e) {
+      $('#instInput').keyup(function(e) {
         if(e.which == 13) {
           $scope.process($scope.content);
           $('#instInput').hide();

@@ -106,14 +106,17 @@ angular.module('ldApp')
     command.commandExecO({
       ptyPayload:'detach',
       callback:function detachC(){
-      obj.debugData.disassembly=['detached'];
+      obj.debugData.status='detached';
       obj.debugData.registers=[];
       obj.data=[];
       }
     });
+    
     command.commandExecO({
-      ptyPayload:'quit'
+      ptyPayload:'quit',
+      callback:null
     });
+    
     //$scope.commandExecL('quit',null);
   }
   return obj;

@@ -38,21 +38,27 @@ function gdbCommandRunnerC(){
   this.runningState=2;
   this.stopedState=3;
   this.status=0;
+  var self=this;
   this.skipState=0;
   this.initialisationSteps=[
     'set arch arm'+'\n',
     'target remote :12345'+'\n'
   ];
   this.commandPush = function (data){
-    console.log('command arrived '+ data.ptyPayload+'\n');
+    console.log('\n ==========command push======');
+    console.log('command arrived '+ data.ptyPayload);
     this.commandCount+=1;
     this.commandStack.push(function() {
       console.log('executing '+data.ptyPayload +'\n');
       gdb.stdin.write(data.ptyPayload+'\n');
       if(data.ptyPayload==='quit'){
-        this.status=this.stopedState;
+        //socket.emit('news','quited\n(gdb)');
+        self.status=0;
+        self.commandCount=0;
+        self.commandStack=[];
         // global state
         started=0;
+        console.log('gdb stopped');
       }
     });
 
@@ -72,6 +78,7 @@ function gdbCommandRunnerC(){
 
   };
   this.commandFinished = function(){
+    console.log('status: '+this.status);
     if(this.status===0){
       console.log('switching to initialistation\n');
 
@@ -139,6 +146,7 @@ function gdbStdoutCallback(socket,chunk) {
   }
 }
 function attachGDBtoPeer(socket){
+  console.log('attaching gdb to peer')
   gdb.stdout.setEncoding('utf-8');
   gdb.stdout.on('data',function(data){ gdbStdoutCallback(socket,data); });
   gdb.stderr.setEncoding('utf-8');
@@ -154,6 +162,7 @@ function startARMELF(socket,data){
   attachGDBtoPeer(socket);
 }
 function startX86ELF(socket,data){
+  console.log('starting x86 elf debugging')
   // spawn gdb and load target
   gdb = cp.spawn('gdb', [ data.name] );
   gdbCommandRunner.initialisationSteps=['set disassembly-flavor intel\n','break _start\n','run\n']
@@ -185,6 +194,8 @@ function startCommandHandler(socket,data) {
     }catch(err){
       console.log(err);
     }
+  }else{
+    //gdb.stdin.write('run\n');
   }
 }
 
