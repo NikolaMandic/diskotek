@@ -139,6 +139,7 @@ angular.module('ldApp').factory('command',[
 
   };
   var socket = io.connect('http://localhost:8070');
+  //socket.
   // for debugging and rad
   window.socket=socket;
   window.command = obj.commandExecO;
@@ -203,7 +204,13 @@ angular.module('ldApp').factory('command',[
       obj.scope.$apply();
     }
   });
+  var assembleNewsStream = socket.asEventStream('assembleNews');
 
+ /*
+  socket.on('assembleNews',function (argument) {
+    window.location('localhost:8080/index.html#/');
+  });
+*/
   return obj;
 }]);
 

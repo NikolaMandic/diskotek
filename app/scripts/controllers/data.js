@@ -83,6 +83,7 @@ angular.module('ldApp')
       },
       callback:null
     });
+
     /*
     command.commandExecO({
       ptyPayload:'set arch arm'

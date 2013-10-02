@@ -177,6 +177,9 @@ body {
     padding: 0px;
     */
 }
+.inst_selected{
+  background-color: rgba(110,110,0,0.07);
+}
 .inst_row{
   @include make-row();
 }

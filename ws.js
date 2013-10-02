@@ -175,7 +175,9 @@ function startCommandHandler(socket,data) {
     console.log('starting debugger');
     console.log('architecture: ', data );
     started=1;
+    architecture=data.architecture;
     try{
+      gdbCommandRunner.arch=data.architecture;
       switch (data.architecture) {
       case 'arm elf':
         console.log('starting arm debugging');
@@ -198,13 +200,27 @@ function startCommandHandler(socket,data) {
     //gdb.stdin.write('run\n');
   }
 }
+function assembleARM(instruction){
+  return 'echo "' +
+               instruction +
+               '" > aa.txt; arm-linux-gnueabi-as aa.txt; arm-linux-gnueabi-objdump -d a.out |grep -o -E -e "0:(\\s*(\\w+)\\s*)" | cut -d ":" -f 2| grep -o -E -e "\\w+"'
+}
 
+function assemblex86(instruction){
+
+  return 'echo "' + instruction + '" > /tmp/aa.txt ; as /tmp/aa.txt -o/tmp/a.o; objdump -d /tmp/a.o | sed -rn "s/.*[0-9]+:\\s+(([a-f0-9]+\\s+)+)\\s+.*/\\1/p" ';
+}
 function assemblerCommandHandler(socket,data){
   var exec = require('child_process').exec,
   child;
-  child = exec('echo "' +
-               data.command +
-               '" > aa.txt; arm-linux-gnueabi-as aa.txt; arm-linux-gnueabi-objdump -d a.out |grep -o -E -e "0:(\\s*(\\w+)\\s*)" | cut -d ":" -f 2| grep -o -E -e "\\w+"',
+  var command;
+  if(data.architecture==='x86'){
+    command=assemblex86(data.command);
+  }else{
+    command=assembleARM(data.command);
+  }
+  console.log('command to be executed: ',command);
+  child = exec(command,
   function (error, stdout, stderr) {
     socket.emit('assembleNews',{
       bin:stdout
@@ -269,7 +285,7 @@ function setupSocketIOChannels(socket){
     startCommandHandler(socket,data);
   });
   socket.on('assemble',function(data){
-    assemblerCommandHandler(socket,data);
+    assemblerCommandHandler(socket,data.ptyPayload);
   });
   socket.on('exec',function(data){
     execCommandHandler(socket,data);

@@ -32,7 +32,7 @@
  <div id="debugMenu" ng-controller="MainCtrl">
    <div id="status" >
      <div >
-       status: {{sharedData.dUI.statusLine}} 
+       status: {{data.status}} 
      </div>
      
    </div>  
@@ -96,6 +96,7 @@
         <script src="bower_components/underscore/underscore.js"></script>
         <script src="bower_components/d3/d3.js"></script>
 
+        <script src="bacon.js/dist/Bacon.js"></script>
         <script src="../flight.js"></script>
 
         <script type="text/javascript">

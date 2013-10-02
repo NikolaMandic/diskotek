@@ -70,6 +70,7 @@ angular.module('ldApp')
      * */
     $scope.commandStart=function(){
       Data.debugData.arch='x86';
+      Data.status='running';
       Data.startCommand($scope.file,$scope.architecture);
     };
     $scope.commandStartVM=function() {
@@ -84,6 +85,7 @@ angular.module('ldApp')
     };
     $scope.stop = function() {
       Data.stop();
+      Data.status='stopped';
     };
     $scope.stepOver = function  () {
       command.commandExecO({ptyPayload:'ni'});

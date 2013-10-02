@@ -21,44 +21,137 @@ angular.module('ldApp').directive('resizable', function() {
     }
   };
   return ddo;
-});
+})
 angular.module('ldApp').directive('editable',function(){
   var selected = [];
+  var instInputBig=$('#instInputBig');
+  var content;
+  var rootScope;
+  function processBig(){
+  
+  };
+  function process(){
+  
+  };
+  $(window).keyup(function(e){
+    if(e.which===13){
+      if(selected.length>0){
+        if(e.shiftKey){
+          var memlines = _.pluck(selected,'memraw');
+          content=memlines.join('\n');
+          instInputBig.attr({
+            rows:memlines.length
+          }); 
+          instInputBig.html(content);
+          instInputBig.css({
+            position:'absolute',
+            left: selected[0].leftmr,
+            top: selected[0].topmr,
+          });
+          instInputBig.show();
+
+          instInputBig.focus();
+        }else{
+          var opcodes = _.pluck(selected,'opcode');
+
+          var operands = _.pluck(selected,'operands');
+          var instructions = _.zip(opcodes,operands).map(function(v){
+            return v.join(" ");
+          });
+          content=instructions.join('\n');
+          instInputBig.attr({
+            rows:instructions.length
+          }); 
+          instInputBig.html(content);
+          instInputBig.css({
+
+            position:'absolute',
+            left: selected[0].leftop+'px',
+            top: selected[0].topop+'px',
+          });
+          instInputBig.show();       
+          instInputBig.focus();
+        }
+      }
+    }
+  });
+  instInputBig.keyup(function(e) {
+    e.stopPropagation();
+    if(e.which == 13 && e.ctrlKey) {
+      processBig(content);
+      instInputBig.hide();
+      _.each(selected,function(v){
+        v.selected=false;
+      });
+
+      selected=[];
+      rootScope.$apply();
+    }
+    if(e.which == 27) {
+      //$scope.process($scope.content);
+      instInputBig.hide();
+      _.each(selected,function(v){
+        v.selected=false;
+      });
+      selected=[];
+      rootScope.$apply();
+    }
+
+  }); 
+
+  $('#instInput').keyup(function(e) {
+    e.stopPropagation();
+    if(e.which == 13) {
+      process(content);
+      $('#instInput').hide();
+    }
+    if(e.which == 27) {
+      //$scope.process($scope.content);
+      $('#instInput').hide();
+    }
+
+  });
   var ddo = {
     scope:true,
     // replace:true,
     //transclude:true,
     //template:$('#editTemplate').html(),
     controller: function dcOnt($scope, $element,$attrs, $transclude,$rootScope, $compile,Data,$controller) {
+      rootScope=$rootScope;
       $scope.mode = "display";
       $scope.process = function(content){
         console.log($attrs); 
         Data.debugData.patch(scope.thing);
         console.log("console edited",content);
-      }
-      
-      $('#instInput').keyup(function(e) {
-        if(e.which == 13) {
-          $scope.process($scope.content);
-          $('#instInput').hide();
-        }
-        if(e.which == 27) {
-          //$scope.process($scope.content);
-          $('#instInput').hide();
-        }
+      };
 
-      });
+
 
     },
     link: function lf(scope,iElement,iAttrs) {
+      var offset = $(iElement).offset();
+        if(iAttrs.editable==="raw"){
+          scope.thing.leftmr = offset.left;
+          scope.thing.topmr = offset.top;
+        }else{
+          scope.thing.leftop = offset.left;
+          scope.thing.topop = offset.top;
+        }
+
       $(iElement).click(function(){
         selected.push(scope.thing);
+        scope.thing.selected=!scope.thing.selected;
+        if (!scope.thing.selected) {
+         selected = _.without(selected,scope.thing);
+        }
+        selected = _.sortBy(selected,'topmr');
+        scope.$apply();
       });
       $(iElement).dblclick(function(){
         scope.mode = "edit";
         scope.content=$(iElement).html();
         $('#instInput').val(scope.content);
-        var offset = $(iElement).offset();
+        var offset = $(iElement).position();
         $('#instInput').offset({
           left: offset.left,
           top: offset.top,

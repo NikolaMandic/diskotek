@@ -2,7 +2,8 @@
     
   <div id="disassembly" draggable resizable>
 
-    <div ng-switch="thing.type" class="{{thing.current?'inst_row_current':'inst_row'}}" ng-repeat="thing in data.debugData.disassembly">
+    <div ng-switch="thing.type" class="{{thing.current?'inst_row_current':'inst_row'}}  {{thing.selected?' inst_selected':'' }}"
+      ng-repeat="thing in data.debugData.disassembly">
 
           <div ng-switch-when="instruction" class="inst_addr {{thing.hasBreakpoint?'breakpoint':'' }}" ng-click="toggleBreakpoint(thing.address,thing)">
            <span> 
@@ -90,4 +91,7 @@
   </div>
 
 </div>
-  <input id="instInput" type="text" value="" size="20" style="display:hidden;"/>
+  <input id="instInput" type="text" value="" size="20" style="display:none;"/>
+
+  <textarea rows="3" cols="20" id="instInputBig" type="text" size="20" style="display:none;">
+  </textarea>
