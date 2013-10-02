@@ -22,13 +22,44 @@ angular.module('ldApp').directive('resizable', function() {
   };
   return ddo;
 })
-angular.module('ldApp').directive('editable',function(){
+angular.module('ldApp').directive('editable',['command',function(command){
   var selected = [];
   var instInputBig=$('#instInputBig');
   var content;
   var rootScope;
+  var editing;
+  var data;
   function processBig(){
-  
+    var bytes;
+    var rawStringCommand='';
+    if (editing === 'raw') {
+      var memlines = _.pluck(selected,'memraw');
+      bytes=/\w.*\w/.exec(memlines.join('\n').replace(/\n/g,' '))[0].match(/\w{2}/g);
+
+      bytesNew = /\w.*\w/.exec(instInputBig.val().replace(/\n/g,' '))[0].match(/\w{2}/g);
+      if(bytes.length< bytesNew.length){
+        alert('no space for extra bytes');
+      }else{
+        var reversed = _.map(/\w.*\w/.exec(instInputBig.val().replace(/\n/g,' '))[0].match(/\w{2}/g),function(v,i,l){
+          return l[l.length-i-1];
+        }).join("");
+     
+
+        rawStringCommand = 'set {char[' + 
+                            bytesNew.length + 
+                            ']}'+ 
+                            selected[0].address  + 
+                            '=0x' + reversed
+                            ;
+        command.commandExecO({
+          ptyPayload:rawStringCommand
+        });
+        data.debugData.getDissasembly();
+        data.debugData.infoBreakpoints();
+      }
+    }else{
+    
+    }
   };
   function process(){
   
@@ -37,12 +68,13 @@ angular.module('ldApp').directive('editable',function(){
     if(e.which===13){
       if(selected.length>0){
         if(e.shiftKey){
+          editing = 'raw';
           var memlines = _.pluck(selected,'memraw');
           content=memlines.join('\n');
           instInputBig.attr({
             rows:memlines.length
           }); 
-          instInputBig.html(content);
+          instInputBig.val(content);
           instInputBig.css({
             position:'absolute',
             left: selected[0].leftmr,
@@ -52,8 +84,8 @@ angular.module('ldApp').directive('editable',function(){
 
           instInputBig.focus();
         }else{
+          editing = 'op';
           var opcodes = _.pluck(selected,'opcode');
-
           var operands = _.pluck(selected,'operands');
           var instructions = _.zip(opcodes,operands).map(function(v){
             return v.join(" ");
@@ -62,7 +94,7 @@ angular.module('ldApp').directive('editable',function(){
           instInputBig.attr({
             rows:instructions.length
           }); 
-          instInputBig.html(content);
+          instInputBig.val(content);
           instInputBig.css({
 
             position:'absolute',
@@ -90,6 +122,7 @@ angular.module('ldApp').directive('editable',function(){
     if(e.which == 27) {
       //$scope.process($scope.content);
       instInputBig.hide();
+      content='';
       _.each(selected,function(v){
         v.selected=false;
       });
@@ -117,6 +150,8 @@ angular.module('ldApp').directive('editable',function(){
     //transclude:true,
     //template:$('#editTemplate').html(),
     controller: function dcOnt($scope, $element,$attrs, $transclude,$rootScope, $compile,Data,$controller) {
+      //fix inject dependency on declaration level
+      data=Data;
       rootScope=$rootScope;
       $scope.mode = "display";
       $scope.process = function(content){
@@ -162,7 +197,7 @@ angular.module('ldApp').directive('editable',function(){
     }
   };
   return ddo;
-});
+}]);
 angular.module('ldApp').directive('commandwind',function() {
   var ddo = {
     scope:{},
@@ -173,12 +208,16 @@ angular.module('ldApp').directive('commandwind',function() {
                   '<a ng-click="sendCommand(command)">sendCommand</a>&nbsp<a ng-click="clone()">new</a>&nbsp<a ng-click="destroy()">X</a></div>'+
                   ' <div ng-repeat="thing in things">{{thing}}</div>'+
               '</div>',
-    controller: function dcOnt($scope, $element,$attrs, $transclude,$rootScope, $compile,Data,$controller) {
+    controller: function dcOnt($scope, $element,$attrs, $transclude,$rootScope, $compile,Data,$controller,command) {
       //var Data = $injector.get("Data");
      // dcOnt.$new=function(){};
-      $scope.sendCommand=function(command){
-        Data.commandExecL(command,function(){
-          $scope.things=Data.sharedData.result;
+      $scope.sendCommand=function(cmd){
+        command.commandExecO({
+          ptyPayload:cmd,
+          callback:function(result){
+            $scope.things=result;
+            $scope.$apply();
+          }
         });
       }
       $scope.clone = function() {
