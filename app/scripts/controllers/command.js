@@ -107,36 +107,45 @@ angular.module('ldApp').factory('command',[
    *
    * */
   obj.commandExecO=function(args){
+    var dfd = new jQuery.Deferred();
     console.log('send: ' ,args);
     var callback;
+
     if(_.isFunction(args.callback)){
       callback = args.callback;
     }else{
       if(args.resultVariable){
-          callback=function putStuffinResultC() {
+          callback=function putStuffinResultC(r) {
           obj.sharedData[args.resultVariable]=obj.sharedData.result;
+
+          dfd.resolve(d);
         };
       }else{
         if(args.resultVariable!==null ){
-            callback=function anonCallback() {};
+            callback=function anonCallback(r) {
+              dfd.resolve(r);
+            };
         }
       }
     }
     if(args.scope){
-      callback = _.wrap(callback,function(f){
-        f();
+      callback = function(d){
+        callback(d);
+        dfd.resolve(d);
         scope.$apply();
-      });
+      }
     }
     if(args.callback!==null){
       obj.callbackQueue.push(callback);
     }
+    
+
     var msgType = (args.msgType)?args.msgType : 'command';
     var cmd = (args.ptyPayload)?args.ptyPayload : args.payload;
     obj.sock.emit(msgType,{
       ptyPayload:cmd
     });
-
+    return dfd.promise();
   };
   var socket = io.connect('http://localhost:8070');
   //socket.

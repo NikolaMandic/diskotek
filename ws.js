@@ -128,20 +128,22 @@ function gdbstdErr(socket,chunk) {
     data:chunk
   });
 }
-
+var currentOutputBuffer='';
 function gdbStdoutCallback(socket,chunk) {
-  console.log(chunk+'\n');
+  //console.log(chunk+'\n');
   // if gdb is initialized
   if(gdbCommandRunner.status===2){
-    console.log('this chunk is sent\n');
-    socket.emit('news',{
-      type:'output',
-      data:chunk
-    });
+    //console.log('this chunk is sent\n');
+    currentOutputBuffer+=chunk;
   }
 
   if(chunk.match(/.*\(gdb\)\s.*/g)){
     console.log('found gdb string that is used as separator\n');
+     socket.emit('news',{
+      type:'output',
+      data:currentOutputBuffer
+    });
+    currentOutputBuffer='';
     gdbCommandRunner.commandFinished();
   }
 }

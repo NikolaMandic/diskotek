@@ -20,6 +20,21 @@ angular.module('ldApp').factory('DataDebug',['$rootScope','command','DataDisasse
      }
 
    });
+   debugData.__lookupGetter__("disassembly", function(p){
+     return value;
+   });
+              /*       
+   debugData.__defineSetter__("disassembly", function(val){
+     value = val;
+   });
+   debugData.__defineGetter__("registers", function(){
+     return value;
+   });
+                     
+   debugData.__defineSetter__("registers", function(val){
+     value = val;
+   });
+   */
    /*
    obj.callbackQueue.push(debugData.dissasemblyCallback);
    socket.emit('command', { ptyPayload: 'disas $pc-80,$pc+80' });
@@ -64,7 +79,6 @@ angular.module('ldApp').factory('DataDebug',['$rootScope','command','DataDisasse
     //obj.callbackQueue.push(function removeBreakpointC() {});
     command.commandExecO({
       ptyPayload: 'clear *' + address
-
     });
     /*
     socket.emit('command',{

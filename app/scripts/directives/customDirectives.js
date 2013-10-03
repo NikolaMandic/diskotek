@@ -19,7 +19,7 @@ angular.module('ldApp').directive('resizable', function() {
       });
 
     }
-  };
+  }
   return ddo;
 })
 angular.module('ldApp').directive('editable',['command',function(command){

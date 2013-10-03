@@ -33,7 +33,8 @@ angular.module('ldApp')
 
   
 
-
+  //for debugging
+  window.data=obj;
   /*
    * this command will switch to vagrant directory and
    * check output of vagrant status if it's not created it will warn user
