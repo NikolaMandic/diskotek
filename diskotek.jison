@@ -78,7 +78,10 @@ argList : arg | argCommaList;
 argCommaList : "," arg | "," argCommaList;
 methodInvocation : IDENT "(" argList ")";
 methodInvocation : IDENT "(" ")";
+methodInvocation : fieldAccess "(" argList ")";
+methodInvocation : fieldAccess "("  ")";
 
+assignment : fieldAccess EQ expList | IDENT ;
 assignment : IDENT EQ expList | IDENT ;
 
 op: "+"|"-"|"/"|"*";
