@@ -93,7 +93,7 @@ sep: ANY;
 funcSig : IDENT "(" ")";
 funcSig : IDENT "(" expList ")";
 ifs: IF condition NEWLINE statementList ;
-ife: IF condition NEWLINE statementList ELSE statementList ;
+ife: IF condition NEWLINE statementList ELSE NEWLINE statementList ;
 condition: expList | expList cop expList;
 arg : expList  ;
 cop : "==" | "!=" |  "&&" | "|";
