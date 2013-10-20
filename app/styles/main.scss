@@ -128,6 +128,7 @@ body {
   background:url(Milky-02.png) ($n/$iconsInRow)*$width+$offsetX ($n%$iconsInRow)*$height+$offsetY;
 }
 @mixin milky($n){
+  float:left;
   @extend .sprite;
   @extend .milky-sprite;
   @extend .milky-a#{$n};
@@ -149,10 +150,47 @@ body {
   position:absolute;
   
 }
+.sMenu{
+
+  width:64px*5;
+  height:64px;
+}
+.sm_save{
+
+  @include milky(7)
+}
+.sm_play{
+
+  @include milky(94)
+}
+.sm_stepOv{
+
+  @include milky(24)
+}
+.sm_stepInto{
+
+  @include milky(82)
+}
+.sm_discard{
+
+  @include milky(118)
+}
 #newScript{
   @extend .controlScripts;
   @include milky(95)
 }
+.scriptPanelWraper{
+  position:fixed;
+  padding-top:30px;
+  background:rgba(0,0,255,0.1);
+  display:inline-block;
+}
+.scriptEditor{
+
+  width:64px*5;
+  height:500px;
+}
+
 /* /scripting*/
  
 /*   debug view      */

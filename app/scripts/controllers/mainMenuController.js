@@ -64,6 +64,7 @@ angular.module('ldApp')
     $scope.file=Data.sharedData.fileName;
     $scope.sharedData=Data.sharedData;
     Data.scope=$scope;
+    $scope.bWindows=[];
     $scope.architecture ='arm elf';
     /*
      * following scope functions just forward to functions on data module
@@ -103,7 +104,11 @@ angular.module('ldApp')
       Data.debugData.getDissasembly();
       Data.debugData.getRegisterInfo();
     };
-
+    
+    $scope.newScript = function() {
+      //$scope.newScriptWindow;
+      $scope.bWindows.push({});
+    };
     $scope.command='';
     $scope.awesomeThings = [
       'HTML5 Boilerplate',

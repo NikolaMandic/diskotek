@@ -201,13 +201,7 @@ angular.module('ldApp').directive('editable',['command',function(command){
 angular.module('ldApp').directive('commandwind',function() {
   var ddo = {
     scope:{},
-    template: '<div >'+
-                '<div>commandPanel</div>'+
-                '<div>'+
-                  '<input type="text" size="10" ng-model="command">'+
-                  '<a ng-click="sendCommand(command)">sendCommand</a>&nbsp<a ng-click="clone()">new</a>&nbsp<a ng-click="destroy()">X</a></div>'+
-                  ' <div ng-repeat="thing in things">{{thing}}</div>'+
-              '</div>',
+    template: $("#commandWindT").html(),
     controller: function dcOnt($scope, $element,$attrs, $transclude,$rootScope, $compile,Data,$controller,command) {
       //var Data = $injector.get("Data");
      // dcOnt.$new=function(){};
@@ -256,4 +250,55 @@ angular.module('ldApp').directive('commandwind',function() {
   };
   return ddo;
 });
+angular.module('ldApp').directive('beditor',function() {
+
+  var ddo = {
+    scope:{},
+    template: $("#newScriptWT").html(),
+    replace:true,
+    controller: function dcOnt($scope, $element,$attrs, $transclude,$rootScope, $compile,Data,$controller,command) {
+      //var Data = $injector.get("Data");
+     // ,
+      // dcOnt.$new=function(){};
+      $scope.sendCommand=function(cmd){
+        command.commandExecO({
+          ptyPayload:cmd,
+          callback:function(result){
+            $scope.things=result;
+            $scope.$apply();
+          }
+        });
+
+      }
+      $scope.destroy = function() {
+        //$element.$destroy();
+        $element.remove();
+      };
+    },
+    link: function lf(scope,iElement,iAttrs) {
+      var ace=window.ace;
+      var editEl=$(iElement).find(".scriptEditor")[0];
+      var editor = ace.edit(editEl);
+      editor.setTheme("ace/theme/monokai");
+      editor.getSession().setMode("ace/mode/beeScript");
+      $(editEl).on("mousemove",function(e){
+        e.stopPropagation();
+      });
+
+    }
+  };
+  return ddo;
+});
+ require.config({
+    packages:[{
+      name:'ace',
+      location:'../bower_components/ace/lib/ace',
+      main:'ace'
+    }]
+});
+
+    require(['ace'],function(ace){
+      window.ace=ace;
+    });
+
 

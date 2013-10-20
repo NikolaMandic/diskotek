@@ -37,7 +37,10 @@
      
    </div>  
    <div id="scriptingPanel">
-     <div id="newScript"></div>
+     <div id="newScript" ng-click="newScript()"></div>
+     <span ng-repeat="w in bWindows">
+      <div beditor></div>
+     </span>
    </div>
    <div id="menuPanel">
       
@@ -91,15 +94,59 @@
 
 
 </body>
+<template id="commandWindT">
+  <div >
+    <div>commandPanel</div>
+    <div>
+      <input type="text" size="10" ng-model="command">
+      <a ng-click="sendCommand(command)">sendCommand</a>&nbsp<a ng-click="clone()">new</a>&nbsp<a ng-click="destroy()">X</a>
+    </div>
+    <div ng-repeat="thing in things">{{thing}}</div>
+  </div>
+
+</template>
+<template id="newScriptWT">
+  <div class="scriptPanelWraper" draggable >
+    <div class="sMenu">
+
+      <div class="sm_save"></div>
+      <div class="sm_play"></div>
+      <div class="sm_stepOv"></div>
+      <div class="sm_stepInto"></div>
+      <div class="sm_discard"></div>
+    </div>
+    <div class="scriptEditor">
+      def doThat()
+        variable=5
+
+      def doThis()
+        variable=3
+
+      place = 0x80000000
+      memory.place = 'nop'
+      variable = memory.place
+      if variable == 3
+        doThat()
+      else
+        doThis()
+
+      while variable
+        variable=variable-1
+    </div>
+  </div>
+
+</template>
        <script src="bower_components/jquery/jquery.js"></script>
        <script src="http://localhost:8070/socket.io/socket.io.js"></script>
    
         <script src="bower_components/stroll/js/stroll.js"></script>
         <script src="bower_components/raphael/raphael.js"></script>
         <script src="bower_components/underscore/underscore.js"></script>
+        <script src="bower_components/requirejs/require.js"></script>
         <script src="bower_components/d3/d3.js"></script>
-
+        <!--
         <script src="bacon.js/dist/Bacon.js"></script>
+        -->
         <script src="../flight.js"></script>
 
         <script type="text/javascript">

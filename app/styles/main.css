@@ -7842,7 +7842,7 @@ body {
 /*   /disassembly view */
 /* scripting */
 /* line 1082, milky/*.png */
-.milky-sprite, .milky-a1, .milky-a10, .milky-a100, .milky-a101, .milky-a102, .milky-a103, .milky-a104, .milky-a105, .milky-a106, .milky-a107, .milky-a108, .milky-a109, .milky-a11, .milky-a110, .milky-a111, .milky-a112, .milky-a113, .milky-a114, .milky-a115, .milky-a116, .milky-a117, .milky-a118, .milky-a119, .milky-a12, .milky-a120, .milky-a121, .milky-a122, .milky-a123, .milky-a124, .milky-a125, .milky-a126, .milky-a127, .milky-a128, .milky-a129, .milky-a13, .milky-a130, .milky-a131, .milky-a14, .milky-a15, .milky-a16, .milky-a17, .milky-a18, .milky-a19, .milky-a2, .milky-a20, .milky-a21, .milky-a22, .milky-a23, .milky-a24, .milky-a25, .milky-a26, .milky-a27, .milky-a28, .milky-a29, .milky-a3, .milky-a30, .milky-a31, .milky-a32, .milky-a33, .milky-a34, .milky-a35, .milky-a36, .milky-a37, .milky-a38, .milky-a39, .milky-a4, .milky-a40, .milky-a41, .milky-a42, .milky-a43, .milky-a44, .milky-a45, .milky-a46, .milky-a47, .milky-a48, .milky-a49, .milky-a5, .milky-a50, .milky-a51, .milky-a52, .milky-a53, .milky-a54, .milky-a55, .milky-a56, .milky-a57, .milky-a58, .milky-a59, .milky-a6, .milky-a60, .milky-a61, .milky-a62, .milky-a63, .milky-a64, .milky-a65, .milky-a66, .milky-a67, .milky-a68, .milky-a69, .milky-a7, .milky-a70, .milky-a71, .milky-a72, .milky-a73, .milky-a74, .milky-a75, .milky-a76, .milky-a77, .milky-a78, .milky-a79, .milky-a8, .milky-a80, .milky-a81, .milky-a82, .milky-a83, .milky-a84, .milky-a85, .milky-a86, .milky-a87, .milky-a88, .milky-a89, .milky-a9, .milky-a90, .milky-a91, .milky-a92, .milky-a93, .milky-a94, .milky-a95, #newScript, .milky-a96, .milky-a97, .milky-a98, .milky-a99 {
+.milky-sprite, .milky-a1, .milky-a10, .milky-a100, .milky-a101, .milky-a102, .milky-a103, .milky-a104, .milky-a105, .milky-a106, .milky-a107, .milky-a108, .milky-a109, .milky-a11, .milky-a110, .milky-a111, .milky-a112, .milky-a113, .milky-a114, .milky-a115, .milky-a116, .milky-a117, .milky-a118, .sm_discard, .milky-a119, .milky-a12, .milky-a120, .milky-a121, .milky-a122, .milky-a123, .milky-a124, .milky-a125, .milky-a126, .milky-a127, .milky-a128, .milky-a129, .milky-a13, .milky-a130, .milky-a131, .milky-a14, .milky-a15, .milky-a16, .milky-a17, .milky-a18, .milky-a19, .milky-a2, .milky-a20, .milky-a21, .milky-a22, .milky-a23, .milky-a24, .sm_stepOv, .milky-a25, .milky-a26, .milky-a27, .milky-a28, .milky-a29, .milky-a3, .milky-a30, .milky-a31, .milky-a32, .milky-a33, .milky-a34, .milky-a35, .milky-a36, .milky-a37, .milky-a38, .milky-a39, .milky-a4, .milky-a40, .milky-a41, .milky-a42, .milky-a43, .milky-a44, .milky-a45, .milky-a46, .milky-a47, .milky-a48, .milky-a49, .milky-a5, .milky-a50, .milky-a51, .milky-a52, .milky-a53, .milky-a54, .milky-a55, .milky-a56, .milky-a57, .milky-a58, .milky-a59, .milky-a6, .milky-a60, .milky-a61, .milky-a62, .milky-a63, .milky-a64, .milky-a65, .milky-a66, .milky-a67, .milky-a68, .milky-a69, .milky-a7, .sm_save, .milky-a70, .milky-a71, .milky-a72, .milky-a73, .milky-a74, .milky-a75, .milky-a76, .milky-a77, .milky-a78, .milky-a79, .milky-a8, .milky-a80, .milky-a81, .milky-a82, .sm_stepInto, .milky-a83, .milky-a84, .milky-a85, .milky-a86, .milky-a87, .milky-a88, .milky-a89, .milky-a9, .milky-a90, .milky-a91, .milky-a92, .milky-a93, .milky-a94, .sm_play, .milky-a95, #newScript, .milky-a96, .milky-a97, .milky-a98, .milky-a99 {
   background: url('/images/generated/milky-s91ee9a1113.png') no-repeat;
 }
 
@@ -7952,7 +7952,7 @@ body {
 }
 
 /* line 60, ../../../../../var/lib/gems/1.9.1/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
-.milky-a118 {
+.milky-a118, .sm_discard {
   background-position: 0 -7424px;
 }
 
@@ -8087,7 +8087,7 @@ body {
 }
 
 /* line 60, ../../../../../var/lib/gems/1.9.1/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
-.milky-a24 {
+.milky-a24, .sm_stepOv {
   background-position: 0 -2816px;
 }
 
@@ -8337,7 +8337,7 @@ body {
 }
 
 /* line 60, ../../../../../var/lib/gems/1.9.1/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
-.milky-a7 {
+.milky-a7, .sm_save {
   background-position: 0 -2240px;
 }
 
@@ -8407,7 +8407,7 @@ body {
 }
 
 /* line 60, ../../../../../var/lib/gems/1.9.1/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
-.milky-a82 {
+.milky-a82, .sm_stepInto {
   background-position: 0 -6976px;
 }
 
@@ -8472,7 +8472,7 @@ body {
 }
 
 /* line 60, ../../../../../var/lib/gems/1.9.1/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
-.milky-a94 {
+.milky-a94, .sm_play {
   background-position: 0 -3776px;
 }
 
@@ -8501,7 +8501,7 @@ body {
   background-position: 0 -1216px;
 }
 
-/* line 137, main.scss */
+/* line 138, main.scss */
 #scriptingPanel {
   width: 64px;
   height: 200px;
@@ -8510,20 +8510,70 @@ body {
   position: fixed;
 }
 
-/* line 144, main.scss */
-.sprite, #newScript {
+/* line 145, main.scss */
+.sprite, .sm_save, .sm_play, .sm_stepOv, .sm_stepInto, .sm_discard, #newScript {
   width: 64px;
   height: 64px;
 }
 
-/* line 148, main.scss */
+/* line 149, main.scss */
 .controlScripts, #newScript {
   position: absolute;
 }
 
+/* line 153, main.scss */
+.sMenu {
+  width: 320px;
+  height: 64px;
+}
+
+/* line 158, main.scss */
+.sm_save {
+  float: left;
+}
+
+/* line 162, main.scss */
+.sm_play {
+  float: left;
+}
+
+/* line 166, main.scss */
+.sm_stepOv {
+  float: left;
+}
+
+/* line 170, main.scss */
+.sm_stepInto {
+  float: left;
+}
+
+/* line 174, main.scss */
+.sm_discard {
+  float: left;
+}
+
+/* line 178, main.scss */
+#newScript {
+  float: left;
+}
+
+/* line 182, main.scss */
+.scriptPanelWraper {
+  position: fixed;
+  padding-top: 30px;
+  background: rgba(0, 0, 255, 0.1);
+  display: inline-block;
+}
+
+/* line 188, main.scss */
+.scriptEditor {
+  width: 320px;
+  height: 500px;
+}
+
 /* /scripting*/
 /*   debug view      */
-/* line 160, main.scss */
+/* line 198, main.scss */
 #wrapermain {
   margin-left: -15px;
   margin-right: -15px;
@@ -8544,19 +8594,19 @@ body {
   clear: both;
 }
 @media (min-width: 992px) {
-  /* line 160, main.scss */
+  /* line 198, main.scss */
   #wrapermain {
     float: left;
     width: 100%;
   }
 }
 
-/* line 164, main.scss */
+/* line 202, main.scss */
 .breakpoint {
   background: rgba(220, 0, 0, 0.3);
 }
 
-/* line 167, main.scss */
+/* line 205, main.scss */
 #disassembly {
   position: relative;
   min-height: 1px;
@@ -8564,14 +8614,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 167, main.scss */
+  /* line 205, main.scss */
   #disassembly {
     float: left;
     width: 75%;
   }
 }
 
-/* line 170, main.scss */
+/* line 208, main.scss */
 .lineNumber {
   position: relative;
   min-height: 1px;
@@ -8579,14 +8629,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 170, main.scss */
+  /* line 208, main.scss */
   .lineNumber {
     float: left;
     width: 16.66667%;
   }
 }
 
-/* line 173, main.scss */
+/* line 211, main.scss */
 .srcCode {
   position: relative;
   min-height: 1px;
@@ -8594,14 +8644,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 173, main.scss */
+  /* line 211, main.scss */
   .srcCode {
     float: left;
     width: 83.33333%;
   }
 }
 
-/* line 176, main.scss */
+/* line 214, main.scss */
 .blank {
   position: relative;
   min-height: 1px;
@@ -8609,14 +8659,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 176, main.scss */
+  /* line 214, main.scss */
   .blank {
     float: left;
     width: 100%;
   }
 }
 
-/* line 179, main.scss */
+/* line 217, main.scss */
 #registers {
   position: relative;
   min-height: 1px;
@@ -8635,14 +8685,14 @@ body {
 */
 }
 @media (min-width: 992px) {
-  /* line 179, main.scss */
+  /* line 217, main.scss */
   #registers {
     float: left;
     width: 25%;
   }
 }
 
-/* line 193, main.scss */
+/* line 231, main.scss */
 #commandResult {
   position: relative;
   min-height: 1px;
@@ -8650,19 +8700,19 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 193, main.scss */
+  /* line 231, main.scss */
   #commandResult {
     float: left;
     width: 25%;
   }
 }
 
-/* line 198, main.scss */
+/* line 236, main.scss */
 #registers li:nth-child(16) {
   background: rgba(192, 57, 43, 0.09);
 }
 
-/* line 202, main.scss */
+/* line 240, main.scss */
 .hero-unit {
   position: relative;
   min-height: 1px;
@@ -8680,19 +8730,19 @@ body {
     */
 }
 @media (min-width: 992px) {
-  /* line 202, main.scss */
+  /* line 240, main.scss */
   .hero-unit {
     float: left;
     width: 75%;
   }
 }
 
-/* line 215, main.scss */
+/* line 253, main.scss */
 .inst_selected {
   background-color: rgba(110, 110, 0, 0.07);
 }
 
-/* line 218, main.scss */
+/* line 256, main.scss */
 .inst_row {
   margin-left: -15px;
   margin-right: -15px;
@@ -8709,7 +8759,7 @@ body {
   clear: both;
 }
 
-/* line 221, main.scss */
+/* line 259, main.scss */
 .inst_addr {
   position: relative;
   min-height: 1px;
@@ -8717,14 +8767,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 221, main.scss */
+  /* line 259, main.scss */
   .inst_addr {
     float: left;
     width: 16.66667%;
   }
 }
 
-/* line 224, main.scss */
+/* line 262, main.scss */
 .inst_raw {
   position: relative;
   min-height: 1px;
@@ -8732,14 +8782,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 224, main.scss */
+  /* line 262, main.scss */
   .inst_raw {
     float: left;
     width: 16.66667%;
   }
 }
 
-/* line 227, main.scss */
+/* line 265, main.scss */
 .inst_opcode {
   position: relative;
   min-height: 1px;
@@ -8747,14 +8797,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 227, main.scss */
+  /* line 265, main.scss */
   .inst_opcode {
     float: left;
     width: 16.66667%;
   }
 }
 
-/* line 230, main.scss */
+/* line 268, main.scss */
 .inst_operands {
   position: relative;
   min-height: 1px;
@@ -8762,14 +8812,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 230, main.scss */
+  /* line 268, main.scss */
   .inst_operands {
     float: left;
     width: 25%;
   }
 }
 
-/* line 233, main.scss */
+/* line 271, main.scss */
 .inst_comment {
   position: relative;
   min-height: 1px;
@@ -8778,14 +8828,14 @@ body {
   color: #00AA00;
 }
 @media (min-width: 992px) {
-  /* line 233, main.scss */
+  /* line 271, main.scss */
   .inst_comment {
     float: left;
     width: 25%;
   }
 }
 
-/* line 237, main.scss */
+/* line 275, main.scss */
 .reg_row {
   margin-left: -15px;
   margin-right: -15px;
@@ -8802,7 +8852,7 @@ body {
   clear: both;
 }
 
-/* line 240, main.scss */
+/* line 278, main.scss */
 .reg_name {
   position: relative;
   min-height: 1px;
@@ -8810,14 +8860,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 240, main.scss */
+  /* line 278, main.scss */
   .reg_name {
     float: left;
     width: 16.66667%;
   }
 }
 
-/* line 243, main.scss */
+/* line 281, main.scss */
 .reg_value1 {
   position: relative;
   min-height: 1px;
@@ -8825,14 +8875,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 243, main.scss */
+  /* line 281, main.scss */
   .reg_value1 {
     float: left;
     width: 41.66667%;
   }
 }
 
-/* line 246, main.scss */
+/* line 284, main.scss */
 .reg_value2 {
   position: relative;
   min-height: 1px;
@@ -8840,19 +8890,19 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 246, main.scss */
+  /* line 284, main.scss */
   .reg_value2 {
     float: left;
     width: 41.66667%;
   }
 }
 
-/* line 249, main.scss */
+/* line 287, main.scss */
 #registers .reg_row:nth-child(odd), .secInst:nth-child(odd), .hero-unit .inst_row:nth-child(odd) {
   background: rgba(220, 220, 220, 0.35);
 }
 
-/* line 253, main.scss */
+/* line 291, main.scss */
 .inst_row_current {
   margin-left: -15px;
   margin-right: -15px;
@@ -8870,7 +8920,7 @@ body {
   clear: both;
 }
 
-/* line 257, main.scss */
+/* line 295, main.scss */
 .sectionS div {
   position: relative;
   min-height: 1px;
@@ -8878,7 +8928,7 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-  /* line 257, main.scss */
+  /* line 295, main.scss */
   .sectionS div {
     float: left;
     width: 25%;
@@ -8887,7 +8937,7 @@ body {
 
 /*   /debug view     */
 /*   graph view      */
-/* line 264, main.scss */
+/* line 302, main.scss */
 #holder, .sectionP, .sectionS, .sectionView {
   margin-left: -15px;
   margin-right: -15px;
@@ -8906,13 +8956,13 @@ body {
 
 /*    /graph view     */
 /* linkify  */
-/* line 270, main.scss */
+/* line 308, main.scss */
 a {
   text-decoration: none;
   color: #198de6;
 }
 
-/* line 275, main.scss */
+/* line 313, main.scss */
 .roll {
   display: inline-block;
   overflow: hidden;
@@ -8923,7 +8973,7 @@ a {
   -moz-perspective-origin: 50% 50%;
 }
 
-/* line 287, main.scss */
+/* line 325, main.scss */
 .roll span {
   display: block;
   position: relative;
@@ -8936,14 +8986,14 @@ a {
   -moz-transform-style: preserve-3d;
 }
 
-/* line 301, main.scss */
+/* line 339, main.scss */
 .roll:hover span {
   background: #111;
   -webkit-transform: translate3d(0px, 0px, -30px) rotateX(90deg);
   -moz-transform: translate3d(0px, 0px, -30px) rotateX(90deg);
 }
 
-/* line 307, main.scss */
+/* line 345, main.scss */
 .roll span:after {
   content: attr(data-title);
   display: block;
