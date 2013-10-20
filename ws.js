@@ -10,7 +10,7 @@
 // express is used to serve static content for app and also for togetherjs
 var express = require('express');
 var app = express();
-var _=require('underscore');
+var _=require('lodash');
 app.use(express.static('./' + '/app'));
 app.use(express.static('./' + '/app/static-myapp'));
 

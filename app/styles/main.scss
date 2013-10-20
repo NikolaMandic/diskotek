@@ -118,8 +118,43 @@ body {
 }
 /*   /disassembly view */
 
-
-
+/* scripting */
+@mixin milkySprite($n){
+  $iconsInRow:8;
+  $width:48px;
+  $height:48px;
+  $offsetX:0px;
+  $offsetY:0px;
+  background:url(Milky-02.png) ($n/$iconsInRow)*$width+$offsetX ($n%$iconsInRow)*$height+$offsetY;
+}
+@mixin milky($n){
+  @extend .sprite;
+  @extend .milky-sprite;
+  @extend .milky-a#{$n};
+}
+@import "milky/*.png";
+@include all-milky-sprites;
+#scriptingPanel{
+  width:64px;
+  height:200px;
+  left:0px;
+  top:50%;
+  position:fixed;
+}
+.sprite{
+  width:64px;
+  height:64px;
+}
+.controlScripts{
+  position:absolute;
+  
+}
+#newScript{
+  @extend .controlScripts;
+  @include milky(95)
+}
+/* /scripting*/
+ 
 /*   debug view      */
 
 #wrapermain{

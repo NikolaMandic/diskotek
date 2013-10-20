@@ -160,7 +160,7 @@ module.exports = function (grunt) {
       options: {
         sassDir: '<%= yeoman.app %>/styles',
         cssDir: '<%= yeoman.app %>/styles',
-        generatedImagesDir: '.tmp/images/generated',
+        generatedImagesDir: '<%= yeoman.app %>/images/generated',
         imagesDir: '<%= yeoman.app %>/images',
         javascriptsDir: '<%= yeoman.app %>/scripts',
         fontsDir: '<%= yeoman.app %>/styles/fonts',

@@ -213,7 +213,7 @@ angular.module('ldApp').factory('command',[
       obj.scope.$apply();
     }
   });
-  var assembleNewsStream = socket.asEventStream('assembleNews');
+//  var assembleNewsStream = socket.asEventStream('assembleNews');
 
  /*
   socket.on('assembleNews',function (argument) {
