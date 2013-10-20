@@ -1,5 +1,5 @@
 {
-  "name": "ld",
+  "name": "diskotek",
   "version": "0.0.0",
   "dependencies": {},
   "devDependencies": {
@@ -37,8 +37,8 @@
     "karma-phantomjs-launcher": "~0.1.0",
     "karma": "~0.10.2",
     "grunt-karma": "~0.6.1",
-    "jison": "0.4.10",
-    "socket.io": "0.9.0",
+    "jison": "*",
+    "socket.io": "*",
     "express": "3.x",
     "bower":"latest"
   },
