@@ -250,7 +250,7 @@ angular.module('ldApp').directive('commandwind',function() {
   };
   return ddo;
 });
-angular.module('ldApp').directive('beditor',function() {
+angular.module('ldApp').directive('beditor',['ace',function(aceS) {
 
   var ddo = {
     scope:{},
@@ -276,7 +276,7 @@ angular.module('ldApp').directive('beditor',function() {
       };
     },
     link: function lf(scope,iElement,iAttrs) {
-      var ace=window.ace;
+      var ace = aceS.ace;
       var editEl=$(iElement).find(".scriptEditor")[0];
       var editor = ace.edit(editEl);
       editor.setTheme("ace/theme/monokai");
@@ -288,17 +288,9 @@ angular.module('ldApp').directive('beditor',function() {
     }
   };
   return ddo;
-});
- require.config({
-    packages:[{
-      name:'ace',
-      location:'../bower_components/ace/lib/ace',
-      main:'ace'
-    }]
-});
+}]);
 
-    require(['ace'],function(ace){
-      window.ace=ace;
-    });
+
+
 
 

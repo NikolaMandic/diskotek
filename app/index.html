@@ -103,7 +103,6 @@
     </div>
     <div ng-repeat="thing in things">{{thing}}</div>
   </div>
-
 </template>
 <template id="newScriptWT">
   <div class="scriptPanelWraper" draggable >
@@ -116,22 +115,22 @@
       <div class="sm_discard"></div>
     </div>
     <div class="scriptEditor">
-      def doThat()
-        variable=5
+def doThat()
+  variable=5
 
-      def doThis()
-        variable=3
+def doThis()
+  variable=3
 
-      place = 0x80000000
-      memory.place = 'nop'
-      variable = memory.place
-      if variable == 3
-        doThat()
-      else
-        doThis()
+place = 0x80000000
+memory.place = 'nop'
+variable = memory.place
+if variable == 3
+  doThat()
+else
+  doThis()
 
-      while variable
-        variable=variable-1
+while variable
+  variable=variable-1
     </div>
   </div>
 
