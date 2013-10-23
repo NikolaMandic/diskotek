@@ -250,13 +250,38 @@ angular.module('ldApp').directive('commandwind',function() {
   };
   return ddo;
 });
-angular.module('ldApp').directive('beditor',['ace',function(aceS) {
+angular.module('ldApp').directive('beditor',['ace','beeScript',function(aceS,beeScriptS) {
 
   var ddo = {
     scope:{},
     template: $("#newScriptWT").html(),
     replace:true,
     controller: function dcOnt($scope, $element,$attrs, $transclude,$rootScope, $compile,Data,$controller,command) {
+      var beeScript = beeScriptS.beeScript;
+      $scope.running=false;
+      $scope.save = function(){
+      
+      }
+      $scope.run = function(){
+      
+      }
+      $scope.stepOver = function(){
+        if ($scope.running){
+          beeScript.runner.next()
+        }else{
+          beeScript.text = $scope.editor.getValue();
+
+          beeScript.generate()
+          beeScript.next()
+          $scope.running=true;
+        }
+      }
+      $scope.stepInto = function(){
+      
+      }
+      $scope.close = function(){
+      
+      }
       //var Data = $injector.get("Data");
      // ,
       // dcOnt.$new=function(){};
@@ -278,7 +303,7 @@ angular.module('ldApp').directive('beditor',['ace',function(aceS) {
     link: function lf(scope,iElement,iAttrs) {
       var ace = aceS.ace;
       var editEl=$(iElement).find(".scriptEditor")[0];
-      var editor = ace.edit(editEl);
+      var editor = scope.editor = ace.edit(editEl);
       editor.setTheme("ace/theme/monokai");
       editor.getSession().setMode("ace/mode/beeScript");
       $(editEl).on("mousemove",function(e){

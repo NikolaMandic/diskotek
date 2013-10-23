@@ -142,6 +142,7 @@ body {
   top:50%;
   position:fixed;
 }
+
 .sprite{
   width:64px;
   height:64px;
@@ -185,8 +186,15 @@ body {
   background:rgba(0,0,255,0.1);
   display:inline-block;
 }
-.scriptEditor{
 
+.scriptOutput{
+
+  float:left;
+  width:64px*5;
+  height:500px;
+}
+.scriptEditor{
+  float:left;
   width:64px*5;
   height:500px;
 }
