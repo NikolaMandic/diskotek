@@ -1,11 +1,13 @@
 
 angular.module('ldApp').factory('DataDebug',['$rootScope','command','DataDisassemblyParsers',
                                 function($rootScope,command,dataParsers){
- var debugData = {};
+ var debugData = {
+   arch:'x86'
+ };
   //transforms command output recived from server into array of instructions
   debugData.commands = {
     x86:{
-      disassembly:'disas /rm $eip-80,$eip+80'//$eip,$eip+40'
+      disassembly:'disas /rm $eip-40,$eip+40'//$eip,$eip+40'
     },
     arm:{
       disassembly:'disas /rm $pc-80,$pc+80'
@@ -43,10 +45,16 @@ angular.module('ldApp').factory('DataDebug',['$rootScope','command','DataDisasse
  debugData.patch = function(thing){
    console.log('patch',thing);
  };
+ debugData.stepOver = function(){
+   command.commandExecO({ptyPayload:'ni'});
+
+   debugData.getDissasembly();
+   debugData.getRegisterInfo();
+ }
  debugData.getRegisterInfo = function (){
    command.commandExecO({
      callback:function getRegInfoC(result){
-       debugData.registers = result.slice(0,-1).map(function(value){
+       debugData.registersNew = result.slice(0,-1).map(function(value){
          var s=value.split(/(\w+)\s*(\w+)\s*(\w+)/);
          return {
            name:s[1],
@@ -54,7 +62,11 @@ angular.module('ldApp').factory('DataDebug',['$rootScope','command','DataDisasse
            value2:s[3],
          };
        });
+       /*
+      if (_.pluck(debugData.registers,{name:'eip'}).value1-_.pluck(debugData.registersNew,{name:'eip'}).value1){
 
+      } 
+      */
       $rootScope.$emit('debugDataLoaded');
      },
      ptyPayload:'info registers'

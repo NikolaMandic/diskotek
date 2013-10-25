@@ -54,6 +54,8 @@
          <option value="pe" disabled >pe</option>
        </select>
        <a href="#/disas" ng-click="commandDissasemble()">disassemble</a>|
+
+       <a ng-click="commandLoad()">load file</a>|
        <a ng-click="commandStart('gdb-multiarch '+$scope.file)">start debugging</a>|
        <a ng-click="commandStartVM()">switch to vm</a>|
        <a ng-click="stop()">stop</a>
@@ -101,7 +103,7 @@
       <input type="text" size="10" ng-model="command">
       <a ng-click="sendCommand(command)">sendCommand</a>&nbsp<a ng-click="clone()">new</a>&nbsp<a ng-click="destroy()">X</a>
     </div>
-    <div ng-repeat="thing in things">{{thing}}</div>
+    <div ng-repeat="thing in things track by $index">{{thing}}</div>
   </div>
 </template>
 <template id="newScriptWT">
@@ -144,6 +146,7 @@ while variable
         <script src="bower_components/underscore/underscore.js"></script>
         <script src="bower_components/requirejs/require.js"></script>
         <script src="bower_components/d3/d3.js"></script>
+
         <!--
         <script src="bacon.js/dist/Bacon.js"></script>
         -->

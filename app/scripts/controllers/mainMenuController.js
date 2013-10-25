@@ -69,6 +69,11 @@ angular.module('ldApp')
     /*
      * following scope functions just forward to functions on data module
      * */
+    $scope.commandLoad = function(){
+      Data.debugData.arch='x86';
+      Data.status='running';
+      Data.loadCommand($scope.file,$scope.architecture)
+    }
     $scope.commandStart=function(){
       Data.debugData.arch='x86';
       Data.status='running';
@@ -89,9 +94,7 @@ angular.module('ldApp')
       Data.status='stopped';
     };
     $scope.stepOver = function  () {
-      command.commandExecO({ptyPayload:'ni'});
-      Data.debugData.getDissasembly();
-      Data.debugData.getRegisterInfo();
+      Data.debugData.stepOver();
     };
     $scope.cont = function  () {
       command.commandExecO({ptyPayload:'c'});

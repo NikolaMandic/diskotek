@@ -75,12 +75,25 @@ angular.module('ldApp')
    * and target remote command to connect to the emulator
    *
    * */
+  obj.loadCommand = function (name,architecture){
+
+    command.commandExecO({
+      msgType:'start',
+      payload:{
+        name:name,
+        architecture:architecture,
+        initSteps:['set disassembly-flavor intel\n']
+      },
+      callback:null
+    });
+  }
   obj.startCommand = function (name,architecture) {
     command.commandExecO({
       msgType:'start',
       payload:{
         name:name,
-        architecture:architecture
+        architecture:architecture,
+        initSteps:['set disassembly-flavor intel\n','break _start\n','run\n']
       },
       callback:null
     });

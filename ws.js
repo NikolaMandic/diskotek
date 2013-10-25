@@ -167,7 +167,8 @@ function startX86ELF(socket,data){
   console.log('starting x86 elf debugging')
   // spawn gdb and load target
   gdb = cp.spawn('gdb', [ data.name] );
-  gdbCommandRunner.initialisationSteps=['set disassembly-flavor intel\n','break _start\n','run\n']
+
+  gdbCommandRunner.initialisationSteps=data.initSteps;  //['set disassembly-flavor intel\n','break _start\n','run\n']
   // on gdb output
   attachGDBtoPeer(socket);
 }
