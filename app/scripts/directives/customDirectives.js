@@ -250,7 +250,7 @@ angular.module('ldApp').directive('commandwind',function() {
   };
   return ddo;
 });
-angular.module('ldApp').directive('beditor',['command','Data','ace','beeScript',function(command,gdbD,aceS,beeScriptS) {
+angular.module('ldApp').directive('beditor',['command','state','ace','beeScript',function(command,state,aceS,beeScriptS) {
 
   var ddo = {
     scope:{},
@@ -259,7 +259,7 @@ angular.module('ldApp').directive('beditor',['command','Data','ace','beeScript',
     controller: function dcOnt($scope, $element,$attrs, $transclude,$rootScope, $compile,Data,$controller,command) {
       var beeScript = beeScriptS.beeScript;
       beeScript.runner.diskotekLib.command=command.commandExecO
-      beeScript.runner.diskotekLib.state = gdbD
+      beeScript.runner.diskotekLib.state = state
       $scope.running=false;
       $scope.dirty=false;
       $scope.save = function(){

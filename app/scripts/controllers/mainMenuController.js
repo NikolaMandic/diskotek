@@ -29,7 +29,7 @@ var socket;
  * that are on display there
  * */
 angular.module('ldApp')
-  .controller('MainCtrl', function (command,$rootScope,$scope,$http,Data) {
+  .controller('MainCtrl', function (configState,command,$rootScope,$scope,$http,Data) {
     // linkify('a');
 
     $scope.data=Data;
@@ -65,7 +65,7 @@ angular.module('ldApp')
     $scope.sharedData=Data.sharedData;
     Data.scope=$scope;
     $scope.bWindows=[];
-    $scope.architecture ='arm elf';
+    $scope.architecture =configState.architecture;
     /*
      * following scope functions just forward to functions on data module
      * */
