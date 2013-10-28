@@ -36,12 +36,7 @@
      </div>
      
    </div>  
-   <div id="scriptingPanel">
-     <div id="newScript" ng-click="newScript()"></div>
-     <span ng-repeat="w in bWindows">
-      <div beditor></div>
-     </span>
-   </div>
+
    <div id="menuPanel">
       
      <div id="fileItem">
@@ -94,7 +89,12 @@
     
  </div>
 
-
+<div id="scriptingPanel" ng-controller="scriptsController">
+  <div id="newScript" ng-click="newScript()"></div>
+  <span ng-repeat="w in bWindows">
+    <div beditor></div>
+  </span>
+</div>
 </body>
 <template id="commandWindT">
   <div >
@@ -184,6 +184,8 @@ while variable
              <!-- build:js({.tmp,app}) scripts/scripts.js -->
         <script src="scripts/app.js"></script>
         <script src="scripts/controllers/mainMenuController.js"></script>
+
+        <script src="scripts/controllers/scriptsController.js"></script>
         <script src="scripts/controllers/Ch.js"></script>
         <script src="scripts/controllers/debugController.js"></script>
         <script src="scripts/controllers/data.js"></script>

@@ -54,7 +54,7 @@ angular.module('ldApp').factory('DataDebug',['$rootScope','command','DataDisasse
  debugData.getRegisterInfo = function (){
    command.commandExecO({
      callback:function getRegInfoC(result){
-       debugData.registersNew = result.slice(0,-1).map(function(value){
+       debugData.registers = result.slice(0,-1).map(function(value){
          var s=value.split(/(\w+)\s*(\w+)\s*(\w+)/);
          return {
            name:s[1],

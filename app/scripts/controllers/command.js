@@ -107,6 +107,9 @@ angular.module('ldApp').factory('command',[
    *
    * */
   obj.commandExecO=function(args){
+    if (typeof args === 'string'){
+      args = {ptyPayload:args}
+    }
     var dfd = new jQuery.Deferred();
     console.log('send: ' ,args);
     var callback;

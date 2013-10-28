@@ -250,7 +250,7 @@ angular.module('ldApp').directive('commandwind',function() {
   };
   return ddo;
 });
-angular.module('ldApp').directive('beditor',['ace','beeScript',function(aceS,beeScriptS) {
+angular.module('ldApp').directive('beditor',['command','Data','ace','beeScript',function(command,gdbD,aceS,beeScriptS) {
 
   var ddo = {
     scope:{},
@@ -258,7 +258,10 @@ angular.module('ldApp').directive('beditor',['ace','beeScript',function(aceS,bee
     replace:true,
     controller: function dcOnt($scope, $element,$attrs, $transclude,$rootScope, $compile,Data,$controller,command) {
       var beeScript = beeScriptS.beeScript;
+      beeScript.runner.diskotekLib.command=command.commandExecO
+      beeScript.runner.diskotekLib.state = gdbD
       $scope.running=false;
+      $scope.dirty=false;
       $scope.save = function(){
       
       }
@@ -266,7 +269,7 @@ angular.module('ldApp').directive('beditor',['ace','beeScript',function(aceS,bee
       
       }
       $scope.stepOver = function(){
-        if ($scope.running){
+        if (!$scope.dirty){
           beeScript.runner.next()
         }else{
           beeScript.text = $scope.editor.getValue();
@@ -274,6 +277,7 @@ angular.module('ldApp').directive('beditor',['ace','beeScript',function(aceS,bee
           beeScript.generate()
           beeScript.next()
           $scope.running=true;
+          $scope.dirty=false;
         }
       }
       $scope.stepInto = function(){
@@ -306,6 +310,7 @@ angular.module('ldApp').directive('beditor',['ace','beeScript',function(aceS,bee
       var editor = scope.editor = ace.edit(editEl);
       editor.setTheme("ace/theme/monokai");
       editor.getSession().setMode("ace/mode/beeScript");
+      editor.on('change',function(){scope.dirty=true;});
       $(editEl).on("mousemove",function(e){
         e.stopPropagation();
       });

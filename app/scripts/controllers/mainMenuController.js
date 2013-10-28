@@ -108,10 +108,7 @@ angular.module('ldApp')
       Data.debugData.getRegisterInfo();
     };
     
-    $scope.newScript = function() {
-      //$scope.newScriptWindow;
-      $scope.bWindows.push({});
-    };
+
     $scope.command='';
     $scope.awesomeThings = [
       'HTML5 Boilerplate',
