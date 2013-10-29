@@ -3,7 +3,8 @@
   angular.module('ldApp').factory('configState', function() {
     var configState;
     return configState = {
-      architecture: 'x86',
+      architecture: 'x86 elf',
+      file: 'hw',
       TLBEntrySize: 3,
       getMemoryCommand: function(addr) {
         var h, s;
