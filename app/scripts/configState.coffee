@@ -6,4 +6,4 @@ angular.module('ldApp').factory 'configState', ()->
     getMemoryCommand:(addr)->
       s = 1<<configState.TLBEntrySize
       h = s/2
-      'disas /rm *'+addr+'-'+h+','+'*'+addr+'+'+h
+      'disas /rm '+addr+',+'+s

@@ -14,7 +14,10 @@ angular.module('ldApp').factory 'state',['command','configState','DataDisassembl
       }
     getMemory:(addr)->
       if state.memory.TLB[addr>>>TLBEntrySize]?
-        return state.memory.TLB[addr>>>TLBEntrySize].content[addr]
+        c = state.memory.TLB[addr>>>TLBEntrySize].content
+        r=_.where( c.content,{'address':addr})?[0]
+
+        return r
       else
         
         #debugData.disassembly=dataParsers[debugData.arch].disassemblyParser(data).combined;

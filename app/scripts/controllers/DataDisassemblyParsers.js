@@ -7,9 +7,10 @@
  */
 angular.module('ldApp').factory('DataDisassemblyParsers',function(){
   var parsers = {
-    x86:{},
     arm:{}
   };
+
+  parsers['x86 elf']={}
   parsers.parseXD = function (data){
     return _.map(data,function(v){
       var s = (/\s+(\w+)\s*((\w+\s+){1,4})(.*)/).exec(v);
@@ -182,7 +183,7 @@ angular.module('ldApp').factory('DataDisassemblyParsers',function(){
       };
     });
   };
-  parsers['arm'].disassemblyParser=parsers['x86'].disassemblyParser= function dissasemblyx86Callback(disassemblyRaw){
+  parsers['arm'].disassemblyParser=parsers['x86 elf'].disassemblyParser= function dissasemblyx86Callback(disassemblyRaw){
        var dissasembly= disassemblyRaw.slice(1,-2);
 
     var instructions = [];

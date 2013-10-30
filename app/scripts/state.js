@@ -15,8 +15,13 @@
           TLB: {}
         },
         getMemory: function(addr) {
+          var c, r, _ref;
           if (state.memory.TLB[addr >>> TLBEntrySize] != null) {
-            return state.memory.TLB[addr >>> TLBEntrySize].content[addr];
+            c = state.memory.TLB[addr >>> TLBEntrySize].content;
+            r = (_ref = _.where(c.content, {
+              'address': addr
+            })) != null ? _ref[0] : void 0;
+            return r;
           } else {
             return command.commandExecO(configState.getMemoryCommand(addr)).then(function(contentPulled) {
               return state.memory.TLB[addr >>> TLBEntrySize] = {

@@ -10,7 +10,7 @@
         var h, s;
         s = 1 << configState.TLBEntrySize;
         h = s / 2;
-        return 'disas /rm *' + addr + '-' + h + ',' + '*' + addr + '+' + h;
+        return 'disas /rm ' + addr + ',+' + s;
       }
     };
   });
