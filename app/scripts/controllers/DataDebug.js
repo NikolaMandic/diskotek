@@ -46,8 +46,11 @@ angular.module('ldApp').factory('DataDebug',['$rootScope','command','DataDisasse
    console.log('patch',thing);
  };
  debugData.stepOver = function(){
-   command.commandExecO({ptyPayload:'ni'});
+   if (configState.recording){
+    configState.record.push('s ni'); 
+   }
 
+   command.commandExecO({ptyPayload:'ni'});
    debugData.getDissasembly();
    debugData.getRegisterInfo();
  }
@@ -77,6 +80,9 @@ angular.module('ldApp').factory('DataDebug',['$rootScope','command','DataDisasse
   };
   debugData.setBreakpoint = function(address) {
     //obj.callbackQueue.push(function setBreakpointC() {});
+    if (configState.recording){
+      configState.record.push('break *'+address); 
+    }
     command.commandExecO({
       ptyPayload:'break *' + address
     });

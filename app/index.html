@@ -54,6 +54,7 @@
        <a ng-click="commandStart('gdb-multiarch '+$scope.file)">start debugging</a>|
        <a ng-click="commandStartVM()">switch to vm</a>|
        <a ng-click="stop()">stop</a>
+       <a ng-click="recToggle()">{{recording?'stop rec':'start rec'}}</a>
      </div>
      <div id="controls">
        <a ng-click="cont()">run </a> 
@@ -92,7 +93,7 @@
 <div id="scriptingPanel" ng-controller="scriptsController">
   <div id="newScript" ng-click="newScript()"></div>
   <span ng-repeat="w in bWindows">
-    <div beditor></div>
+    <beditor >  </beditor>
   </span>
 </div>
 </body>
@@ -116,23 +117,7 @@
       <div class="sm_stepInto"></div>
       <div class="sm_discard"></div>
     </div>
-    <div class="scriptEditor">
-def doThat()
-  variable=5
-
-def doThis()
-  variable=3
-
-place = 0x80000000
-memory.place = 'nop'
-variable = memory.place
-if variable == 3
-  doThat()
-else
-  doThis()
-
-while variable
-  variable=variable-1
+    <div class="scriptEditor" ng-bind="contents">
     </div>
     <div class="scriptOutput"></div>
   </div>

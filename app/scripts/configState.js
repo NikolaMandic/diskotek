@@ -6,6 +6,9 @@
       architecture: 'x86 elf',
       file: 'hw',
       TLBEntrySize: 3,
+      recording: false,
+      record: [],
+      bWindows: [],
       getMemoryCommand: function(addr) {
         var h, s;
         s = 1 << configState.TLBEntrySize;

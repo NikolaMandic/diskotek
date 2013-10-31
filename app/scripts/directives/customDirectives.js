@@ -202,10 +202,13 @@ angular.module('ldApp').directive('commandwind',function() {
   var ddo = {
     scope:{},
     template: $("#commandWindT").html(),
-    controller: function dcOnt($scope, $element,$attrs, $transclude,$rootScope, $compile,Data,$controller,command) {
+    controller: function dcOnt(configState,$scope, $element,$attrs, $transclude,$rootScope, $compile,Data,$controller,command) {
       //var Data = $injector.get("Data");
      // dcOnt.$new=function(){};
       $scope.sendCommand=function(cmd){
+        if(configState.recording){
+          configState.record.push('s ' + cmd);
+        }
         command.commandExecO({
           ptyPayload:cmd,
           callback:function(result){
@@ -254,14 +257,15 @@ angular.module('ldApp').directive('beditor',['command','state','ace','beeScript'
 
   var ddo = {
     scope:{},
+    restrict:'E',
     template: $("#newScriptWT").html(),
-    replace:true,
-    controller: function dcOnt($scope, $element,$attrs, $transclude,$rootScope, $compile,Data,$controller,command) {
+    controller: function dcOnt(configState,$scope, $element,$attrs, $transclude,$rootScope, $compile,Data,$controller,command) {
       var beeScript = beeScriptS.beeScript;
       beeScript.runner.diskotekLib.command=command.commandExecO
       beeScript.runner.diskotekLib.state = state
       $scope.running=false;
       $scope.dirty=false;
+      $scope.contents=configState.bWindows[configState.bWindows.length-1]
       $scope.save = function(){
       
       }
@@ -304,7 +308,7 @@ angular.module('ldApp').directive('beditor',['command','state','ace','beeScript'
         $element.remove();
       };
     },
-    link: function lf(scope,iElement,iAttrs) {
+    link:  function lf(scope,iElement,iAttrs,$compile) {
       var ace = aceS.ace;
       var editEl=$(iElement).find(".scriptEditor")[0];
       var editor = scope.editor = ace.edit(editEl);
