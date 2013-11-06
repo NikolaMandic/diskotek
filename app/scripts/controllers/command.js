@@ -166,6 +166,8 @@ angular.module('ldApp').factory('command',[
    *
    * */
   socket.on('execNews',function (data) {
+
+    console.log('in: exec ',data);
     var cdata = data.data;
     var callback = obj.callbackQueue.shift();
 

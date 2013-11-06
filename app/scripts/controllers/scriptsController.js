@@ -3,7 +3,7 @@
   angular.module('ldApp').controller("scriptsController", function(configState, command, $rootScope, $scope, $http, Data) {
     $scope.bWindows = configState.bWindows;
     return $scope.newScript = function() {
-      return $scope.bWindows.push('');
+      return $scope.bWindows.push('this is a script placeholder');
     };
   });
 

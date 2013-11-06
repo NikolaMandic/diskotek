@@ -314,6 +314,7 @@ angular.module('ldApp').directive('beditor',['command','state','ace','beeScript'
       var editor = scope.editor = ace.edit(editEl);
       editor.setTheme("ace/theme/monokai");
       editor.getSession().setMode("ace/mode/beeScript");
+      editor.setValue(scope.contents);
       editor.on('change',function(){scope.dirty=true;});
       $(editEl).on("mousemove",function(e){
         e.stopPropagation();

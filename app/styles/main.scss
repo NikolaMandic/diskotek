@@ -136,7 +136,7 @@ body {
 @import "milky/*.png";
 @include all-milky-sprites;
 #scriptingPanel{
-  width:64px;
+  display:inline-block;
   height:200px;
   left:0px;
   top:50%;
@@ -152,33 +152,33 @@ body {
   
 }
 .sMenu{
-
+  font-size:32px;
   width:64px*5;
-  height:64px;
+  height:32px;
+}
+
+.sMenu div{
+
+  float:left;
 }
 .sm_save{
 
-  @include milky(7)
 }
 .sm_play{
 
-  @include milky(94)
 }
 .sm_stepOv{
 
-  @include milky(24)
 }
 .sm_stepInto{
 
-  @include milky(82)
 }
 .sm_discard{
-
-  @include milky(118)
 }
 #newScript{
   @extend .controlScripts;
-  @include milky(95)
+  font-size:32px;
+  //@include milky(95)
 }
 .scriptPanelWraper{
   position:fixed;
@@ -195,6 +195,7 @@ body {
 }
 .scriptEditor{
   float:left;
+  z-index:1000;
   width:64px*5;
   height:500px;
 }

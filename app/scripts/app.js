@@ -9,8 +9,10 @@ require.config({
       name:'bScript',
       location:'../bower_components/beeScript',
       main:'beeScriptRunner'
-    }]
-
+    }],
+    paths:{
+      //'es5-shim':'../bower_components/ace/lib/ace/lib'
+    }
 });
 
 angular.module('ldApp', ['ngRoute'])

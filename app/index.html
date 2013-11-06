@@ -15,6 +15,7 @@
         <link rel="stylesheet" href="styles/main.css">
         <link rel="stylesheet" href="bower_components/stroll/css/stroll.css">
 
+        <link rel="stylesheet" href="bower_components/ionicons/ionicons.css">
         <link rel="stylesheet" href="bower_components/jqueryuicss/index.css">
         <!-- endbuild -->
 </head>
@@ -91,8 +92,8 @@
  </div>
 
 <div id="scriptingPanel" ng-controller="scriptsController">
-  <div id="newScript" ng-click="newScript()"></div>
-  <span ng-repeat="w in bWindows">
+  <div id="newScript" class="icon-document" ng-click="newScript()"></div>
+  <span ng-repeat="w in bWindows track by $index">
     <beditor >  </beditor>
   </span>
 </div>
@@ -111,13 +112,13 @@
   <div class="scriptPanelWraper" draggable >
     <div class="sMenu">
 
-      <div class="sm_save"></div>
-      <div class="sm_play"></div>
-      <div class="sm_stepOv" ng-click="stepOver()"></div>
-      <div class="sm_stepInto"></div>
-      <div class="sm_discard"></div>
+      <div class="sm_save icon-ios7-download"></div>
+      <div class="sm_play icon-play"></div>
+      <div class="sm_stepOv icon-arrow-down-c" ng-click="stepOver()"></div>
+      <div class="sm_stepInto icon-arrow-graph-down-right"></div>
+      <div class="sm_discard icon-ios7-trash"></div>
     </div>
-    <div class="scriptEditor" ng-bind="contents">
+    <div class="scriptEditor" >
     </div>
     <div class="scriptOutput"></div>
   </div>

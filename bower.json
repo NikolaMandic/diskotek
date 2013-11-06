@@ -21,7 +21,9 @@
     "d3":"latest",
     "ace":"*",
     "beeScript": "https://github.com/NikolaMandic/beeScript.git",
-    "lodash":"*"
+    "lodash":"*",
+    "ionicons":"*",
+    "keypress":"https://github.com/dmauro/Keypress/"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.0",

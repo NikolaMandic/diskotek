@@ -27,9 +27,22 @@
  *  &nbsp; &nbsp;&nbsp; &nbsp; },<br/>
  * &nbsp; &nbsp;]<br/>
  * */
-angular.module('ldApp').factory('DataDisassembly',['$rootScope','command','DataDisassemblyParsers',
-                                function($rootScope,command,dataParsers){
+angular.module('ldApp').factory('DataDisassembly',['$rootScope','command','DataDisassemblyParsers','configState',
+                                function($rootScope,command,dataParsers,configState){
   var disassemblyData={};
+  var commands={
+   'x86 elf':{
+     getSectionDisassembly: 'objdump -M intel -D ',
+
+     getSectionHeaders: 'objdump -M intel -h '
+   },
+   'arm elf':{
+   
+     getSectionDisassembly: 'arm-linux-gnueabi-objdump -D ',
+
+     getSectionHeaders: 'arm-linux-gnueabi-objdump -h '
+   }
+  };
   /*
    * variable parsers is put there to make writing shorter   
    * it is a collection of functions for parsing output of 
@@ -66,7 +79,7 @@ angular.module('ldApp').factory('DataDisassembly',['$rootScope','command','DataD
       disassemblyData.getHexDump(file,disassemblyData.sectionHeaders);
     }
     command.commandExecO({
-      ptyPayload:'arm-linux-gnueabi-objdump -h ' + file,
+      ptyPayload:commands[configState.architecture].getSectionHeaders  + file,
       callback:sectionHeadersC,
       msgType:'exec'
     });
@@ -90,7 +103,7 @@ angular.module('ldApp').factory('DataDisassembly',['$rootScope','command','DataD
         disassemblyData.sectionData=parsers.processData(result);
       },
       msgType: 'exec',
-      ptyPayload:'arm-linux-gnueabi-objdump -D ' + file
+      ptyPayload:commands[configState.architecture].getSectionDisassembly + file
 
     });
   };

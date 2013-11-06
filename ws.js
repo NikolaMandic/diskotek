@@ -236,10 +236,12 @@ function assemblerCommandHandler(socket,data){
   });
 }
 function execCommandHandler(socket,data){
+  console.log("executing command ",data)
   execCommandCount+=1;
   if(execCommandCount>1){
     execCommandStack.push(function(){
       cp.exec(data.ptyPayload, function(error,stdout,stderr) {
+        console.log(stdout);
         socket.emit('execNews',{
           data:stdout
         });
