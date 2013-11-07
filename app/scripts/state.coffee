@@ -1,12 +1,11 @@
-angular.module('ldApp').factory 'state',['command','configState','DataDisassemblyParsers', (command,configState,parsers) ->
+angular.module('ldApp').factory 'state',['command','configState','DataDisassemblyParsers','data', (command,configState,parsers,data) ->
   TLBEntrySize = configState.TLBEntrySize
   state =
     registers:
-
       '':''
+    data: data
     memory:
       ###
-      
       
       ###
       TLB:{
