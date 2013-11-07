@@ -5,7 +5,7 @@
     return configState = {
       architecture: 'x86 elf',
       file: 'hw',
-      TLBEntrySize: 3,
+      TLBEntrySize: 8,
       recording: false,
       record: [],
       bWindows: [],

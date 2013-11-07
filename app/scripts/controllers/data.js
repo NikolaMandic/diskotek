@@ -7,8 +7,8 @@
  *
  */
 angular.module('ldApp')
-.factory('Data',['$rootScope','command','DataDebug','DataDisassembly',
-         function($rootScope,command,DataDebug,DataDisassembly){
+.factory('Data',['$rootScope','command','DataDebug','DataDisassembly','configState',
+         function($rootScope,command,DataDebug,DataDisassembly,configState){
   //gdb service
   var obj={
     debugData:DataDebug,
@@ -86,6 +86,8 @@ angular.module('ldApp')
       },
       callback:null
     });
+
+    obj.disassemblyData.disassemble(configState.file,configState.architecture);
   }
   obj.startCommand = function (name,architecture) {
     command.commandExecO({

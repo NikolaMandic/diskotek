@@ -5,9 +5,9 @@ angular.module('ldApp')
     $scope.toggleBreakpoint = function(address,thing) {
       thing.hasBreakpoint = thing.hasBreakpoint?false:true;
       if(thing.hasBreakpoint){
-        Data.setBreakpoint(address);
+        Data.debugData.setBreakpoint(address);
       }else{
-        Date.removeBreakpoint(address);
+        Date.debugData.removeBreakpoint(address);
       }
       
     };

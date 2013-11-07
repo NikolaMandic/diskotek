@@ -263,6 +263,10 @@ angular.module('ldApp').directive('beditor',['command','state','ace','beeScript'
       var beeScript = beeScriptS.beeScript;
       beeScript.runner.diskotekLib.command=command.commandExecO
       beeScript.runner.diskotekLib.state = state
+      beeScript.runner.diskotekLib.$rootScope=$rootScope;
+      beeScript.runner.variables.fImage = { name: 'fImage',
+                                            value: Data.disassemblyData
+                                          };
       $scope.running=false;
       $scope.dirty=false;
       $scope.contents=configState.bWindows[configState.bWindows.length-1]
@@ -277,8 +281,16 @@ angular.module('ldApp').directive('beditor',['command','state','ace','beeScript'
           beeScript.runner.next()
         }else{
           beeScript.text = $scope.editor.getValue();
+          beeScript.reset();
+          beeScript.runner.diskotekLib.command=command.commandExecO
+          beeScript.runner.diskotekLib.state = state
 
+          beeScript.runner.diskotekLib.$rootScope=$rootScope;
+          beeScript.runner.variables.fImage = { name: 'fImage',
+            value: Data.disassemblyData
+          };
           beeScript.generate()
+
           beeScript.next()
           $scope.running=true;
           $scope.dirty=false;
@@ -315,7 +327,10 @@ angular.module('ldApp').directive('beditor',['command','state','ace','beeScript'
       editor.setTheme("ace/theme/monokai");
       editor.getSession().setMode("ace/mode/beeScript");
       editor.setValue(scope.contents);
-      editor.on('change',function(){scope.dirty=true;});
+      editor.getSession().on('change', function(e) {
+        // e.type, etc
+        scope.dirty=true;
+      });
       $(editEl).on("mousemove",function(e){
         e.stopPropagation();
       });

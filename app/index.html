@@ -42,7 +42,7 @@
       
      <div id="fileItem">
        <label for="name">name</label>
-       <INPUT type="TEXT" ng-model="file" name="name" value="" id="name">
+       <INPUT type="TEXT" ng-model="configState.file" name="name" value="" id="name">
        <label for="architectre">architecture</label>
        <select name="architecture" ng-model="architecture" >
          <option value="arm elf">arm elf</option>
@@ -52,7 +52,7 @@
        <a href="#/disas" ng-click="commandDissasemble()">disassemble</a>|
 
        <a ng-click="commandLoad()">load file</a>|
-       <a ng-click="commandStart('gdb-multiarch '+$scope.file)">start debugging</a>|
+       <a ng-click="commandStart('gdb-multiarch '+$scope.configState.file)">start debugging</a>|
        <a ng-click="commandStartVM()">switch to vm</a>|
        <a ng-click="stop()">stop</a>
        <a ng-click="recToggle()">{{recording?'stop rec':'start rec'}}</a>

@@ -1,4 +1,4 @@
-angular.module('ldApp').factory 'state',['command','configState','DataDisassemblyParsers','data', (command,configState,parsers,data) ->
+angular.module('ldApp').factory 'state',['command','configState','DataDisassemblyParsers','Data', (command,configState,parsers,data) ->
   TLBEntrySize = configState.TLBEntrySize
   state =
     registers:

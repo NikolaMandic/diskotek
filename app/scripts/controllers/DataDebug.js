@@ -1,9 +1,9 @@
 
-angular.module('ldApp').factory('DataDebug',['$rootScope','command','DataDisassemblyParsers',
-                                function($rootScope,command,dataParsers){
- var debugData = {
-   arch:'x86'
- };
+angular.module('ldApp').factory('DataDebug',['$rootScope','command','DataDisassemblyParsers','configState',
+                                function($rootScope,command,dataParsers,configState){
+  var debugData = {
+    arch:'x86'
+  };
   //transforms command output recived from server into array of instructions
   debugData.commands = {
     x86:{
@@ -16,9 +16,9 @@ angular.module('ldApp').factory('DataDebug',['$rootScope','command','DataDisasse
   debugData.getDissasembly = function getDissasembly () {
    
    command.commandExecO({
-     ptyPayload:debugData.commands[debugData.arch].disassembly,
+     ptyPayload:configState.getMemoryCommand('$eip'),//debugData.commands[configState.architecture].disassembly,
      callback:function(data){
-       debugData.disassembly=dataParsers[debugData.arch].disassemblyParser(data).combined;
+       debugData.disassembly=dataParsers[configState.architecture].disassemblyParser(data).combined;
      }
 
    });
@@ -41,39 +41,64 @@ angular.module('ldApp').factory('DataDebug',['$rootScope','command','DataDisasse
    obj.callbackQueue.push(debugData.dissasemblyCallback);
    socket.emit('command', { ptyPayload: 'disas $pc-80,$pc+80' });
    */
- };
- debugData.patch = function(thing){
-   console.log('patch',thing);
- };
- debugData.stepOver = function(){
-   if (configState.recording){
-    configState.record.push('s ni'); 
-   }
+   };
+  debugData.patch = function(thing){
+    console.log('patch',thing);
+  };
 
-   command.commandExecO({ptyPayload:'ni'});
-   debugData.getDissasembly();
-   debugData.getRegisterInfo();
- }
- debugData.getRegisterInfo = function (){
-   command.commandExecO({
-     callback:function getRegInfoC(result){
-       debugData.registers = result.slice(0,-1).map(function(value){
-         var s=value.split(/(\w+)\s*(\w+)\s*(\w+)/);
-         return {
-           name:s[1],
-           value1:s[2],
-           value2:s[3],
-         };
-       });
-       /*
-      if (_.pluck(debugData.registers,{name:'eip'}).value1-_.pluck(debugData.registersNew,{name:'eip'}).value1){
+  debugData.cont = function  () {
 
-      } 
-      */
-      $rootScope.$emit('debugDataLoaded');
-     },
-     ptyPayload:'info registers'
-   });
+    if (configState.recording){
+      configState.record.push('s c'); 
+    }
+    command.commandExecO({ptyPayload:'c'});
+    debugData.getDissasembly();
+    debugData.getRegisterInfo();
+    debugData.infoBreakpoints();
+  };
+  debugData.stepInto = function  () {
+
+    if (configState.recording){
+      configState.record.push('s si'); 
+    }
+    command.commandExecO({ptyPayload:'si'});
+    debugData.getDissasembly();
+    debugData.getRegisterInfo();
+    debugData.infoBreakpoints();
+  };
+  debugData.stepOver = function(){
+    if (configState.recording){
+     configState.record.push('s ni'); 
+    }
+
+    command.commandExecO({ptyPayload:'ni'});
+    debugData.getDissasembly();
+    debugData.getRegisterInfo();
+  }
+  $rootScope.$on('refreshView',function(){
+    debugData.getDissasembly();
+    debugData.getRegisterInfo();
+  });
+  debugData.getRegisterInfo = function (){
+    command.commandExecO({
+      callback:function getRegInfoC(result){
+        debugData.registers = result.slice(0,-1).map(function(value){
+          var s=value.split(/(\w+)\s*(\w+)\s*(\w+)/);
+          return {
+            name:s[1],
+            value1:s[2],
+            value2:s[3],
+          };
+        });
+        /*
+       if (_.pluck(debugData.registers,{name:'eip'}).value1-_.pluck(debugData.registersNew,{name:'eip'}).value1){
+
+       } 
+       */
+       $rootScope.$emit('debugDataLoaded');
+      },
+      ptyPayload:'info registers'
+    });
     //debugData.callbackQueue.push();
 
     //socket.emit('command', { ptyPayload: 'info registers' });
@@ -81,7 +106,7 @@ angular.module('ldApp').factory('DataDebug',['$rootScope','command','DataDisasse
   debugData.setBreakpoint = function(address) {
     //obj.callbackQueue.push(function setBreakpointC() {});
     if (configState.recording){
-      configState.record.push('break *'+address); 
+      configState.record.push('s break *'+address); 
     }
     command.commandExecO({
       ptyPayload:'break *' + address

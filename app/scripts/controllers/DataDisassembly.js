@@ -74,9 +74,11 @@ angular.module('ldApp').factory('DataDisassembly',['$rootScope','command','DataD
    * */
   disassemblyData.getSectionHeaders=function(file){
     function sectionHeadersC (data){
-      disassemblyData.sectionHeaders=parsers.parseSHeaders(data);
+      if(!data.match(/no loadable/g)){
+        disassemblyData.sectionHeaders=parsers.parseSHeaders(data);
 
-      disassemblyData.getHexDump(file,disassemblyData.sectionHeaders);
+        disassemblyData.getHexDump(file,disassemblyData.sectionHeaders);
+      }
     }
     command.commandExecO({
       ptyPayload:commands[configState.architecture].getSectionHeaders  + file,
@@ -129,7 +131,10 @@ angular.module('ldApp').factory('DataDisassembly',['$rootScope','command','DataD
         msgType:'exec'
       });
     });
- 
+    if(sectionHeaders.length===0){
+    
+      disassemblyData.doneLoading(); 
+    } 
   };
   /*
    * triggers event that signals that a view should be updated since

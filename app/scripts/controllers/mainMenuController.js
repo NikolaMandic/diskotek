@@ -63,6 +63,7 @@ angular.module('ldApp')
      * */
     $scope.recording=false;
     $scope.file=Data.sharedData.fileName;
+    $scope.configState=configState;
     $scope.sharedData=Data.sharedData;
     Data.scope=$scope;
     $scope.bWindows=[];
@@ -87,22 +88,22 @@ angular.module('ldApp')
     $scope.commandLoad = function(){
       Data.debugData.arch='x86';
       Data.status='running';
-      Data.loadCommand($scope.file,$scope.architecture)
+      Data.loadCommand(configState.file,$scope.architecture)
     }
     $scope.commandStart=function(){
       Data.debugData.arch='x86';
       Data.status='running';
-      Data.startCommand($scope.file,$scope.architecture);
+      Data.startCommand(configState.file,$scope.architecture);
     };
     $scope.commandStartVM=function() {
-      Data.startCommandVM($scope.file);
+      Data.startCommandVM(configState.file);
     };
     $scope.registerInfo = function() {
       Data.getRegisterInfo();
 
     };
     $scope.commandDissasemble = function() {
-      Data.disassemblyData.disassemble($scope.file,$scope.architecture);
+      Data.disassemblyData.disassemble(configState.file,$scope.architecture);
     };
     $scope.stop = function() {
       Data.stop();
@@ -111,16 +112,12 @@ angular.module('ldApp')
     $scope.stepOver = function  () {
       Data.debugData.stepOver();
     };
+
     $scope.cont = function  () {
-      command.commandExecO({ptyPayload:'c'});
-      Data.debugData.getDissasembly();
-      Data.debugData.getRegisterInfo();
-      Data.debugData.infoBreakpoints();
+      Data.debugData.cont();
     };
     $scope.stepInto = function  () {
-      command.commandExecO({ptyPayload:'si'});
-      Data.debugData.getDissasembly();
-      Data.debugData.getRegisterInfo();
+      Data.debugData.stepInto();
     };
     
 
