@@ -23,7 +23,8 @@
     "beeScript": "https://github.com/NikolaMandic/beeScript.git",
     "lodash":"*",
     "ionicons":"*",
-    "keypress":"https://github.com/dmauro/Keypress/"
+    "keypress":"https://github.com/dmauro/Keypress/",
+    "sprintf":"https://github.com/alexei/sprintf.js"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.0",
