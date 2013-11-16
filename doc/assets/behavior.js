@@ -13,7 +13,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
           "commentsOnly": true,
           "name": "Markdown"
         },
-        "sourcePath": "/home/uname/ld/README.md",
+        "sourcePath": "/home/uname/diskotek/README.md",
         "projectPath": "README.md",
         "targetPath": "index",
         "pageTitle": "index",
@@ -21,17 +21,36 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
           "type": "heading",
           "data": {
             "level": 1,
-            "title": "ld",
-            "slug": "ld",
+            "title": "diskotek",
+            "slug": "diskotek",
             "isFileHeader": true
           },
-          "depth": 1
+          "depth": 1,
+          "children": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 2,
+                "title": "docs",
+                "slug": "docs"
+              },
+              "depth": 2
+            }
+          ]
         },
-        "title": "ld"
+        "title": "diskotek"
       },
       "depth": 1,
       "outline": [
         {
+          "type": "heading",
+          "data": {
+            "level": 2,
+            "title": "docs",
+            "slug": "docs"
+          },
+          "depth": 2
+        }, {
           "type": "heading",
           "data": {
             "level": 1,
@@ -58,285 +77,612 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
         }
       ]
     }, {
+      "type": "file",
+      "data": {
+        "language": {
+          "nameMatchers": [".js"],
+          "pygmentsLexer": "javascript",
+          "multiLineComment": ["/*", "*", "*/"],
+          "singleLineComment": ["//"],
+          "ignorePrefix": "}",
+          "foldPrefix": "^",
+          "name": "JavaScript"
+        },
+        "sourcePath": "/home/uname/diskotek/app/scripts/app.js",
+        "projectPath": "app/scripts/app.js",
+        "targetPath": "app",
+        "pageTitle": "app",
+        "title": "app"
+      },
+      "depth": 1,
+      "outline": []
+    }, {
+      "type": "file",
+      "data": {
+        "language": {
+          "nameMatchers": [".js"],
+          "pygmentsLexer": "javascript",
+          "multiLineComment": ["/*", "*", "*/"],
+          "singleLineComment": ["//"],
+          "ignorePrefix": "}",
+          "foldPrefix": "^",
+          "name": "JavaScript"
+        },
+        "sourcePath": "/home/uname/diskotek/app/scripts/beeScripts.js",
+        "projectPath": "app/scripts/beeScripts.js",
+        "targetPath": "beeScripts",
+        "pageTitle": "beeScripts",
+        "title": "beeScripts"
+      },
+      "depth": 1,
+      "outline": []
+    }, {
+      "type": "file",
+      "data": {
+        "language": {
+          "nameMatchers": [".coffee", "Cakefile"],
+          "pygmentsLexer": "coffee-script",
+          "multiLineComment": ["###*", " *", " ###", "###", "#", "###"],
+          "strictMultiLineEnd": false,
+          "singleLineComment": ["#"],
+          "ignorePrefix": "}",
+          "foldPrefix": "^",
+          "name": "CoffeeScript"
+        },
+        "sourcePath": "/home/uname/diskotek/app/scripts/beeScripts.coffee",
+        "projectPath": "app/scripts/beeScripts.coffee",
+        "targetPath": "beeScripts",
+        "pageTitle": "beeScripts",
+        "title": "beeScripts"
+      },
+      "depth": 1,
+      "outline": []
+    }, {
+      "type": "file",
+      "data": {
+        "language": {
+          "nameMatchers": [".coffee", "Cakefile"],
+          "pygmentsLexer": "coffee-script",
+          "multiLineComment": ["###*", " *", " ###", "###", "#", "###"],
+          "strictMultiLineEnd": false,
+          "singleLineComment": ["#"],
+          "ignorePrefix": "}",
+          "foldPrefix": "^",
+          "name": "CoffeeScript"
+        },
+        "sourcePath": "/home/uname/diskotek/app/scripts/configState.coffee",
+        "projectPath": "app/scripts/configState.coffee",
+        "targetPath": "configState",
+        "pageTitle": "configState",
+        "title": "configState"
+      },
+      "depth": 1,
+      "outline": []
+    }, {
+      "type": "file",
+      "data": {
+        "language": {
+          "nameMatchers": [".js"],
+          "pygmentsLexer": "javascript",
+          "multiLineComment": ["/*", "*", "*/"],
+          "singleLineComment": ["//"],
+          "ignorePrefix": "}",
+          "foldPrefix": "^",
+          "name": "JavaScript"
+        },
+        "sourcePath": "/home/uname/diskotek/app/scripts/configState.js",
+        "projectPath": "app/scripts/configState.js",
+        "targetPath": "configState",
+        "pageTitle": "configState",
+        "title": "configState"
+      },
+      "depth": 1,
+      "outline": []
+    }, {
       "type": "folder",
       "data": {
-        "path": "app",
-        "title": "app"
+        "path": "controllers",
+        "title": "controllers"
       },
       "depth": 1,
       "children": [
         {
-          "type": "folder",
+          "type": "file",
           "data": {
-            "path": "app/scripts",
-            "title": "scripts"
+            "language": {
+              "nameMatchers": [".js"],
+              "pygmentsLexer": "javascript",
+              "multiLineComment": ["/*", "*", "*/"],
+              "singleLineComment": ["//"],
+              "ignorePrefix": "}",
+              "foldPrefix": "^",
+              "name": "JavaScript"
+            },
+            "sourcePath": "/home/uname/diskotek/app/scripts/controllers/Ch.js",
+            "projectPath": "app/scripts/controllers/Ch.js",
+            "targetPath": "controllers/Ch",
+            "pageTitle": "controllers/Ch",
+            "title": "Ch"
           },
           "depth": 2,
-          "children": [
-            {
-              "type": "folder",
-              "data": {
-                "path": "app/scripts/controllers",
-                "title": "controllers"
-              },
-              "depth": 3,
-              "children": [
-                {
-                  "type": "file",
-                  "data": {
-                    "language": {
-                      "nameMatchers": [".js"],
-                      "pygmentsLexer": "javascript",
-                      "multiLineComment": ["/*", "*", "*/"],
-                      "singleLineComment": ["//"],
-                      "ignorePrefix": "}",
-                      "foldPrefix": "^",
-                      "name": "JavaScript"
-                    },
-                    "sourcePath": "/home/uname/ld/app/scripts/controllers/Ch.js",
-                    "projectPath": "app/scripts/controllers/Ch.js",
-                    "targetPath": "app/scripts/controllers/Ch",
-                    "pageTitle": "app/scripts/controllers/Ch",
-                    "title": "Ch"
-                  },
-                  "depth": 4,
-                  "outline": []
-                }, {
-                  "type": "file",
-                  "data": {
-                    "language": {
-                      "nameMatchers": [".js"],
-                      "pygmentsLexer": "javascript",
-                      "multiLineComment": ["/*", "*", "*/"],
-                      "singleLineComment": ["//"],
-                      "ignorePrefix": "}",
-                      "foldPrefix": "^",
-                      "name": "JavaScript"
-                    },
-                    "sourcePath": "/home/uname/ld/app/scripts/controllers/DataDebug.js",
-                    "projectPath": "app/scripts/controllers/DataDebug.js",
-                    "targetPath": "app/scripts/controllers/DataDebug",
-                    "pageTitle": "app/scripts/controllers/DataDebug",
-                    "title": "DataDebug"
-                  },
-                  "depth": 4,
-                  "outline": []
-                }, {
-                  "type": "file",
-                  "data": {
-                    "language": {
-                      "nameMatchers": [".js"],
-                      "pygmentsLexer": "javascript",
-                      "multiLineComment": ["/*", "*", "*/"],
-                      "singleLineComment": ["//"],
-                      "ignorePrefix": "}",
-                      "foldPrefix": "^",
-                      "name": "JavaScript"
-                    },
-                    "sourcePath": "/home/uname/ld/app/scripts/controllers/DataDisassembly.js",
-                    "projectPath": "app/scripts/controllers/DataDisassembly.js",
-                    "targetPath": "app/scripts/controllers/DataDisassembly",
-                    "pageTitle": "app/scripts/controllers/DataDisassembly",
-                    "title": "DataDisassembly"
-                  },
-                  "depth": 4,
-                  "outline": []
-                }, {
-                  "type": "file",
-                  "data": {
-                    "language": {
-                      "nameMatchers": [".js"],
-                      "pygmentsLexer": "javascript",
-                      "multiLineComment": ["/*", "*", "*/"],
-                      "singleLineComment": ["//"],
-                      "ignorePrefix": "}",
-                      "foldPrefix": "^",
-                      "name": "JavaScript"
-                    },
-                    "sourcePath": "/home/uname/ld/app/scripts/controllers/DataDisassemblyParsers.js",
-                    "projectPath": "app/scripts/controllers/DataDisassemblyParsers.js",
-                    "targetPath": "app/scripts/controllers/DataDisassemblyParsers",
-                    "pageTitle": "app/scripts/controllers/DataDisassemblyParsers",
-                    "title": "DataDisassemblyParsers"
-                  },
-                  "depth": 4,
-                  "outline": []
-                }, {
-                  "type": "file",
-                  "data": {
-                    "language": {
-                      "nameMatchers": [".js"],
-                      "pygmentsLexer": "javascript",
-                      "multiLineComment": ["/*", "*", "*/"],
-                      "singleLineComment": ["//"],
-                      "ignorePrefix": "}",
-                      "foldPrefix": "^",
-                      "name": "JavaScript"
-                    },
-                    "sourcePath": "/home/uname/ld/app/scripts/controllers/chD.js",
-                    "projectPath": "app/scripts/controllers/chD.js",
-                    "targetPath": "app/scripts/controllers/chD",
-                    "pageTitle": "app/scripts/controllers/chD",
-                    "title": "chD"
-                  },
-                  "depth": 4,
-                  "outline": []
-                }, {
-                  "type": "file",
-                  "data": {
-                    "language": {
-                      "nameMatchers": [".js"],
-                      "pygmentsLexer": "javascript",
-                      "multiLineComment": ["/*", "*", "*/"],
-                      "singleLineComment": ["//"],
-                      "ignorePrefix": "}",
-                      "foldPrefix": "^",
-                      "name": "JavaScript"
-                    },
-                    "sourcePath": "/home/uname/ld/app/scripts/controllers/command.js",
-                    "projectPath": "app/scripts/controllers/command.js",
-                    "targetPath": "app/scripts/controllers/command",
-                    "pageTitle": "app/scripts/controllers/command",
-                    "title": "command"
-                  },
-                  "depth": 4,
-                  "outline": []
-                }, {
-                  "type": "file",
-                  "data": {
-                    "language": {
-                      "nameMatchers": [".js"],
-                      "pygmentsLexer": "javascript",
-                      "multiLineComment": ["/*", "*", "*/"],
-                      "singleLineComment": ["//"],
-                      "ignorePrefix": "}",
-                      "foldPrefix": "^",
-                      "name": "JavaScript"
-                    },
-                    "sourcePath": "/home/uname/ld/app/scripts/controllers/data.js",
-                    "projectPath": "app/scripts/controllers/data.js",
-                    "targetPath": "app/scripts/controllers/data",
-                    "pageTitle": "app/scripts/controllers/data",
-                    "title": "data"
-                  },
-                  "depth": 4,
-                  "outline": []
-                }, {
-                  "type": "file",
-                  "data": {
-                    "language": {
-                      "nameMatchers": [".js"],
-                      "pygmentsLexer": "javascript",
-                      "multiLineComment": ["/*", "*", "*/"],
-                      "singleLineComment": ["//"],
-                      "ignorePrefix": "}",
-                      "foldPrefix": "^",
-                      "name": "JavaScript"
-                    },
-                    "sourcePath": "/home/uname/ld/app/scripts/controllers/debugController.js",
-                    "projectPath": "app/scripts/controllers/debugController.js",
-                    "targetPath": "app/scripts/controllers/debugController",
-                    "pageTitle": "app/scripts/controllers/debugController",
-                    "title": "debugController"
-                  },
-                  "depth": 4,
-                  "outline": []
-                }, {
-                  "type": "file",
-                  "data": {
-                    "language": {
-                      "nameMatchers": [".js"],
-                      "pygmentsLexer": "javascript",
-                      "multiLineComment": ["/*", "*", "*/"],
-                      "singleLineComment": ["//"],
-                      "ignorePrefix": "}",
-                      "foldPrefix": "^",
-                      "name": "JavaScript"
-                    },
-                    "sourcePath": "/home/uname/ld/app/scripts/controllers/disas.js",
-                    "projectPath": "app/scripts/controllers/disas.js",
-                    "targetPath": "app/scripts/controllers/disas",
-                    "pageTitle": "app/scripts/controllers/disas",
-                    "title": "disas"
-                  },
-                  "depth": 4,
-                  "outline": []
-                }, {
-                  "type": "file",
-                  "data": {
-                    "language": {
-                      "nameMatchers": [".js"],
-                      "pygmentsLexer": "javascript",
-                      "multiLineComment": ["/*", "*", "*/"],
-                      "singleLineComment": ["//"],
-                      "ignorePrefix": "}",
-                      "foldPrefix": "^",
-                      "name": "JavaScript"
-                    },
-                    "sourcePath": "/home/uname/ld/app/scripts/controllers/headerd.js",
-                    "projectPath": "app/scripts/controllers/headerd.js",
-                    "targetPath": "app/scripts/controllers/headerd",
-                    "pageTitle": "app/scripts/controllers/headerd",
-                    "title": "headerd"
-                  },
-                  "depth": 4,
-                  "outline": []
-                }, {
-                  "type": "file",
-                  "data": {
-                    "language": {
-                      "nameMatchers": [".js"],
-                      "pygmentsLexer": "javascript",
-                      "multiLineComment": ["/*", "*", "*/"],
-                      "singleLineComment": ["//"],
-                      "ignorePrefix": "}",
-                      "foldPrefix": "^",
-                      "name": "JavaScript"
-                    },
-                    "sourcePath": "/home/uname/ld/app/scripts/controllers/mainMenuController.js",
-                    "projectPath": "app/scripts/controllers/mainMenuController.js",
-                    "targetPath": "app/scripts/controllers/mainMenuController",
-                    "pageTitle": "app/scripts/controllers/mainMenuController",
-                    "title": "mainMenuController"
-                  },
-                  "depth": 4,
-                  "outline": []
-                }
-              ]
-            }, {
-              "type": "folder",
-              "data": {
-                "path": "app/scripts/directives",
-                "title": "directives"
-              },
-              "depth": 3,
-              "children": [
-                {
-                  "type": "file",
-                  "data": {
-                    "language": {
-                      "nameMatchers": [".js"],
-                      "pygmentsLexer": "javascript",
-                      "multiLineComment": ["/*", "*", "*/"],
-                      "singleLineComment": ["//"],
-                      "ignorePrefix": "}",
-                      "foldPrefix": "^",
-                      "name": "JavaScript"
-                    },
-                    "sourcePath": "/home/uname/ld/app/scripts/directives/customDirectives.js",
-                    "projectPath": "app/scripts/directives/customDirectives.js",
-                    "targetPath": "app/scripts/directives/customDirectives",
-                    "pageTitle": "app/scripts/directives/customDirectives",
-                    "title": "customDirectives"
-                  },
-                  "depth": 4,
-                  "outline": []
-                }
-              ]
-            }
-          ]
+          "outline": []
+        }, {
+          "type": "file",
+          "data": {
+            "language": {
+              "nameMatchers": [".js"],
+              "pygmentsLexer": "javascript",
+              "multiLineComment": ["/*", "*", "*/"],
+              "singleLineComment": ["//"],
+              "ignorePrefix": "}",
+              "foldPrefix": "^",
+              "name": "JavaScript"
+            },
+            "sourcePath": "/home/uname/diskotek/app/scripts/controllers/DataDebug.js",
+            "projectPath": "app/scripts/controllers/DataDebug.js",
+            "targetPath": "controllers/DataDebug",
+            "pageTitle": "controllers/DataDebug",
+            "title": "DataDebug"
+          },
+          "depth": 2,
+          "outline": []
+        }, {
+          "type": "file",
+          "data": {
+            "language": {
+              "nameMatchers": [".js"],
+              "pygmentsLexer": "javascript",
+              "multiLineComment": ["/*", "*", "*/"],
+              "singleLineComment": ["//"],
+              "ignorePrefix": "}",
+              "foldPrefix": "^",
+              "name": "JavaScript"
+            },
+            "sourcePath": "/home/uname/diskotek/app/scripts/controllers/DataDisassembly.js",
+            "projectPath": "app/scripts/controllers/DataDisassembly.js",
+            "targetPath": "controllers/DataDisassembly",
+            "pageTitle": "controllers/DataDisassembly",
+            "title": "DataDisassembly"
+          },
+          "depth": 2,
+          "outline": []
+        }, {
+          "type": "file",
+          "data": {
+            "language": {
+              "nameMatchers": [".js"],
+              "pygmentsLexer": "javascript",
+              "multiLineComment": ["/*", "*", "*/"],
+              "singleLineComment": ["//"],
+              "ignorePrefix": "}",
+              "foldPrefix": "^",
+              "name": "JavaScript"
+            },
+            "sourcePath": "/home/uname/diskotek/app/scripts/controllers/DataDisassemblyParsers.js",
+            "projectPath": "app/scripts/controllers/DataDisassemblyParsers.js",
+            "targetPath": "controllers/DataDisassemblyParsers",
+            "pageTitle": "controllers/DataDisassemblyParsers",
+            "title": "DataDisassemblyParsers"
+          },
+          "depth": 2,
+          "outline": []
+        }, {
+          "type": "file",
+          "data": {
+            "language": {
+              "nameMatchers": [".js"],
+              "pygmentsLexer": "javascript",
+              "multiLineComment": ["/*", "*", "*/"],
+              "singleLineComment": ["//"],
+              "ignorePrefix": "}",
+              "foldPrefix": "^",
+              "name": "JavaScript"
+            },
+            "sourcePath": "/home/uname/diskotek/app/scripts/controllers/chD.js",
+            "projectPath": "app/scripts/controllers/chD.js",
+            "targetPath": "controllers/chD",
+            "pageTitle": "controllers/chD",
+            "title": "chD"
+          },
+          "depth": 2,
+          "outline": []
+        }, {
+          "type": "file",
+          "data": {
+            "language": {
+              "nameMatchers": [".js"],
+              "pygmentsLexer": "javascript",
+              "multiLineComment": ["/*", "*", "*/"],
+              "singleLineComment": ["//"],
+              "ignorePrefix": "}",
+              "foldPrefix": "^",
+              "name": "JavaScript"
+            },
+            "sourcePath": "/home/uname/diskotek/app/scripts/controllers/command.js",
+            "projectPath": "app/scripts/controllers/command.js",
+            "targetPath": "controllers/command",
+            "pageTitle": "controllers/command",
+            "title": "command"
+          },
+          "depth": 2,
+          "outline": []
+        }, {
+          "type": "file",
+          "data": {
+            "language": {
+              "nameMatchers": [".js"],
+              "pygmentsLexer": "javascript",
+              "multiLineComment": ["/*", "*", "*/"],
+              "singleLineComment": ["//"],
+              "ignorePrefix": "}",
+              "foldPrefix": "^",
+              "name": "JavaScript"
+            },
+            "sourcePath": "/home/uname/diskotek/app/scripts/controllers/data.js",
+            "projectPath": "app/scripts/controllers/data.js",
+            "targetPath": "controllers/data",
+            "pageTitle": "controllers/data",
+            "title": "data"
+          },
+          "depth": 2,
+          "outline": []
+        }, {
+          "type": "file",
+          "data": {
+            "language": {
+              "nameMatchers": [".js"],
+              "pygmentsLexer": "javascript",
+              "multiLineComment": ["/*", "*", "*/"],
+              "singleLineComment": ["//"],
+              "ignorePrefix": "}",
+              "foldPrefix": "^",
+              "name": "JavaScript"
+            },
+            "sourcePath": "/home/uname/diskotek/app/scripts/controllers/debugController.js",
+            "projectPath": "app/scripts/controllers/debugController.js",
+            "targetPath": "controllers/debugController",
+            "pageTitle": "controllers/debugController",
+            "title": "debugController"
+          },
+          "depth": 2,
+          "outline": []
+        }, {
+          "type": "file",
+          "data": {
+            "language": {
+              "nameMatchers": [".js"],
+              "pygmentsLexer": "javascript",
+              "multiLineComment": ["/*", "*", "*/"],
+              "singleLineComment": ["//"],
+              "ignorePrefix": "}",
+              "foldPrefix": "^",
+              "name": "JavaScript"
+            },
+            "sourcePath": "/home/uname/diskotek/app/scripts/controllers/disassemblyController.js",
+            "projectPath": "app/scripts/controllers/disassemblyController.js",
+            "targetPath": "controllers/disassemblyController",
+            "pageTitle": "controllers/disassemblyController",
+            "title": "disassemblyController"
+          },
+          "depth": 2,
+          "outline": []
+        }, {
+          "type": "file",
+          "data": {
+            "language": {
+              "nameMatchers": [".js"],
+              "pygmentsLexer": "javascript",
+              "multiLineComment": ["/*", "*", "*/"],
+              "singleLineComment": ["//"],
+              "ignorePrefix": "}",
+              "foldPrefix": "^",
+              "name": "JavaScript"
+            },
+            "sourcePath": "/home/uname/diskotek/app/scripts/controllers/headerd.js",
+            "projectPath": "app/scripts/controllers/headerd.js",
+            "targetPath": "controllers/headerd",
+            "pageTitle": "controllers/headerd",
+            "title": "headerd"
+          },
+          "depth": 2,
+          "outline": []
+        }, {
+          "type": "file",
+          "data": {
+            "language": {
+              "nameMatchers": [".js"],
+              "pygmentsLexer": "javascript",
+              "multiLineComment": ["/*", "*", "*/"],
+              "singleLineComment": ["//"],
+              "ignorePrefix": "}",
+              "foldPrefix": "^",
+              "name": "JavaScript"
+            },
+            "sourcePath": "/home/uname/diskotek/app/scripts/controllers/mainMenuController.js",
+            "projectPath": "app/scripts/controllers/mainMenuController.js",
+            "targetPath": "controllers/mainMenuController",
+            "pageTitle": "controllers/mainMenuController",
+            "title": "mainMenuController"
+          },
+          "depth": 2,
+          "outline": []
+        }, {
+          "type": "file",
+          "data": {
+            "language": {
+              "nameMatchers": [".js"],
+              "pygmentsLexer": "javascript",
+              "multiLineComment": ["/*", "*", "*/"],
+              "singleLineComment": ["//"],
+              "ignorePrefix": "}",
+              "foldPrefix": "^",
+              "name": "JavaScript"
+            },
+            "sourcePath": "/home/uname/diskotek/app/scripts/controllers/scriptsController.js",
+            "projectPath": "app/scripts/controllers/scriptsController.js",
+            "targetPath": "controllers/scriptsController",
+            "pageTitle": "controllers/scriptsController",
+            "title": "scriptsController"
+          },
+          "depth": 2,
+          "outline": []
+        }, {
+          "type": "file",
+          "data": {
+            "language": {
+              "nameMatchers": [".coffee", "Cakefile"],
+              "pygmentsLexer": "coffee-script",
+              "multiLineComment": ["###*", " *", " ###", "###", "#", "###"],
+              "strictMultiLineEnd": false,
+              "singleLineComment": ["#"],
+              "ignorePrefix": "}",
+              "foldPrefix": "^",
+              "name": "CoffeeScript"
+            },
+            "sourcePath": "/home/uname/diskotek/app/scripts/controllers/scriptsController.coffee",
+            "projectPath": "app/scripts/controllers/scriptsController.coffee",
+            "targetPath": "controllers/scriptsController",
+            "pageTitle": "controllers/scriptsController",
+            "title": "scriptsController"
+          },
+          "depth": 2,
+          "outline": []
         }
       ]
+    }, {
+      "type": "file",
+      "data": {
+        "language": {
+          "nameMatchers": [".js"],
+          "pygmentsLexer": "javascript",
+          "multiLineComment": ["/*", "*", "*/"],
+          "singleLineComment": ["//"],
+          "ignorePrefix": "}",
+          "foldPrefix": "^",
+          "name": "JavaScript"
+        },
+        "sourcePath": "/home/uname/diskotek/app/scripts/debuggerState.js",
+        "projectPath": "app/scripts/debuggerState.js",
+        "targetPath": "debuggerState",
+        "pageTitle": "debuggerState",
+        "title": "debuggerState"
+      },
+      "depth": 1,
+      "outline": []
+    }, {
+      "type": "folder",
+      "data": {
+        "path": "directives",
+        "title": "directives"
+      },
+      "depth": 1,
+      "children": [
+        {
+          "type": "file",
+          "data": {
+            "language": {
+              "nameMatchers": [".js"],
+              "pygmentsLexer": "javascript",
+              "multiLineComment": ["/*", "*", "*/"],
+              "singleLineComment": ["//"],
+              "ignorePrefix": "}",
+              "foldPrefix": "^",
+              "name": "JavaScript"
+            },
+            "sourcePath": "/home/uname/diskotek/app/scripts/directives/customDirectives.js",
+            "projectPath": "app/scripts/directives/customDirectives.js",
+            "targetPath": "directives/customDirectives",
+            "pageTitle": "directives/customDirectives",
+            "title": "customDirectives"
+          },
+          "depth": 2,
+          "outline": []
+        }
+      ]
+    }, {
+      "type": "file",
+      "data": {
+        "language": {
+          "nameMatchers": [".js"],
+          "pygmentsLexer": "javascript",
+          "multiLineComment": ["/*", "*", "*/"],
+          "singleLineComment": ["//"],
+          "ignorePrefix": "}",
+          "foldPrefix": "^",
+          "name": "JavaScript"
+        },
+        "sourcePath": "/home/uname/diskotek/app/scripts/gdbDriver.js",
+        "projectPath": "app/scripts/gdbDriver.js",
+        "targetPath": "gdbDriver",
+        "pageTitle": "gdbDriver",
+        "title": "gdbDriver"
+      },
+      "depth": 1,
+      "outline": []
+    }, {
+      "type": "file",
+      "data": {
+        "language": {
+          "nameMatchers": [".coffee", "Cakefile"],
+          "pygmentsLexer": "coffee-script",
+          "multiLineComment": ["###*", " *", " ###", "###", "#", "###"],
+          "strictMultiLineEnd": false,
+          "singleLineComment": ["#"],
+          "ignorePrefix": "}",
+          "foldPrefix": "^",
+          "name": "CoffeeScript"
+        },
+        "sourcePath": "/home/uname/diskotek/app/scripts/state.coffee",
+        "projectPath": "app/scripts/state.coffee",
+        "targetPath": "state",
+        "pageTitle": "state",
+        "title": "state"
+      },
+      "depth": 1,
+      "outline": []
+    }, {
+      "type": "file",
+      "data": {
+        "language": {
+          "nameMatchers": [".js"],
+          "pygmentsLexer": "javascript",
+          "multiLineComment": ["/*", "*", "*/"],
+          "singleLineComment": ["//"],
+          "ignorePrefix": "}",
+          "foldPrefix": "^",
+          "name": "JavaScript"
+        },
+        "sourcePath": "/home/uname/diskotek/app/scripts/state.js",
+        "projectPath": "app/scripts/state.js",
+        "targetPath": "state",
+        "pageTitle": "state",
+        "title": "state"
+      },
+      "depth": 1,
+      "outline": []
+    }, {
+      "type": "file",
+      "data": {
+        "language": {
+          "nameMatchers": [".coffee", "Cakefile"],
+          "pygmentsLexer": "coffee-script",
+          "multiLineComment": ["###*", " *", " ###", "###", "#", "###"],
+          "strictMultiLineEnd": false,
+          "singleLineComment": ["#"],
+          "ignorePrefix": "}",
+          "foldPrefix": "^",
+          "name": "CoffeeScript"
+        },
+        "sourcePath": "/home/uname/diskotek/app/scripts/uiBackendDriver.coffee",
+        "projectPath": "app/scripts/uiBackendDriver.coffee",
+        "targetPath": "uiBackendDriver",
+        "pageTitle": "uiBackendDriver",
+        "title": "uiBackendDriver"
+      },
+      "depth": 1,
+      "outline": []
+    }, {
+      "type": "file",
+      "data": {
+        "language": {
+          "nameMatchers": [".js"],
+          "pygmentsLexer": "javascript",
+          "multiLineComment": ["/*", "*", "*/"],
+          "singleLineComment": ["//"],
+          "ignorePrefix": "}",
+          "foldPrefix": "^",
+          "name": "JavaScript"
+        },
+        "sourcePath": "/home/uname/diskotek/app/scripts/uiBackendGDBDriver.js",
+        "projectPath": "app/scripts/uiBackendGDBDriver.js",
+        "targetPath": "uiBackendGDBDriver",
+        "pageTitle": "uiBackendGDBDriver",
+        "title": "uiBackendGDBDriver"
+      },
+      "depth": 1,
+      "outline": []
+    }, {
+      "type": "file",
+      "data": {
+        "language": {
+          "nameMatchers": [".coffee", "Cakefile"],
+          "pygmentsLexer": "coffee-script",
+          "multiLineComment": ["###*", " *", " ###", "###", "#", "###"],
+          "strictMultiLineEnd": false,
+          "singleLineComment": ["#"],
+          "ignorePrefix": "}",
+          "foldPrefix": "^",
+          "name": "CoffeeScript"
+        },
+        "sourcePath": "/home/uname/diskotek/app/scripts/uiBackendGDBDriver.coffee",
+        "projectPath": "app/scripts/uiBackendGDBDriver.coffee",
+        "targetPath": "uiBackendGDBDriver",
+        "pageTitle": "uiBackendGDBDriver",
+        "title": "uiBackendGDBDriver"
+      },
+      "depth": 1,
+      "outline": []
+    }, {
+      "type": "file",
+      "data": {
+        "language": {
+          "nameMatchers": [".coffee", "Cakefile"],
+          "pygmentsLexer": "coffee-script",
+          "multiLineComment": ["###*", " *", " ###", "###", "#", "###"],
+          "strictMultiLineEnd": false,
+          "singleLineComment": ["#"],
+          "ignorePrefix": "}",
+          "foldPrefix": "^",
+          "name": "CoffeeScript"
+        },
+        "sourcePath": "/home/uname/diskotek/app/scripts/uiBackendUtilsDriver.coffee",
+        "projectPath": "app/scripts/uiBackendUtilsDriver.coffee",
+        "targetPath": "uiBackendUtilsDriver",
+        "pageTitle": "uiBackendUtilsDriver",
+        "title": "uiBackendUtilsDriver"
+      },
+      "depth": 1,
+      "outline": []
+    }, {
+      "type": "file",
+      "data": {
+        "language": {
+          "nameMatchers": [".js"],
+          "pygmentsLexer": "javascript",
+          "multiLineComment": ["/*", "*", "*/"],
+          "singleLineComment": ["//"],
+          "ignorePrefix": "}",
+          "foldPrefix": "^",
+          "name": "JavaScript"
+        },
+        "sourcePath": "/home/uname/diskotek/app/scripts/uiBackendUtilsDriver.js",
+        "projectPath": "app/scripts/uiBackendUtilsDriver.js",
+        "targetPath": "uiBackendUtilsDriver",
+        "pageTitle": "uiBackendUtilsDriver",
+        "title": "uiBackendUtilsDriver"
+      },
+      "depth": 1,
+      "outline": []
+    }, {
+      "type": "file",
+      "data": {
+        "language": {
+          "nameMatchers": [".js"],
+          "pygmentsLexer": "javascript",
+          "multiLineComment": ["/*", "*", "*/"],
+          "singleLineComment": ["//"],
+          "ignorePrefix": "}",
+          "foldPrefix": "^",
+          "name": "JavaScript"
+        },
+        "sourcePath": "/home/uname/diskotek/app/scripts/uiGDBDriver.js",
+        "projectPath": "app/scripts/uiGDBDriver.js",
+        "targetPath": "uiGDBDriver",
+        "pageTitle": "uiGDBDriver",
+        "title": "uiGDBDriver"
+      },
+      "depth": 1,
+      "outline": []
     }
   ];
 
