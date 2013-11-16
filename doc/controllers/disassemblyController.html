@@ -1,0 +1,213 @@
+<!DOCTYPE html><html lang="en"><head><title>controllers/disassemblyController</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="controllers/disassemblyController"><meta name="groc-project-path" content="app/scripts/controllers/disassemblyController.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">app/scripts/controllers/disassemblyController.js</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">&#39;ldApp&#39;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">controller</span><span class="p">(</span><span class="s1">&#39;disassemblyController&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">$rootScope</span><span class="p">,</span><span class="nx">$scope</span><span class="p">,</span><span class="nx">$http</span><span class="p">,</span><span class="nx">Data</span><span class="p">,</span><span class="nx">bboxF</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">trigger</span><span class="p">(</span><span class="s2">&quot;routeChanged&quot;</span><span class="p">);</span>
+
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">sharedData</span><span class="o">=</span><span class="nx">Data</span><span class="p">.</span><span class="nx">sharedData</span><span class="p">;</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">data</span><span class="o">=</span><span class="nx">Data</span><span class="p">;</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">$watch</span><span class="p">(</span><span class="s1">&#39;Data.sharedData.disasViewData.sectionD[0]&#39;</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">n</span><span class="p">,</span><span class="nx">o</span><span class="p">){</span>
+      <span class="nx">$scope</span><span class="p">.</span><span class="nx">selectedSection</span><span class="o">=</span><span class="nx">n</span><span class="p">;</span>
+      <span class="nx">$scope</span><span class="p">.</span><span class="nx">selected</span><span class="o">=</span><span class="s1">&#39;section&#39;</span><span class="p">;</span>
+    <span class="p">});</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">selectSection</span><span class="o">=</span><span class="p">{};</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">selected</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">;</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">scrollToSection</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">section</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>$scope.selectedSection=section;
+$scope.selected='section';</p></div></div><div class="code"><div class="wrapper">     <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;html, body&#39;</span><span class="p">).</span><span class="nx">animate</span><span class="p">({</span>
+        <span class="nx">scrollTop</span><span class="o">:</span> <span class="nx">section</span><span class="p">.</span><span class="nx">position</span><span class="p">.</span><span class="nx">y</span>
+      <span class="p">},</span> <span class="mi">2000</span><span class="p">);</span>
+    <span class="p">};</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">scrollToHeader</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">header</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>body...</p></div></div><div class="code"><div class="wrapper">       <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;html, body&#39;</span><span class="p">).</span><span class="nx">animate</span><span class="p">({</span>
+        <span class="nx">scrollTop</span><span class="o">:</span> <span class="nx">header</span><span class="p">.</span><span class="nx">position</span><span class="p">.</span><span class="nx">y</span>
+      <span class="p">},</span> <span class="mi">2000</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">dViewSwitch</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">view</span><span class="p">,</span><span class="nx">x</span><span class="p">,</span><span class="nx">y</span><span class="p">){</span>
+      
+      <span class="k">if</span> <span class="p">(</span><span class="nx">view</span><span class="o">===</span><span class="nx">$scope</span><span class="p">.</span><span class="nx">hldView</span><span class="p">){</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#dwindow&quot;</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;visibility&#39;</span><span class="p">)</span><span class="o">===</span><span class="s1">&#39;visible&#39;</span><span class="p">){</span>
+          <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#dwindow&quot;</span><span class="p">).</span><span class="nx">css</span><span class="p">({</span>
+            <span class="nx">visibility</span><span class="o">:</span><span class="s1">&#39;hidden&#39;</span>
+          <span class="p">});</span>
+        <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+
+          <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#dwindow&quot;</span><span class="p">).</span><span class="nx">css</span><span class="p">({</span>
+            <span class="nx">visibility</span><span class="o">:</span><span class="s1">&#39;visible&#39;</span>
+          <span class="p">});</span>
+        <span class="p">}</span>
+      <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+        <span class="nx">$scope</span><span class="p">.</span><span class="nx">hldView</span><span class="o">=</span><span class="nx">view</span><span class="p">;</span>
+
+        <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#dwindow&quot;</span><span class="p">).</span><span class="nx">css</span><span class="p">({</span>
+          <span class="nx">visibility</span><span class="o">:</span><span class="s1">&#39;visible&#39;</span>
+        <span class="p">});</span>
+
+      <span class="p">}</span>
+      <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#dwindow&quot;</span><span class="p">).</span><span class="nx">css</span><span class="p">({</span>
+        <span class="nx">width</span><span class="o">:</span><span class="s1">&#39;1000px&#39;</span><span class="p">,</span>
+        <span class="nx">position</span><span class="o">:</span><span class="s1">&#39;absolute&#39;</span><span class="p">,</span>
+        <span class="nx">top</span><span class="o">:</span><span class="nx">y</span><span class="p">,</span><span class="c1">//g.attrs.y,</span>
+        <span class="nx">left</span><span class="o">:</span><span class="nx">x</span><span class="p">,</span><span class="c1">// srx+8*uW+&#39;px&#39;,</span>
+        <span class="nx">background</span><span class="o">:</span><span class="s1">&#39;rgba(0,110,0,0.9)&#39;</span>
+      <span class="p">});</span>
+         
+    <span class="p">};</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">graphView</span><span class="o">=</span><span class="kd">function</span><span class="p">(</span><span class="nx">section</span><span class="p">,</span><span class="nx">index</span><span class="p">){</span>
+       <span class="k">if</span><span class="p">(</span><span class="nx">section</span><span class="p">.</span><span class="nx">view</span><span class="o">===</span><span class="s1">&#39;G&#39;</span><span class="p">){</span>
+        <span class="nx">section</span><span class="p">.</span><span class="nx">view</span><span class="o">=</span><span class="s1">&#39;hidden&#39;</span><span class="p">;</span>
+       <span class="p">}</span><span class="k">else</span><span class="p">{</span>   
+          <span class="nx">section</span><span class="p">.</span><span class="nx">view</span><span class="o">=</span><span class="s1">&#39;G&#39;</span><span class="p">;</span>
+
+          <span class="nx">$scope</span><span class="p">.</span><span class="nx">$apply</span><span class="p">();</span>
+          <span class="c1">//$scope.dViewSwitch(section.view=&#39;G&#39;,srx+8*uW-500,g.attrs.y );</span>
+
+          <span class="c1">//$scope.hldViewSection=section.name;</span>
+          <span class="c1">//$scope.$apply();</span>
+          <span class="c1">//$scope.headerC();,</span>
+          <span class="kd">var</span> <span class="nx">disas</span><span class="o">=</span><span class="nx">_</span><span class="p">.</span><span class="nx">flatten</span><span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">pluck</span><span class="p">(</span><span class="nx">section</span><span class="p">.</span><span class="nx">sectionContent</span><span class="p">,</span><span class="s1">&#39;symContent&#39;</span><span class="p">));</span>
+          <span class="kd">var</span> <span class="nx">bboxes</span><span class="o">=</span><span class="nx">Data</span><span class="p">.</span><span class="nx">disassemblyData</span><span class="p">.</span><span class="nx">bbfd</span><span class="p">(</span><span class="nx">disas</span><span class="p">);</span>
+          <span class="kd">var</span> <span class="nx">height</span><span class="o">=</span><span class="nx">disas</span><span class="p">.</span><span class="nx">length</span><span class="o">*</span><span class="mi">15</span><span class="o">+</span><span class="nx">bboxes</span><span class="p">.</span><span class="nx">length</span><span class="o">*</span><span class="mi">50</span><span class="o">+</span><span class="mi">200</span><span class="p">;</span>
+          <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#graphViewPlace&#39;</span><span class="o">+</span><span class="nx">index</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">);</span>
+          <span class="nx">bboxF</span><span class="p">.</span><span class="nx">r</span><span class="p">({</span>
+            <span class="nx">id</span><span class="o">:</span><span class="s1">&#39;graphViewPlace&#39;</span><span class="o">+</span><span class="nx">index</span><span class="p">,</span>
+            <span class="nx">w</span><span class="o">:</span><span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#sectionContainer&quot;</span><span class="p">).</span><span class="nx">width</span><span class="p">(),</span>
+            <span class="nx">h</span><span class="o">:</span><span class="nx">height</span><span class="p">,</span>
+            <span class="nx">data</span><span class="o">:</span><span class="nx">bboxes</span>
+          <span class="p">});</span>
+       <span class="p">}</span>
+        
+    <span class="p">};</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">disasView</span><span class="o">=</span><span class="kd">function</span><span class="p">(</span><span class="nx">section</span><span class="p">){</span>
+      <span class="k">if</span><span class="p">(</span><span class="nx">section</span><span class="p">.</span><span class="nx">view</span><span class="o">===</span><span class="s1">&#39;D&#39;</span><span class="p">){</span>
+        <span class="nx">section</span><span class="p">.</span><span class="nx">view</span><span class="o">=</span><span class="s1">&#39;hidden&#39;</span><span class="p">;</span>
+
+      <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+        <span class="nx">section</span><span class="p">.</span><span class="nx">view</span><span class="o">=</span><span class="s2">&quot;D&quot;</span><span class="p">;</span>
+
+        <span class="c1">//$scope.$apply();</span>
+      <span class="p">}</span>
+      <span class="c1">//$scope.dViewSwitch(v.view=&#39;D&#39;,srx+8*uW-500,g.attrs.y );</span>
+      <span class="c1">//var sections= Data.sharedData.disasViewData.sectionD;</span>
+      <span class="c1">//$scope.selectedSection=section;//_.findWhere(sections,{sectionName:v.name});</span>
+    <span class="p">};</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">hexView</span><span class="o">=</span><span class="kd">function</span><span class="p">(</span><span class="nx">section</span><span class="p">){</span>
+      <span class="k">if</span><span class="p">(</span><span class="nx">section</span><span class="p">.</span><span class="nx">view</span><span class="o">===</span><span class="s1">&#39;H&#39;</span><span class="p">){</span>
+        <span class="nx">section</span><span class="p">.</span><span class="nx">view</span><span class="o">=</span><span class="s1">&#39;hidden&#39;</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>$scope.$apply();</p></div></div><div class="code"><div class="wrapper">      <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+        <span class="nx">section</span><span class="p">.</span><span class="nx">view</span><span class="o">=</span><span class="s2">&quot;H&quot;</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>$scope.$apply();</p></div></div><div class="code"><div class="wrapper">      <span class="p">}</span>
+   
+      
+    <span class="p">};</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">renderDisasembly</span><span class="o">=</span><span class="kd">function</span><span class="p">(</span><span class="nx">disassembly</span><span class="p">){</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Data.getHeaders();</p></div></div><div class="code"><div class="wrapper">      <span class="kd">var</span> <span class="nx">disassemblyData</span><span class="o">=</span><span class="nx">Data</span><span class="p">.</span><span class="nx">disassemblyData</span><span class="p">;</span>
+      <span class="nx">$scope</span><span class="p">.</span><span class="nx">selected</span><span class="o">=</span><span class="s1">&#39;header&#39;</span><span class="p">;</span>
+      <span class="nx">$scope</span><span class="p">.</span><span class="nx">$apply</span><span class="p">();</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>$scope.$watch('Data.sharedData.disasViewData.sheaders',function(n,o){</p></div></div><div class="code"><div class="wrapper">        <span class="kd">var</span> <span class="nx">sheaders</span> <span class="o">=</span> <span class="nx">disassemblyData</span><span class="p">.</span><span class="nx">sectionHeaders</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">tsheaders</span> <span class="o">=</span> <span class="nx">_</span><span class="p">.</span><span class="nx">reject</span><span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">sortBy</span><span class="p">(</span><span class="nx">sheaders</span><span class="p">,</span><span class="s1">&#39;VMA&#39;</span><span class="p">),</span><span class="kd">function</span><span class="p">(</span><span class="nx">v</span><span class="p">){</span>
+          <span class="k">return</span> <span class="nx">v</span><span class="p">.</span><span class="nx">VMA</span><span class="o">===</span><span class="s1">&#39;00000000&#39;</span><span class="p">;</span>
+        <span class="p">});</span>
+        <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#holder&quot;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">);</span> <span class="c1">//teardown</span>
+
+        <span class="kd">var</span> <span class="nx">srx</span><span class="o">=</span><span class="mi">100</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">rx</span><span class="o">=</span><span class="nx">srx</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">uW</span><span class="o">=</span><span class="mi">70</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">spaceB</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">height</span><span class="o">=</span><span class="mi">40</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">ry</span><span class="o">=</span><span class="mi">50</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">fH</span><span class="o">=</span><span class="mi">10</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">offc</span> <span class="o">=-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">ehdr</span> <span class="o">=</span> <span class="nx">disassemblyData</span><span class="p">.</span><span class="nx">fileHeaders</span><span class="p">.</span><span class="nx">ehdr</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">phdr</span> <span class="o">=</span> <span class="nx">disassemblyData</span><span class="p">.</span><span class="nx">fileHeaders</span><span class="p">.</span><span class="nx">phdr</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">r</span><span class="p">;</span>
+
+        <span class="nx">r</span> <span class="o">=</span> <span class="nx">Raphael</span><span class="p">(</span><span class="s1">&#39;holder&#39;</span><span class="p">,</span><span class="mi">1500</span><span class="p">,</span><span class="mi">50</span><span class="o">*</span><span class="mi">3</span><span class="o">+</span><span class="nx">phdr</span><span class="p">.</span><span class="nx">length</span><span class="o">*</span><span class="p">(</span><span class="mi">50</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="mi">200</span><span class="p">);</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>this part will render ehdr structure</p></div></div><div class="code"><div class="wrapper">     
+        <span class="nx">d3</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s2">&quot;#holder&quot;</span><span class="p">).</span><span class="nx">select</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+          <span class="k">return</span> <span class="p">;</span>
+        <span class="p">}).</span><span class="nx">data</span><span class="p">(</span><span class="nx">ehdr</span><span class="p">).</span><span class="nx">enter</span><span class="p">().</span><span class="nx">call</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">ii</span><span class="p">){</span>
+          <span class="nx">offc</span><span class="o">+=</span><span class="mi">1</span><span class="p">;</span>
+          <span class="nx">r</span><span class="p">.</span><span class="nx">text</span><span class="p">(</span><span class="nx">srx</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="nx">ry</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="nx">fH</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mi">16</span><span class="o">*</span><span class="nx">offc</span><span class="p">);</span>
+
+          <span class="nx">_</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">ii</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">){</span>
+            <span class="kd">var</span> <span class="nx">elW</span> <span class="o">=</span> <span class="nx">i</span><span class="p">.</span><span class="nx">__data__</span><span class="p">.</span><span class="nx">size</span><span class="p">;</span>
+            <span class="kd">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="nx">i</span><span class="p">.</span><span class="nx">__data__</span><span class="p">;</span>
+            <span class="nx">r</span><span class="p">.</span><span class="nx">setStart</span><span class="p">();</span>
+            <span class="nx">rect</span> <span class="o">=</span> <span class="nx">r</span><span class="p">.</span><span class="nx">rect</span><span class="p">(</span><span class="nx">rx</span><span class="p">,</span><span class="nx">ry</span><span class="p">,</span><span class="nx">uW</span><span class="o">*</span><span class="nx">elW</span><span class="p">,</span><span class="nx">height</span><span class="p">).</span><span class="nx">attr</span><span class="p">({</span>
+              <span class="nx">fill</span><span class="o">:</span><span class="nx">Raphael</span><span class="p">.</span><span class="nx">getColor</span><span class="p">(),</span>
+              <span class="nx">stroke</span><span class="o">:</span><span class="nx">Raphael</span><span class="p">.</span><span class="nx">getColor</span><span class="p">(),</span>
+              <span class="s1">&#39;fill-opacity&#39;</span><span class="o">:</span><span class="mi">0</span><span class="p">,</span>
+              <span class="s1">&#39;stroke-width&#39;</span><span class="o">:</span><span class="mi">2</span>
+            <span class="p">});</span>
+            <span class="nx">rect</span><span class="p">.</span><span class="nx">attr</span><span class="p">({</span><span class="nx">title</span><span class="o">:</span><span class="nx">el</span><span class="p">.</span><span class="nx">comment</span><span class="p">});</span>
+            <span class="kd">var</span> <span class="nx">tel</span><span class="o">=</span><span class="nx">r</span><span class="p">.</span><span class="nx">text</span><span class="p">(</span><span class="nx">rx</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="nx">uW</span><span class="o">*</span><span class="nx">elW</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="nx">ry</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="nx">fH</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="nx">el</span><span class="p">.</span><span class="nx">fName</span><span class="p">);</span>
+            <span class="kd">var</span> <span class="nx">c</span> <span class="o">=</span> <span class="nx">r</span><span class="p">.</span><span class="nx">text</span><span class="p">(</span><span class="nx">rx</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="nx">uW</span><span class="o">*</span><span class="nx">elW</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="nx">ry</span><span class="o">+</span><span class="nx">height</span><span class="o">-</span><span class="mi">3</span><span class="o">-</span><span class="nx">fH</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="nx">el</span><span class="p">.</span><span class="nx">content</span><span class="p">);</span>
+            <span class="nx">c</span><span class="p">.</span><span class="nx">attr</span><span class="p">({</span><span class="nx">editable</span><span class="o">:</span><span class="s2">&quot;simple&quot;</span><span class="p">});</span>
+            <span class="c1">//$(tel).attr({&#39;text-anchor&#39;:&#39;baseline&#39;})</span>
+            <span class="c1">//$(tel).css({&#39;text-anchor&#39;:&#39;&#39;});</span>
+            <span class="nx">rx</span><span class="o">+=</span><span class="nx">uW</span><span class="o">*</span><span class="nx">elW</span><span class="o">+</span><span class="nx">spaceB</span><span class="p">;</span>
+            <span class="k">if</span><span class="p">(</span><span class="nx">rx</span><span class="o">&gt;=</span><span class="mi">16</span><span class="o">*</span><span class="nx">uW</span><span class="p">){</span>
+              <span class="nx">rx</span><span class="o">=</span><span class="nx">srx</span><span class="p">;</span>
+              <span class="nx">ry</span><span class="o">+=</span><span class="mi">51</span><span class="p">;</span>
+              <span class="nx">offc</span><span class="o">+=</span><span class="mi">1</span><span class="p">;</span>
+              <span class="nx">r</span><span class="p">.</span><span class="nx">text</span><span class="p">(</span><span class="nx">srx</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="nx">ry</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="nx">fH</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mi">16</span><span class="o">*</span><span class="nx">offc</span><span class="p">);</span>
+
+
+            <span class="p">}</span>
+            <span class="nx">r</span><span class="p">.</span><span class="nx">setFinish</span><span class="p">();</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>window.r.rect(10*i.<strong>data</strong>,10,50,50);</p></div></div><div class="code"><div class="wrapper">            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">i</span><span class="p">);</span>
+          <span class="p">});</span>
+        <span class="p">});</span>
+    
+
+
+        
+         </div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>start of section header drawing</p></div></div><div class="code"><div class="wrapper">        <span class="nx">rx</span><span class="o">=</span><span class="nx">srx</span><span class="p">;</span>
+        <span class="nx">ry</span><span class="o">+=</span><span class="mi">51</span><span class="p">;</span>
+        <span class="nx">offc</span><span class="o">++</span><span class="p">;</span>
+        <span class="nx">r</span><span class="p">.</span><span class="nx">text</span><span class="p">(</span><span class="nx">srx</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="nx">ry</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="nx">fH</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="o">+</span><span class="mi">16</span><span class="o">*</span><span class="nx">offc</span><span class="p">);</span>
+        <span class="nx">_</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">phdr</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">ii</span><span class="p">,</span><span class="nx">index</span><span class="p">,</span><span class="nx">list</span><span class="p">){</span>
+          <span class="c1">//for each section header in file</span>
+          <span class="nx">_</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">ii</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">){</span>
+            <span class="c1">//draw that section header by drawing all fields</span>
+            <span class="kd">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="nx">i</span><span class="p">;</span>
+            <span class="kd">var</span> <span class="nx">t</span> <span class="o">=</span> <span class="nx">el</span><span class="p">.</span><span class="nx">size</span><span class="p">;</span>
+            <span class="c1">//r.setStart();</span>
+            <span class="nx">rect</span> <span class="o">=</span> <span class="nx">r</span><span class="p">.</span><span class="nx">rect</span><span class="p">(</span><span class="nx">rx</span><span class="p">,</span><span class="nx">ry</span><span class="p">,</span><span class="nx">uW</span><span class="o">*</span><span class="nx">t</span><span class="p">,</span><span class="nx">height</span><span class="p">).</span><span class="nx">attr</span><span class="p">({</span>
+              <span class="nx">fill</span><span class="o">:</span><span class="s1">&#39;#ff00ff&#39;</span><span class="p">,</span><span class="c1">//Raphael.getColor(),</span>
+              <span class="nx">stroke</span><span class="o">:</span><span class="s1">&#39;#00ff00&#39;</span><span class="p">,</span><span class="c1">//Raphael.getColor(),</span>
+              <span class="s1">&#39;fill-opacity&#39;</span><span class="o">:</span><span class="mi">0</span><span class="p">,</span>
+              <span class="s1">&#39;stroke-width&#39;</span><span class="o">:</span><span class="mi">2</span>
+            <span class="p">});</span>
+            <span class="nx">rect</span><span class="p">.</span><span class="nx">attr</span><span class="p">({</span><span class="nx">title</span><span class="o">:</span><span class="nx">el</span><span class="p">.</span><span class="nx">comment</span><span class="p">});</span>
+            <span class="kd">var</span> <span class="nx">tel</span><span class="o">=</span><span class="nx">r</span><span class="p">.</span><span class="nx">text</span><span class="p">(</span><span class="nx">rx</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="nx">uW</span><span class="o">*</span><span class="nx">t</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="nx">ry</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="nx">fH</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="nx">el</span><span class="p">.</span><span class="nx">fName</span><span class="p">);</span>
+
+            <span class="nx">sheaders</span><span class="p">[</span><span class="nx">index</span><span class="p">].</span><span class="nx">position</span><span class="o">=</span><span class="p">{</span><span class="nx">y</span><span class="o">:</span><span class="nx">tel</span><span class="p">.</span><span class="nx">attrs</span><span class="p">.</span><span class="nx">y</span><span class="p">};</span>
+            <span class="kd">var</span> <span class="nx">c</span> <span class="o">=</span> <span class="nx">r</span><span class="p">.</span><span class="nx">text</span><span class="p">(</span><span class="nx">rx</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="nx">uW</span><span class="o">*</span><span class="nx">t</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="nx">ry</span><span class="o">+</span><span class="nx">height</span><span class="o">-</span><span class="mi">3</span><span class="o">-</span><span class="nx">fH</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="nx">el</span><span class="p">.</span><span class="nx">content</span><span class="p">);</span>
+            <span class="nx">c</span><span class="p">.</span><span class="nx">attr</span><span class="p">({</span><span class="nx">editable</span><span class="o">:</span><span class="s2">&quot;simple&quot;</span><span class="p">});</span>
+            <span class="c1">//$(tel).attr({&#39;text-anchor&#39;:&#39;baseline&#39;})</span>
+            <span class="c1">//$(tel).css({&#39;text-anchor&#39;:&#39;&#39;});</span>
+            <span class="nx">rx</span><span class="o">+=</span><span class="nx">uW</span><span class="o">*</span><span class="nx">t</span><span class="o">+</span><span class="nx">spaceB</span><span class="p">;</span>
+            <span class="k">if</span><span class="p">(</span><span class="nx">rx</span><span class="o">&gt;=</span><span class="mi">16</span><span class="o">*</span><span class="nx">uW</span><span class="p">){</span>
+
+             <span class="nx">rx</span><span class="o">=</span><span class="nx">srx</span><span class="p">;</span>
+             <span class="nx">ry</span><span class="o">+=</span><span class="mi">51</span><span class="p">;</span>
+              <span class="nx">offc</span><span class="o">++</span><span class="p">;</span>
+              <span class="nx">r</span><span class="p">.</span><span class="nx">text</span><span class="p">(</span><span class="nx">srx</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="nx">ry</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="nx">fH</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="o">+</span><span class="mi">16</span><span class="o">*</span><span class="nx">offc</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="c1">//r.setFinish();</span>
+
+          <span class="p">});</span>
+      <span class="p">});</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>end of section header drawing</p></div></div><div class="code"><div class="wrapper">      <span class="kd">var</span> <span class="nx">sectionHeaders</span> <span class="o">=</span> <span class="nx">disassemblyData</span><span class="p">.</span><span class="nx">sectionHeaders</span><span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">ss</span> <span class="o">=</span> <span class="nx">disassemblyData</span><span class="p">.</span><span class="nx">sectionD</span><span class="p">;</span>
+
+      <span class="c1">//sort sections by offset in file</span>
+      <span class="kd">var</span> <span class="nx">sectionHeadersSorted</span><span class="o">=</span><span class="nx">_</span><span class="p">.</span><span class="nx">sortBy</span><span class="p">(</span><span class="nx">sectionHeaders</span><span class="p">,</span><span class="s1">&#39;fOff&#39;</span><span class="p">);</span>
+      <span class="c1">//set default view of sections</span>
+      <span class="nx">_</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">sectionHeadersSorted</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">v</span><span class="p">){</span><span class="nx">v</span><span class="p">.</span><span class="nx">view</span><span class="o">=</span><span class="s1">&#39;D&#39;</span><span class="p">});</span>
+      <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#dwindow&quot;</span><span class="p">).</span><span class="nx">draggable</span><span class="p">({</span><span class="nx">handle</span><span class="o">:</span><span class="s1">&#39;.whandle&#39;</span><span class="p">});</span>
+      <span class="nx">$scope</span><span class="p">.</span><span class="nx">$apply</span><span class="p">();</span>
+    <span class="p">};</span>
+
+
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">postRenderSetup</span><span class="o">=</span><span class="kd">function</span><span class="p">(){</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>renderDisasembly</p></div></div><div class="code"><div class="wrapper">    <span class="p">};</span>
+
+
+    <span class="nx">$rootScope</span><span class="p">.</span><span class="nx">$on</span><span class="p">(</span><span class="s2">&quot;disassemblyDataLoaded&quot;</span><span class="p">,</span><span class="nx">$scope</span><span class="p">.</span><span class="nx">renderDisasembly</span><span class="p">);</span>
+
+    <span class="nx">$rootScope</span><span class="p">.</span><span class="nx">$on</span><span class="p">(</span><span class="s2">&quot;disassemblyDataLoaded&quot;</span><span class="p">,</span><span class="nx">$scope</span><span class="p">.</span><span class="nx">postRenderSetup</span><span class="p">);</span>
+
+
+<span class="p">});</span></div></div></div></div></body></html>
