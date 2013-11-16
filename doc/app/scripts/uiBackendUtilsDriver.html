@@ -1,0 +1,86 @@
+<!DOCTYPE html><html lang="en"><head><title>app/scripts/uiBackendUtilsDriver</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../../"><meta name="groc-document-path" content="app/scripts/uiBackendUtilsDriver"><meta name="groc-project-path" content="app/scripts/uiBackendUtilsDriver.coffee"><link rel="stylesheet" type="text/css" media="all" href="../../assets/style.css"><script type="text/javascript" src="../../assets/behavior.js"></script><body><div id="meta"><div class="file-path">app/scripts/uiBackendUtilsDriver.coffee</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s">&#39;ldApp&#39;</span><span class="p">).</span><span class="nx">factory</span> <span class="s">&#39;uiBackendUtilsDriver&#39;</span><span class="p">,[</span><span class="s">&#39;$rootScope&#39;</span><span class="p">,</span><span class="s">&#39;command&#39;</span><span class="p">,</span><span class="s">&#39;DataDisassemblyParsers&#39;</span><span class="p">,</span> <span class="s">&#39;state&#39;</span> <span class="p">,</span> <span class="nf">($rootScope,command,dataParsers,state) -&gt;</span>
+
+  <span class="nx">parsers</span><span class="o">=</span><span class="nx">dataParsers</span>
+  <span class="nv">utilsDriver=</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><ul>
+<li>variable parsers is put there to make writing shorter</li>
+<li>it is a collection of s for parsing output of</li>
+<li>utilities that do the work</li>
+<li>*</li>
+</ul></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><ul>
+<li>this command gets elf and program headers
+ *</li>
+</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">getFileHeaders</span><span class="o">:</span><span class="nf">(file)-&gt;</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>callback for puting them in state</p></div></div><div class="code"><div class="wrapper">      <span class="nv">fileHeadersiC = </span><span class="nf">(data)-&gt;</span>
+        <span class="nx">state</span><span class="p">.</span><span class="nx">fileHeaders</span><span class="o">=</span><span class="nx">parsers</span><span class="p">.</span><span class="nx">parseHeaders</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>get file headers</p></div></div><div class="code"><div class="wrapper">      <span class="nx">command</span><span class="p">.</span><span class="nx">commandExecO</span><span class="p">(</span>
+        <span class="nx">ptyPayload</span><span class="o">:</span><span class="s">&#39;readelf -h -l &#39;</span> <span class="o">+</span> <span class="nx">file</span><span class="p">,</span>
+        <span class="nx">callback</span><span class="o">:</span><span class="nx">fileHeadersC</span><span class="p">,</span>
+        <span class="nx">msgType</span><span class="o">:</span><span class="s">&#39;exec&#39;</span>
+      <span class="p">)</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><ul>
+<li>sends command to invoke objdump to get headers</li>
+<li>registers a callback that will call the parser  to parse output</li>
+<li>and put everything in an array called sectionHeaders</li>
+<li>also calls  that will get hexdump and that is the last</li>
+<li><p>called when getting disassembly</p>
+
+<p>*</p></li>
+</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">getSectionHeaders</span><span class="o">:</span><span class="nf">(file)-&gt;</span>
+      <span class="nv">sectionHeadersC = </span><span class="nf">(data)-&gt;</span>
+        <span class="nx">state</span><span class="p">.</span><span class="nx">sectionHeaders</span><span class="o">=</span><span class="nx">parsers</span><span class="p">.</span><span class="nx">parseSHeaders</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
+
+        <span class="nx">utilsDriver</span><span class="p">.</span><span class="nx">getHexDump</span><span class="p">(</span><span class="nx">file</span><span class="p">,</span><span class="nx">utilsDriver</span><span class="p">.</span><span class="nx">sectionHeaders</span><span class="p">)</span>
+
+      <span class="nx">command</span><span class="p">.</span><span class="nx">commandExecO</span><span class="p">(</span>
+        <span class="nx">ptyPayload</span><span class="o">:</span><span class="s">&#39;arm-linux-gnueabi-objdump -h &#39;</span> <span class="o">+</span> <span class="nx">file</span><span class="p">,</span>
+        <span class="nx">callback</span><span class="o">:</span><span class="nx">sectionHeadersC</span><span class="p">,</span>
+        <span class="nx">msgType</span><span class="o">:</span><span class="s">&#39;exec&#39;</span>
+      <span class="p">)</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><pre><code> *
+</code></pre></div></div><div class="code"><div class="wrapper">    <span class="nv">getHeaders : </span><span class="nf">(file)-&gt;</span>
+      <span class="nx">utilsDriver</span><span class="p">.</span><span class="nx">getFileHeaders</span><span class="p">(</span><span class="nx">file</span><span class="p">)</span>
+      <span class="nx">utilsDriver</span><span class="p">.</span><span class="nx">getSectionHeaders</span><span class="p">(</span><span class="nx">file</span><span class="p">)</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><ul>
+<li>get disassembly
+ *</li>
+</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">getSectionDisassembly</span><span class="o">:</span><span class="nf">(file)-&gt;</span>
+      <span class="nx">command</span><span class="p">.</span><span class="nx">commandExecO</span><span class="p">(</span>
+        <span class="nv">callback: </span><span class="nf">(result)-&gt;</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>parse result of a -D command</p></div></div><div class="code"><div class="wrapper">          <span class="nx">state</span><span class="p">.</span><span class="nx">sectionData</span><span class="o">=</span><span class="nx">parsers</span><span class="p">.</span><span class="nx">processData</span><span class="p">(</span><span class="nx">result</span><span class="p">)</span>
+        <span class="p">,</span>
+        <span class="nv">msgType: </span><span class="s">&#39;exec&#39;</span><span class="p">,</span>
+        <span class="nx">ptyPayload</span><span class="o">:</span><span class="s">&#39;arm-linux-gnueabi-objdump -D &#39;</span> <span class="o">+</span> <span class="nx">file</span>
+
+      <span class="p">)</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><ul>
+<li>gets output of hex dump from readelf utility</li>
+<li>and puts result in hexDump field of every section in sectionData array</li>
+<li>since this is the last  called in getting disassembly</li>
+<li>it will call the doneLoading</li>
+<li>it it stops being last  than this will have to change
+ *</li>
+</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">getHexDump</span><span class="o">:</span><span class="nf">(file,sectionHeaders)-&gt;</span>
+      <span class="nx">_</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">sectionHeaders</span><span class="p">,</span><span class="nf">(v,i)-&gt;</span>
+        <span class="nx">hd</span><span class="o">=</span><span class="nf">(data)-&gt;</span>
+          <span class="nx">state</span><span class="p">.</span><span class="nx">sectionData</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">hexDump</span><span class="o">=</span><span class="nx">parsers</span><span class="p">.</span><span class="nx">parseXD</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s">&quot;\n&quot;</span><span class="p">).</span><span class="nx">slice</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">2</span><span class="p">))</span>
+          <span class="k">if</span><span class="p">(</span><span class="nx">i</span><span class="o">==</span><span class="nx">sectionHeaders</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="nx">utilsDriver</span><span class="p">.</span><span class="nx">doneLoading</span><span class="p">()</span>
+
+
+        <span class="nx">command</span><span class="p">.</span><span class="nx">commandExecO</span><span class="p">({</span>
+          <span class="nx">ptyPayload</span><span class="o">:</span><span class="s">&#39;readelf -x &#39;</span><span class="o">+</span><span class="nx">v</span><span class="p">.</span><span class="nx">name</span><span class="o">+</span><span class="s">&#39; &#39;</span><span class="o">+</span><span class="nx">file</span><span class="p">,</span>
+          <span class="nx">callback</span><span class="o">:</span><span class="nx">hd</span><span class="p">,</span>
+          <span class="nx">msgType</span><span class="o">:</span><span class="s">&#39;exec&#39;</span>
+        <span class="p">})</span>
+      <span class="p">)</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><ul>
+<li>triggers event that signals that a view should be updated since</li>
+<li>data arived
+ *</li>
+</ul></div></div><div class="code"><div class="wrapper">    <span class="nx">doneLoading</span><span class="o">:</span><span class="p">()</span><span class="nf">-&gt;</span>
+      <span class="nx">$rootScope</span><span class="p">.</span><span class="nx">$emit</span><span class="p">(</span><span class="s">&quot;disassemblyDataLoaded&quot;</span><span class="p">,{</span>
+        <span class="nx">utilsDriver</span><span class="o">:</span><span class="nx">utilsDriver</span>
+      <span class="p">})</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><ul>
+<li><p>this  calls s that get data from backend</p>
+
+<p>*</p></li>
+</ul></div></div><div class="code"><div class="wrapper">    <span class="nv">disassemble : </span><span class="nf">(file,architecture)-&gt;</span>
+      <span class="nx">@getSectionDisassembly</span><span class="p">(</span><span class="nx">file</span><span class="p">)</span>
+      <span class="nx">@getHeaders</span><span class="p">(</span><span class="nx">file</span><span class="p">)</span>
+
+
+
+  <span class="k">return</span> <span class="nx">utilsDriver</span>
+<span class="p">]</span></div></div></div></div></body></html>

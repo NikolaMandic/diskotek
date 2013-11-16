@@ -107,38 +107,54 @@ angular.module('ldApp').factory('command',[
    *
    * */
   obj.commandExecO=function(args){
-
+    if (typeof args === 'string'){
+      args = {ptyPayload:args}
+    }
+    var dfd = new jQuery.Deferred();
+    console.log('send: ' ,args);
     var callback;
+
     if(_.isFunction(args.callback)){
       callback = args.callback;
     }else{
       if(args.resultVariable){
-          callback=function putStuffinResultC() {
+          callback=function putStuffinResultC(r) {
           obj.sharedData[args.resultVariable]=obj.sharedData.result;
+
+          dfd.resolve(d);
         };
       }else{
         if(args.resultVariable!==null ){
-            callback=function anonCallback() {};
+            callback=function anonCallback(r) {
+              dfd.resolve(r);
+            };
         }
       }
     }
     if(args.scope){
-      callback = _.wrap(callback,function(f){
-        f();
+      callback = function(d){
+        callback(d);
+        dfd.resolve(d);
         scope.$apply();
-      });
+      }
     }
     if(args.callback!==null){
       obj.callbackQueue.push(callback);
     }
+    
+
     var msgType = (args.msgType)?args.msgType : 'command';
-    var cmd = (args.ptyPayload)?args.ptyPayload : args.cmnd;
+    var cmd = (args.ptyPayload)?args.ptyPayload : args.payload;
     obj.sock.emit(msgType,{
       ptyPayload:cmd
     });
-
+    return dfd.promise();
   };
   var socket = io.connect('http://localhost:8070');
+  //socket.
+  // for debugging and rad
+  window.socket=socket;
+  window.command = obj.commandExecO;
   obj.sock=socket;
 
   /*
@@ -150,6 +166,8 @@ angular.module('ldApp').factory('command',[
    *
    * */
   socket.on('execNews',function (data) {
+
+    console.log('in: exec ',data);
     var cdata = data.data;
     var callback = obj.callbackQueue.shift();
 
@@ -181,13 +199,15 @@ angular.module('ldApp').factory('command',[
    *
    * */
   socket.on('news', function (data) {
-    console.log(data);
+    console.log('in: ',data);
     var dataSplited = data.data.split('\n') ;
     obj.resultRaw = obj.resultRaw.concat(dataSplited);
     obj.result=obj.resultRaw;
     var last = obj.resultRaw[obj.resultRaw.length-1];
     if(last ==='(gdb) '){
       var callback = obj.callbackQueue.shift();
+      console.log('callbackQueue length: ',obj.callbackQueue.length);
+      console.log(callback);
       if(callback){
         callback(obj.result);
       }
@@ -198,7 +218,13 @@ angular.module('ldApp').factory('command',[
       obj.scope.$apply();
     }
   });
+//  var assembleNewsStream = socket.asEventStream('assembleNews');
 
+ /*
+  socket.on('assembleNews',function (argument) {
+    window.location('localhost:8080/index.html#/');
+  });
+*/
   return obj;
 }]);
 

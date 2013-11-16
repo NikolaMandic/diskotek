@@ -1,0 +1,654 @@
+<!DOCTYPE html><html lang="en"><head><title>bower_components/bScript/beeScriptRunner</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../../"><meta name="groc-document-path" content="bower_components/bScript/beeScriptRunner"><meta name="groc-project-path" content="app/bower_components/bScript/beeScriptRunner.coffee"><link rel="stylesheet" type="text/css" media="all" href="../../assets/style.css"><script type="text/javascript" src="../../assets/behavior.js"></script><body><div id="meta"><div class="file-path">app/bower_components/bScript/beeScriptRunner.coffee</div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><p>this module contains the
+stack machine vm
+code generator for it
+and object to wrap it all up</p></div></div><div class="code"><div class="wrapper"><span class="c1">#if requirejs</span>
+
+<span class="nv">ex = </span><span class="s">&quot;&quot;&quot;</span>
+<span class="s">a=&#39;adfsdf&#39;</span>
+<span class="s">s asd </span><span class="err">#</span><span class="s">a adas</span>
+<span class="s">&quot;&quot;&quot;</span>
+<span class="nv">init = </span><span class="nf">(beeScriptB,Compiler)-&gt;</span>
+
+
+  <span class="c1">#init = ()-&gt;</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>get parser</p></div></div><div class="code"><div class="wrapper">  <span class="nv">beeScript = </span><span class="nx">beeScriptB</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>make so that tokens are printed when lexer works</p></div></div><div class="code"><div class="wrapper">  <span class="nv">beeScript.lexer.lex = </span><span class="p">()</span><span class="nf">-&gt;</span>
+    <span class="nv">r = </span><span class="nx">@next</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nx">r</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s">&quot;token: &quot;</span><span class="p">,</span><span class="nx">r</span><span class="p">,</span> <span class="s">&quot; &quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">match</span><span class="p">)</span>
+      <span class="k">return</span> <span class="nx">r</span>
+    <span class="k">else</span>
+      <span class="k">return</span> <span class="nx">@lex</span><span class="p">()</span>
+  <span class="k">class</span> <span class="nb">Error</span>
+    <span class="nx">constructor</span><span class="o">:</span><span class="nf">(@message)-&gt;</span>
+
+
+
+  <span class="nv">diskotekLib =</span>
+    <span class="nv">registers:</span>
+     <span class="s">&#39;eax&#39;</span><span class="o">:</span>
+       <span class="nx">val</span><span class="o">:</span><span class="s">&#39;&#39;</span><span class="p">,</span>
+     <span class="s">&#39;ecx&#39;</span><span class="o">:</span>
+       <span class="nx">val</span><span class="o">:</span><span class="s">&#39;&#39;</span><span class="p">,</span>
+     <span class="s">&#39;edx&#39;</span><span class="o">:</span>
+       <span class="nx">val</span><span class="o">:</span><span class="s">&#39;&#39;</span><span class="p">,</span>
+     <span class="s">&#39;ebx&#39;</span><span class="o">:</span>
+       <span class="nx">val</span><span class="o">:</span><span class="s">&#39;&#39;</span><span class="p">,</span>
+     <span class="s">&#39;esp&#39;</span><span class="o">:</span>
+       <span class="nx">val</span><span class="o">:</span><span class="s">&#39;&#39;</span><span class="p">,</span>
+     <span class="s">&#39;ebp&#39;</span><span class="o">:</span>
+       <span class="nx">val</span><span class="o">:</span><span class="s">&#39;&#39;</span><span class="p">,</span>
+     <span class="s">&#39;esi&#39;</span><span class="o">:</span>
+       <span class="nx">val</span><span class="o">:</span><span class="s">&#39;&#39;</span><span class="p">,</span>
+     <span class="s">&#39;edi&#39;</span><span class="o">:</span>
+       <span class="nx">val</span><span class="o">:</span><span class="s">&#39;&#39;</span><span class="p">,</span>
+     <span class="s">&#39;eip&#39;</span><span class="o">:</span>
+       <span class="nx">val</span><span class="o">:</span><span class="s">&#39;&#39;</span><span class="p">,</span>
+     <span class="s">&#39;eflags&#39;</span><span class="o">:</span>
+       <span class="nx">val</span><span class="o">:</span><span class="s">&#39;&#39;</span><span class="p">,</span>
+     <span class="s">&#39;cs&#39;</span><span class="o">:</span>
+       <span class="nx">val</span><span class="o">:</span><span class="s">&#39;&#39;</span><span class="p">,</span>
+     <span class="s">&#39;ss&#39;</span><span class="o">:</span>
+       <span class="nx">val</span><span class="o">:</span><span class="s">&#39;&#39;</span><span class="p">,</span>
+     <span class="s">&#39;ds&#39;</span><span class="o">:</span>
+       <span class="nx">val</span><span class="o">:</span><span class="s">&#39;&#39;</span><span class="p">,</span>
+     <span class="s">&#39;es&#39;</span><span class="o">:</span>
+       <span class="nx">val</span><span class="o">:</span><span class="s">&#39;&#39;</span><span class="p">,</span>
+     <span class="s">&#39;fs&#39;</span><span class="o">:</span>
+       <span class="nx">val</span><span class="o">:</span><span class="s">&#39;&#39;</span><span class="p">,</span>
+     <span class="s">&#39;gs&#39;</span><span class="o">:</span>
+       <span class="nx">val</span><span class="o">:</span><span class="s">&#39;&#39;</span>
+    <span class="nv">memset: </span><span class="nf">(address,val)-&gt;</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;setting %s to &#39;</span><span class="p">,</span> <span class="nx">address</span><span class="p">,</span><span class="nx">val</span>
+    <span class="nv">readmem: </span><span class="nf">(addr)-&gt;</span>
+      <span class="nv">f = </span><span class="nf">(val)=&gt;</span>
+        <span class="nv">val = </span><span class="nx">_</span><span class="p">.</span><span class="nx">where</span> <span class="nx">@state</span><span class="p">.</span><span class="nx">getMemory</span><span class="p">(</span><span class="nx">addr</span><span class="p">),{</span><span class="s">&#39;address&#39;</span><span class="o">:</span><span class="nx">addr</span><span class="p">}</span>
+        <span class="nx">@vm</span><span class="p">.</span><span class="nx">resume</span>
+      <span class="nv">val = </span><span class="nx">@state</span><span class="p">.</span><span class="nx">getMemory</span><span class="p">(</span><span class="nx">addr</span><span class="p">)</span>
+      <span class="k">if</span> <span class="nx">val</span><span class="o">?</span><span class="p">.</span><span class="nx">then</span><span class="o">?</span>
+        <span class="nx">val</span><span class="p">.</span><span class="nx">then</span> <span class="nx">f</span>
+      <span class="k">else</span>
+        <span class="nx">@vm</span><span class="p">.</span><span class="nx">stack</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span>
+      <span class="p">{</span><span class="s">&#39;stop&#39;</span><span class="o">:</span><span class="s">&#39;&#39;</span><span class="p">}</span>
+    <span class="nv">regset: </span><span class="nf">(reg,val)-&gt;</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;setting %s to &#39;</span><span class="p">,</span> <span class="nx">reg</span><span class="p">,</span><span class="nx">val</span>
+    <span class="nv">regread: </span><span class="nf">(reg)-&gt;</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;regRead &#39;</span><span class="p">,</span><span class="nx">reg</span><span class="p">,</span><span class="nx">@state</span><span class="p">.</span><span class="nx">debugData</span><span class="p">.</span><span class="nx">registers</span><span class="p">[</span><span class="nx">reg</span><span class="p">]</span>
+
+      <span class="p">{</span><span class="s">&#39;stop&#39;</span><span class="o">:</span><span class="s">&#39;&#39;</span><span class="p">}</span>
+    <span class="nv">sendCMD: </span><span class="nf">(cmd)-&gt;</span>
+
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&quot;sending cmd: &quot;</span><span class="p">,</span> <span class="nx">cmd</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+      <span class="nx">@command</span><span class="p">(</span><span class="nx">cmd</span><span class="p">[</span><span class="mi">1</span><span class="p">..])</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>this is stack machine vm input generator
+it extends compiler and overwrites production actions of a parser
+there is expression stack for a+x
+    <code>@stack</code>
+there is call stack for method invocations
+    <code>@callStack</code>
+there is "pc/ip" that contains current block of code and "c" that is ip/pc for that block of code
+    <code>@progP</code>
+there is place for variables. Here are variables stored and kept troughout execution
+    <code>@variables</code>
+every runtime code that is generated is put in
+    <code>@currCode</code>
+main control flow of a program is at execCode so currCode can be appended to execCode and cleaned
+    <code>@execCode</code></p></div></div><div class="code"><div class="wrapper">  <span class="k">class</span> <span class="nx">DiskotekStackMGenerator</span> <span class="k">extends</span> <span class="nx">Compiler</span>
+
+
+    <span class="nv">diskotekLib : </span><span class="nx">diskotekLib</span>
+    <span class="nx">functions</span><span class="o">:</span><span class="p">{}</span>
+
+    <span class="nv">execCode: </span><span class="p">[]</span>
+    <span class="nx">currArgs</span><span class="o">:</span><span class="p">{}</span>
+    <span class="nx">currArgsD</span><span class="o">:</span><span class="p">{}</span>
+    <span class="nx">currArgC</span><span class="o">:</span><span class="mi">0</span>
+    <span class="nx">currIdent</span><span class="o">:</span><span class="s">&#39;&#39;</span>
+    <span class="nv">variables : </span><span class="p">{}</span>
+    <span class="nx">stack</span><span class="o">:</span><span class="p">[]</span>
+    <span class="vi">@p=</span>
+      <span class="nx">ip</span><span class="o">:</span><span class="kc">null</span>
+    <span class="nv">progP:</span>
+      <span class="nx">c</span><span class="o">:</span><span class="mi">0</span>
+      <span class="nx">block</span><span class="o">:</span><span class="kc">null</span>
+
+    <span class="nv">varAcc: </span><span class="kc">null</span>
+    <span class="nv">insideMethodDeff: </span><span class="kc">false</span>
+    <span class="nx">currCode</span><span class="o">:</span><span class="p">[]</span>
+    <span class="nx">currCodeStack</span><span class="o">:</span><span class="p">[]</span>
+    <span class="nx">currFuncName</span><span class="o">:</span><span class="s">&#39;&#39;</span>
+    <span class="nx">currFuncNStack</span><span class="o">:</span><span class="p">[]</span>
+    <span class="nx">callStack</span><span class="o">:</span><span class="p">[]</span>
+    <span class="nv">argFound: </span><span class="nf">(arg) =&gt;</span>
+      <span class="nx">@currArgC</span><span class="o">+=</span><span class="mi">1</span>
+    <span class="nv">methodDeff: </span><span class="nf">(name) =&gt;</span>
+      <span class="nx">@currArgsD</span><span class="o">=</span><span class="p">{}</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&quot;starting mem definition&quot;</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;=======&#39;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s">&#39;========&#39;</span>
+      <span class="nv">fcode = </span><span class="nx">@functions</span><span class="p">[</span><span class="nx">name</span><span class="p">]</span> <span class="o">=</span>
+        <span class="nv">code: </span><span class="p">[]</span>
+        <span class="nx">args</span><span class="o">:</span><span class="p">{}</span>
+        <span class="nx">argc</span><span class="o">:</span><span class="mi">0</span>
+      <span class="c1">#if already in method definition</span>
+      <span class="k">if</span> <span class="nx">@insideMethodDeff</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&quot;inside method def alerady&quot;</span>
+        <span class="c1">#push that scope onto stack</span>
+
+        <span class="nx">@currCodeStack</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">@currCode</span><span class="p">)</span>
+        <span class="nx">@currCode</span><span class="o">=</span><span class="p">[]</span>
+        <span class="nx">@currFuncNStack</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">@currFuncName</span><span class="p">)</span>
+      <span class="k">else</span>
+        <span class="c1">#set flag that it&#39;s method deff</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;current code before method def&#39;</span><span class="p">,</span><span class="nx">@currCode</span>
+        <span class="nx">@execCode</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">..</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="nx">@currCode</span>
+        <span class="c1">#@currCodeStack.push(@currCode)</span>
+        <span class="nx">@currFuncNStack</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">@currFuncName</span><span class="p">)</span>
+        <span class="nx">@currCode</span><span class="o">=</span><span class="p">[]</span>
+        <span class="vi">@insideMethodDeff = </span><span class="kc">true</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>current code goes in new func</p></div></div><div class="code"><div class="wrapper">      <span class="vi">@currCode = </span><span class="nx">fcode</span><span class="p">.</span><span class="nx">code</span>
+      <span class="vi">@currFuncName = </span><span class="nx">name</span>
+    <span class="nx">argDFound</span><span class="o">:</span><span class="nf">(arg)=&gt;</span>
+      <span class="nx">@currArgsD</span><span class="p">[</span><span class="nx">arg</span><span class="p">]</span><span class="o">=</span><span class="kc">null</span>
+      <span class="nx">@currArgDC</span><span class="o">+=</span><span class="mi">1</span>
+    <span class="nv">methodEnd: </span><span class="p">()</span> <span class="o">=&gt;</span>
+      <span class="nx">@functions</span><span class="p">[</span><span class="nx">@currFuncName</span><span class="p">].</span><span class="nx">argc</span><span class="o">=</span><span class="nx">@currArgDC</span>
+      <span class="nx">@functions</span><span class="p">[</span><span class="nx">@currFuncName</span><span class="p">].</span><span class="nx">args</span><span class="o">=</span><span class="nx">@currArgsD</span>
+      <span class="nx">@currCode</span><span class="p">.</span><span class="nx">push</span><span class="p">(()</span><span class="nf">-&gt;</span>
+        <span class="c1">#return to prev control flow</span>
+        <span class="nv">oldP = </span><span class="nx">@callStack</span><span class="p">.</span><span class="nx">pop</span><span class="p">()</span>
+
+        <span class="vi">@progP.c = </span><span class="nx">oldP</span><span class="p">.</span><span class="nx">c</span>
+        <span class="vi">@progP.block = </span><span class="nx">oldP</span><span class="p">.</span><span class="nx">block</span>
+        <span class="c1">#@progP.args = oldP.args</span>
+        <span class="vi">@currArgs = </span><span class="nx">oldP</span><span class="p">.</span><span class="nx">args</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&quot;poping ppointer&quot;</span><span class="p">,</span> <span class="nx">@progP</span>
+      <span class="p">)</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;method def ended &#39;</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;=======&#39;</span><span class="o">+</span><span class="nx">@currFuncName</span><span class="o">+</span><span class="s">&#39;========&#39;</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;code in function &#39;</span><span class="p">,</span><span class="nx">@currCode</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;--------------------------&#39;</span>
+
+      <span class="c1">#if there is parrent f</span>
+      <span class="k">if</span> <span class="nx">@currCodeStack</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">1</span>
+        <span class="c1">#next lines of code go in hers code</span>
+        <span class="vi">@currCode = </span><span class="nx">@currCodeStack</span><span class="p">.</span><span class="nx">pop</span><span class="p">()</span>
+        <span class="vi">@currFuncName = </span><span class="nx">@currFuncNStack</span><span class="p">.</span><span class="nx">pop</span><span class="p">()</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;returned to &#39;</span> <span class="o">+</span> <span class="nx">@currFuncName</span>
+      <span class="k">else</span>
+        <span class="c1">#code goes to global stack</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;returned to global stack&#39;</span>
+        <span class="vi">@insideMethodDeff = </span><span class="kc">false</span>
+        <span class="nx">@currCode</span> <span class="o">=</span><span class="p">[]</span> <span class="c1">#@execCode</span>
+        <span class="vi">@currFuncName = </span><span class="s">&#39;&#39;</span>
+
+
+
+    <span class="nv">methodCall: </span><span class="nf">(name) =&gt;</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;trying to call method %s&#39;</span><span class="p">,</span> <span class="nx">name</span>
+      <span class="nv">f = </span><span class="nx">@functions</span><span class="o">?</span><span class="p">[</span><span class="nx">name</span><span class="p">]</span>
+      <span class="k">if</span> <span class="nx">f</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&quot;method is a func defined&quot;</span>
+        <span class="nx">@currCode</span><span class="p">.</span><span class="nx">push</span><span class="p">(()</span><span class="nf">-&gt;</span>
+          <span class="c1">#increment ip</span>
+          <span class="c1">#@progP.c++</span>
+          <span class="c1">#leave where to return</span>
+          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&quot;pushing ppointer c= &quot;</span><span class="p">,</span> <span class="nx">@progP</span><span class="p">.</span><span class="nx">c</span>
+          <span class="nv">oldP =</span>
+            <span class="nv">c: </span><span class="nx">@progP</span><span class="p">.</span><span class="nx">c</span>
+            <span class="nv">block: </span><span class="nx">@progP</span><span class="p">.</span><span class="nx">block</span>
+            <span class="nv">args: </span><span class="nx">@currArgs</span>
+          <span class="nx">@callStack</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">oldP</span><span class="p">)</span>
+          <span class="nx">@progP</span><span class="p">.</span><span class="nx">c</span><span class="o">=</span><span class="mi">0</span>
+          <span class="nx">@progP</span><span class="p">.</span><span class="nx">block</span><span class="o">=</span><span class="nx">f</span><span class="p">.</span><span class="nx">code</span>
+          <span class="nx">@currArgs</span><span class="p">[</span><span class="nx">arg</span><span class="p">]</span><span class="o">=</span><span class="nx">@stack</span><span class="p">.</span><span class="nx">pop</span><span class="p">()</span> <span class="k">for</span> <span class="nx">arg</span><span class="p">,</span> <span class="nx">val</span> <span class="k">of</span> <span class="nx">f</span><span class="p">.</span><span class="nx">args</span>
+        <span class="p">)</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&quot;pushed entry current code&quot;</span><span class="p">,</span><span class="nx">@currCode</span>
+      <span class="k">else</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;trying to search in lib&#39;</span>
+        <span class="nv">f = </span><span class="nx">diskotekLib</span><span class="o">?</span><span class="p">[</span><span class="nx">name</span><span class="p">]</span> <span class="o">?</span>  <span class="kc">null</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>throw new Error("no function with the name of"+name)</p></div></div><div class="code"><div class="wrapper">        <span class="k">if</span> <span class="nx">f</span>
+          <span class="nx">cf</span><span class="o">=</span><span class="nx">f</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="nx">@stack</span><span class="p">)</span>
+          <span class="nx">@currCode</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">cf</span><span class="p">)</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'> currCode   ()->
+    argsSI=@stack.length-@currArgs.length and diskotekLib )(name)</span></p></div></div><div class="code"><div class="wrapper">          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;method %s from lib just inserted in code&#39;</span><span class="p">,</span> <span class="nx">name</span>
+        <span class="k">else</span>
+          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;method %s not found&#39;</span><span class="p">,</span> <span class="nx">name</span>
+
+    <span class="nv">identFound : </span><span class="nf">(name) =&gt;</span>
+      <span class="vi">@currIdent = </span><span class="nx">name</span>
+    <span class="nv">accessor: </span><span class="nf">(name) =&gt;</span>
+      <span class="k">if</span> <span class="nx">@currIdent</span> <span class="o">is</span> <span class="s">&#39;memory&#39;</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;accessor mem %s&#39;</span><span class="p">,</span> <span class="nx">name</span>
+        <span class="c1">#@varAcc = @variables?.name</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">@variables</span>
+        <span class="k">if</span> <span class="nx">name</span> <span class="k">of</span> <span class="nx">@variables</span>
+          <span class="vi">@varAcc = </span><span class="nx">@variables</span><span class="p">[</span><span class="nx">name</span><span class="p">]</span>
+          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">@varAcc</span><span class="p">,</span><span class="s">&#39; is on&#39;</span>
+        <span class="k">else</span>
+          <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s">&#39;accessing memory with undefined variable&#39;</span><span class="p">)</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'> variables   name:name
+  value:0</span></p></div></div><div class="code"><div class="wrapper">      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">name</span>
+    <span class="nx">condition</span><span class="o">:</span><span class="nf">(term)=&gt;</span>
+      <span class="c1">#todo expand</span>
+
+      <span class="nx">@currCode</span><span class="p">.</span><span class="nx">push</span> <span class="p">(</span><span class="nf">(v)-&gt;</span>
+        <span class="k">return</span> <span class="p">()</span><span class="nf">-&gt;</span>
+          <span class="k">if</span> <span class="nx">@stack</span><span class="p">.</span><span class="nx">pop</span><span class="p">()</span> <span class="o">not</span> <span class="k">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">]</span>
+            <span class="nx">@stack</span><span class="p">.</span><span class="nx">push</span> <span class="kc">true</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;pushing to stack true&#39;</span>
+          <span class="k">else</span>
+            <span class="nx">@stack</span><span class="p">.</span><span class="nx">push</span> <span class="kc">false</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;pushing to stack false&#39;</span>
+      <span class="p">)(</span><span class="nx">term</span><span class="p">)</span>
+    <span class="nx">startWhileExpr</span><span class="o">:</span><span class="p">()</span><span class="o">=&gt;</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;while starts at % &#39;</span><span class="p">,</span><span class="vi">@whileExpStart = </span><span class="nx">@currCode</span><span class="p">.</span><span class="nx">length</span>
+
+
+
+    <span class="nv">startWhile: </span><span class="p">()</span><span class="o">=&gt;</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;while length %s&#39;</span><span class="p">,</span>
+      <span class="vi">@whileExpLength = </span><span class="nx">@currCode</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="nx">@whileExpStart</span>
+
+      <span class="nx">@blockStack</span><span class="p">.</span><span class="nx">push</span> <span class="nx">@currCode</span>
+      <span class="vi">@currCode = </span><span class="p">[]</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;start while&#39;</span>
+    <span class="nv">endWhile: </span><span class="p">()</span><span class="o">=&gt;</span>
+      <span class="c1">#insert condition testing</span>
+
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;code after while &#39;</span><span class="p">,</span> <span class="nx">@currCode</span>
+      <span class="c1">#insert loop</span>
+      <span class="c1">#-1</span>
+      <span class="c1">#-2</span>
+      <span class="c1">#-</span>
+      <span class="nx">@currCode</span><span class="p">.</span><span class="nx">push</span> <span class="p">(</span><span class="nf">(l)-&gt;</span>
+        <span class="p">()</span><span class="nf">-&gt;</span>
+          <span class="c1">#s = @stack.pop()</span>
+          <span class="c1">#console.log s</span>
+          <span class="c1">#if s is off</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>console.log 'jumping over while block'</p></div></div><div class="code"><div class="wrapper">          <span class="nx">@progP</span><span class="p">.</span><span class="nx">c</span><span class="o">=</span><span class="nx">@progP</span><span class="p">.</span><span class="nx">c</span><span class="o">-</span><span class="nx">l</span><span class="o">-</span><span class="mi">1</span> <span class="c1">#1 for instr bellow</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>else
+ console.log 'into while'</p></div></div><div class="code"><div class="wrapper">      <span class="p">)(</span><span class="nx">@currCode</span><span class="p">.</span><span class="nx">length</span><span class="o">+</span><span class="nx">@whileExpLength</span><span class="p">)</span>
+
+      <span class="c1">#insert jump around on start of block</span>
+      <span class="nx">@currCode</span><span class="p">.</span><span class="nx">unshift</span> <span class="p">(</span><span class="nf">(l)-&gt;</span>
+        <span class="k">return</span> <span class="p">()</span><span class="nf">-&gt;</span>
+          <span class="nv">s = </span><span class="nx">@stack</span><span class="p">.</span><span class="nx">pop</span><span class="p">()</span>
+          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">s</span>
+          <span class="k">if</span> <span class="nx">s</span> <span class="o">is</span> <span class="mi">0</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;jumping over if block for &#39;</span><span class="p">,</span><span class="nx">l</span>
+            <span class="nx">@progP</span><span class="p">.</span><span class="nx">c</span><span class="o">=</span><span class="nx">@progP</span><span class="p">.</span><span class="nx">c</span><span class="o">+</span><span class="nx">l</span>
+            <span class="c1">#-1 because c is incremented in &quot;next&quot; f</span>
+            <span class="c1">#-1 for this intr</span>
+          <span class="k">else</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;into if&#39;</span>
+      <span class="p">)(</span><span class="nx">@currCode</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span>
+
+      <span class="c1">#restore prev block</span>
+      <span class="vi">@oldCode = </span><span class="nx">@blockStack</span><span class="p">.</span><span class="nx">pop</span><span class="p">()</span>
+
+      <span class="c1">#append current code to prev block</span>
+      <span class="nx">@oldCode</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">..</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="nx">@currCode</span>
+
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;code after while &#39;</span><span class="p">,</span> <span class="nx">@oldCode</span>
+      <span class="nx">@currCode</span><span class="o">=</span><span class="nx">@oldCode</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;end while&#39;</span><span class="p">,</span> <span class="nx">@blockStack</span>
+
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;end while&#39;</span>
+    <span class="nx">opFound</span><span class="o">:</span><span class="nf">(op)=&gt;</span>
+      <span class="k">switch</span> <span class="nx">op</span>
+        <span class="k">when</span> <span class="nx">@plus</span>
+          <span class="nx">@currCode</span><span class="p">.</span><span class="nx">push</span> <span class="p">()</span><span class="nf">-&gt;</span>
+            <span class="nv">v1 = </span><span class="nx">@stack</span><span class="p">.</span><span class="nx">pop</span><span class="p">()</span>
+            <span class="nv">v2 = </span><span class="nx">@stack</span><span class="p">.</span><span class="nx">pop</span><span class="p">()</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;adding %s + %s&#39;</span><span class="p">,</span><span class="nx">v1</span><span class="p">,</span><span class="nx">v2</span>
+            <span class="nx">@stack</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">v2</span><span class="o">+</span><span class="nx">v1</span><span class="p">)</span>
+        <span class="k">when</span> <span class="nx">@minus</span>
+          <span class="nx">@currCode</span><span class="p">.</span><span class="nx">push</span> <span class="p">()</span><span class="nf">-&gt;</span>
+            <span class="nv">v1 = </span><span class="nx">@stack</span><span class="p">.</span><span class="nx">pop</span><span class="p">()</span>
+            <span class="nv">v2 = </span><span class="nx">@stack</span><span class="p">.</span><span class="nx">pop</span><span class="p">()</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;adding %s - %s&#39;</span><span class="p">,</span><span class="nx">v2</span><span class="p">,</span><span class="nx">v1</span>
+            <span class="nx">@stack</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">v2</span><span class="o">-</span><span class="nx">v1</span><span class="p">)</span>
+        <span class="k">when</span> <span class="nx">@div</span>
+          <span class="nx">@currCode</span><span class="p">.</span><span class="nx">push</span> <span class="p">()</span><span class="nf">-&gt;</span>
+            <span class="nv">v1 = </span><span class="nx">@stack</span><span class="p">.</span><span class="nx">pop</span><span class="p">()</span>
+            <span class="nv">v2 = </span><span class="nx">@stack</span><span class="p">.</span><span class="nx">pop</span><span class="p">()</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;adding %s * %s&#39;</span><span class="p">,</span><span class="nx">v1</span><span class="p">,</span><span class="nx">v2</span>
+            <span class="nx">@stack</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">v2</span><span class="o">*</span><span class="nx">v1</span><span class="p">)</span>
+        <span class="k">when</span> <span class="nx">@mul</span>
+          <span class="nx">@currCode</span><span class="p">.</span><span class="nx">push</span> <span class="p">()</span><span class="nf">-&gt;</span>
+            <span class="nv">v1 = </span><span class="nx">@stack</span><span class="p">.</span><span class="nx">pop</span><span class="p">()</span>
+            <span class="nv">v2 = </span><span class="nx">@stack</span><span class="p">.</span><span class="nx">pop</span><span class="p">()</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;adding %s / %s&#39;</span><span class="p">,</span><span class="nx">v1</span><span class="p">,</span><span class="nx">v2</span>
+            <span class="nx">@stack</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">v2</span><span class="o">/</span><span class="nx">v1</span><span class="p">)</span>
+
+  <span class="c1">##</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><pre><code> 0 0
+</code></pre>
+
+<p>0 0</p></div></div><div class="code"><div class="wrapper">  <span class="c1">#0</span>
+    <span class="nx">termExprFound</span><span class="o">:</span><span class="nf">(term)=&gt;</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;term expr found&#39;</span><span class="p">,</span> <span class="nx">term</span>
+      <span class="c1">#push terminal on stack</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>'string',
+'hdress',
+'id',
+'num',
+'faccess',</p></div></div><div class="code"><div class="wrapper">      <span class="nx">type</span><span class="o">=</span><span class="nx">term</span><span class="p">.</span><span class="nx">type</span>
+
+      <span class="k">switch</span> <span class="nx">type</span>
+        <span class="k">when</span> <span class="s">&quot;id&quot;</span>
+          <span class="k">if</span> <span class="nx">term</span><span class="p">.</span><span class="nx">val</span> <span class="k">of</span> <span class="nx">@diskotekLib</span><span class="p">.</span><span class="nx">registers</span> <span class="o">or</span> <span class="nx">term</span><span class="p">.</span><span class="nx">val</span> <span class="o">==</span><span class="s">&#39;memory&#39;</span>
+            <span class="c1">#@currCode.push ()</span>
+          <span class="k">else</span>
+            <span class="nx">@currCode</span><span class="p">.</span><span class="nx">push</span> <span class="p">(</span><span class="nf">(v)-&gt;</span>
+              <span class="k">return</span> <span class="p">()</span><span class="nf">-&gt;</span>
+                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;pushing variable %s in vars = %s&#39;</span><span class="p">,</span> <span class="nx">v</span><span class="p">,</span><span class="nx">@variables</span><span class="p">[</span><span class="nx">v</span><span class="p">]</span><span class="o">?</span><span class="p">.</span><span class="nx">value</span><span class="o">?</span>
+                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;in args = &#39;</span><span class="p">,</span> <span class="nx">@currArgs</span><span class="o">?</span><span class="p">[</span><span class="nx">v</span><span class="p">]</span>
+                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">@currArgs</span>
+                <span class="nx">@stack</span><span class="p">.</span><span class="nx">push</span>  <span class="nx">@currArgs</span><span class="o">?</span><span class="p">[</span><span class="nx">v</span><span class="p">]</span> <span class="o">?</span> <span class="nx">@variables</span><span class="p">[</span><span class="nx">v</span><span class="p">]</span><span class="o">?</span><span class="p">.</span><span class="nx">value</span><span class="o">?</span>
+            <span class="p">)(</span><span class="nx">term</span><span class="p">.</span><span class="nx">val</span><span class="p">)</span>
+        <span class="k">when</span> <span class="s">&#39;num&#39;</span>
+
+          <span class="nx">@currCode</span><span class="p">.</span><span class="nx">push</span> <span class="p">(</span><span class="nf">(v)-&gt;</span>
+            <span class="k">return</span> <span class="p">()</span><span class="nf">-&gt;</span>
+              <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;pushing term &#39;</span><span class="p">,</span><span class="nx">v</span>
+              <span class="nx">@stack</span><span class="p">.</span><span class="nx">push</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">v</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+          <span class="p">)(</span><span class="nx">term</span><span class="p">.</span><span class="nx">val</span><span class="p">)</span>
+        <span class="k">else</span>
+          <span class="k">if</span> <span class="o">not</span> <span class="nx">@functions</span><span class="p">[</span><span class="nx">term</span><span class="p">]</span>
+
+            <span class="nx">@currCode</span><span class="p">.</span><span class="nx">push</span> <span class="p">(</span><span class="nf">(v)-&gt;</span>
+              <span class="k">return</span> <span class="p">()</span><span class="nf">-&gt;</span>
+                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;pushing term &#39;</span><span class="p">,</span><span class="nx">v</span>
+                <span class="nx">@stack</span><span class="p">.</span><span class="nx">push</span> <span class="nx">v</span>
+            <span class="p">)(</span><span class="nx">term</span><span class="p">.</span><span class="nx">val</span><span class="p">)</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;current code after term push&#39;</span> <span class="p">,</span><span class="nx">@currCode</span>
+    <span class="nv">assignment: </span><span class="nf">(place ,val) =&gt;</span>
+
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;-------assign---------&#39;</span>
+
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;assignment of &#39;</span><span class="p">,</span> <span class="nx">val</span><span class="p">,</span><span class="s">&#39; to &#39;</span> <span class="p">,</span><span class="nx">place</span>
+      <span class="k">if</span> <span class="nx">place</span> <span class="o">is</span> <span class="s">&#39;memory&#39;</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;pushing memset val &#39;</span><span class="p">,</span> <span class="nx">val</span><span class="p">,</span><span class="nx">@varAcc</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">@varAcc</span>
+        <span class="nv">f = </span><span class="p">(</span><span class="nf">(valref) -&gt;</span>
+          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">diskotekLib</span>
+          <span class="p">()</span><span class="nf">-&gt;</span>
+            <span class="nv">val = </span><span class="nx">@stack</span><span class="p">.</span><span class="nx">pop</span><span class="p">()</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">val</span><span class="p">,</span><span class="nx">valref</span><span class="p">.</span><span class="nx">value</span>
+            <span class="nx">@diskotekLib</span><span class="p">.</span><span class="nx">memset</span><span class="p">(</span><span class="nx">valref</span><span class="p">.</span><span class="nx">value</span> <span class="p">,</span> <span class="nx">val</span><span class="p">)</span>
+        <span class="p">)(</span><span class="nx">@varAcc</span><span class="p">)</span>
+
+        <span class="nx">@currCode</span><span class="p">.</span><span class="nx">push</span> <span class="nx">f</span>
+      <span class="k">else</span> <span class="k">if</span> <span class="nx">place</span> <span class="k">of</span> <span class="nx">@diskotekLib</span><span class="p">.</span><span class="nx">registers</span>
+
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;pushing reg val &#39;</span><span class="p">,</span> <span class="nx">val</span><span class="p">,</span><span class="nx">@varAcc</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">@varAcc</span>
+        <span class="nv">f = </span><span class="p">(</span><span class="nf">(valref) -&gt;</span>
+          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">diskotekLib</span>
+          <span class="p">()</span><span class="nf">-&gt;</span>
+            <span class="nv">val = </span><span class="nx">@stack</span><span class="p">.</span><span class="nx">pop</span><span class="p">()</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">val</span><span class="p">,</span><span class="nx">valref</span><span class="p">.</span><span class="nx">value</span>
+            <span class="nx">@diskotekLib</span><span class="p">.</span><span class="nx">regset</span><span class="p">(</span><span class="nx">valref</span> <span class="p">,</span> <span class="nx">val</span><span class="p">)</span>
+        <span class="p">)(</span><span class="nx">place</span><span class="p">)</span>
+
+        <span class="nx">@currCode</span><span class="p">.</span><span class="nx">push</span> <span class="nx">f</span>
+      <span class="k">else</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&quot;rhs------&quot;</span><span class="p">,</span> <span class="nx">val</span>
+        <span class="c1">#this after this place will be in variables</span>
+        <span class="k">if</span> <span class="nx">place</span> <span class="k">of</span> <span class="nx">@variables</span>
+          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;curr ident of var&#39;</span>
+        <span class="k">else</span>
+          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s">&#39;currIdent not of var its initialisation&#39;</span><span class="p">)</span>
+          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;vars&#39;</span><span class="p">,</span> <span class="nx">@variables</span>
+          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;adding to vars&#39;</span>
+          <span class="nx">@variables</span><span class="p">[</span><span class="nx">place</span><span class="p">]</span> <span class="o">=</span>
+            <span class="nx">name</span><span class="o">:</span><span class="nx">place</span>
+            <span class="nx">value</span><span class="o">:</span><span class="mi">0</span>
+
+        <span class="k">if</span> <span class="nx">val</span><span class="p">.</span><span class="nx">val</span> <span class="o">is</span> <span class="s">&#39;memory&#39;</span>
+          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;rhs is memory&#39;</span><span class="p">,</span><span class="nx">@varAcc</span>
+
+          <span class="c1">#insert instruction for reading memory</span>
+          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&quot;read memory instruction&quot;</span><span class="p">,</span><span class="nx">val</span><span class="p">,</span><span class="nx">@varAcc</span>
+          <span class="nv">f = </span><span class="p">(</span><span class="nf">(valref) -&gt;</span>
+
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;setting to %s&#39;</span><span class="p">,</span>  <span class="nx">val</span>
+            <span class="k">return</span> <span class="p">()</span><span class="nf">-&gt;</span>
+              <span class="nx">@diskotekLib</span><span class="p">.</span><span class="nx">readmem</span><span class="p">(</span><span class="nx">valref</span><span class="p">.</span><span class="nx">value</span><span class="p">)</span>
+          <span class="p">)(</span><span class="nx">@variables</span><span class="p">[</span><span class="nx">@varAcc</span><span class="p">.</span><span class="nx">name</span><span class="p">])</span>
+          <span class="nx">@currCode</span><span class="p">.</span><span class="nx">push</span> <span class="nx">f</span>
+          <span class="c1">#store read result in lhs</span>
+          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;inserting store inst&#39;</span><span class="p">,</span><span class="nx">place</span>
+          <span class="nv">f = </span><span class="p">(</span><span class="nf">(valref) -&gt;</span>
+
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;setting to %s&#39;</span><span class="p">,</span>  <span class="nx">val</span>
+            <span class="k">return</span> <span class="p">()</span><span class="nf">-&gt;</span>
+              <span class="nv">r = </span><span class="nx">@stack</span><span class="p">.</span><span class="nx">pop</span><span class="p">()</span>
+              <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;assignment result is&#39;</span><span class="p">,</span> <span class="nx">r</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>if val is 'memory'</p></div></div><div class="code"><div class="wrapper">              <span class="c1">#valref = diskotekLib.readmem(@varAcc.value)</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>else</p></div></div><div class="code"><div class="wrapper">              <span class="nx">valref</span><span class="p">.</span><span class="nx">value</span><span class="o">=</span><span class="nx">r</span>
+          <span class="p">)(</span><span class="nx">@variables</span><span class="p">[</span><span class="nx">place</span><span class="p">])</span>
+          <span class="nx">@currCode</span><span class="p">.</span><span class="nx">push</span> <span class="nx">f</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="nx">val</span><span class="p">.</span><span class="nx">val</span> <span class="k">of</span> <span class="nx">@diskotekLib</span><span class="p">.</span><span class="nx">registers</span>
+
+          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;rhs reg pushing reg val &#39;</span><span class="p">,</span> <span class="nx">val</span><span class="p">,</span><span class="nx">@varAcc</span>
+          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">@varAcc</span>
+          <span class="nv">f = </span><span class="p">(</span><span class="nf">(valref) -&gt;</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">diskotekLib</span>
+            <span class="p">()</span><span class="nf">-&gt;</span>
+              <span class="nv">val = </span><span class="nx">@stack</span><span class="p">.</span><span class="nx">pop</span><span class="p">()</span>
+              <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">val</span><span class="p">,</span><span class="nx">valref</span><span class="p">.</span><span class="nx">value</span>
+              <span class="nx">@diskotekLib</span><span class="p">.</span><span class="nx">regread</span><span class="p">(</span><span class="nx">valref</span> <span class="p">,</span> <span class="nx">val</span><span class="p">)</span>
+          <span class="p">)(</span><span class="nx">val</span><span class="p">)</span>
+
+          <span class="nx">@currCode</span><span class="p">.</span><span class="nx">push</span> <span class="nx">f</span>
+
+        <span class="k">else</span>
+          <span class="c1">#if rhs not memory</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'> variables   f = ((valref) -></p>
+
+<pre><code>console.log 'setting to %s',  val
+return ()-&gt;
+</code></pre>
+
+<p>if val is 'memory'
+      #valref = diskotekLib.readmem(@varAcc.value)
+else
+      valref = val
+  )(@variables[val].value)</p>
+
+<p>console.log 'function to b',f
+else</span></p></div></div><div class="code"><div class="wrapper">          <span class="nv">f = </span><span class="p">(</span><span class="nf">(valref) -&gt;</span>
+
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;setting to %s&#39;</span><span class="p">,</span>  <span class="nx">val</span>
+            <span class="k">return</span> <span class="p">()</span><span class="nf">-&gt;</span>
+              <span class="nv">r = </span><span class="nx">@stack</span><span class="p">.</span><span class="nx">pop</span><span class="p">()</span>
+              <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;assignment result is&#39;</span><span class="p">,</span> <span class="nx">r</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>if val is 'memory'</p></div></div><div class="code"><div class="wrapper">              <span class="c1">#valref = diskotekLib.readmem(@varAcc.value)</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>else</p></div></div><div class="code"><div class="wrapper">              <span class="nx">valref</span><span class="p">.</span><span class="nx">value</span><span class="o">=</span><span class="nx">r</span>
+
+          <span class="p">)(</span><span class="nx">@variables</span><span class="p">[</span><span class="nx">place</span><span class="p">])</span>
+
+          <span class="nx">@currCode</span><span class="p">.</span><span class="nx">push</span> <span class="p">(</span><span class="nx">f</span><span class="p">)</span></div></div></div><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'> variables     if val is 'memory'
+      console.log 'rhs is memory', currCode     else, and currIdent         return ()->
+          valref = val
+      )(@variables[@currIdent].value)</span></p></div></div><div class="code"><div class="wrapper">      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;setting %s to %s&#39;</span><span class="p">,</span> <span class="nx">@currIdent</span><span class="p">,</span> <span class="nx">val</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;----------end assign-----------&#39;</span>
+
+    <span class="nv">ifSStack: </span><span class="p">[]</span>
+    <span class="nx">currElse</span><span class="o">:</span><span class="kc">null</span>
+    <span class="nx">elseSStack</span><span class="o">:</span><span class="p">[]</span>
+    <span class="nx">currIf</span><span class="o">:</span><span class="kc">null</span>
+    <span class="nx">oldCCode</span><span class="o">:</span><span class="kc">null</span>
+    <span class="nx">blockStack</span><span class="o">:</span><span class="p">[]</span>
+    <span class="nx">startIf</span><span class="o">:</span><span class="p">()</span><span class="o">=&gt;</span>
+
+      <span class="c1">#make new block</span>
+      <span class="c1">#old code should be pushed in block stack</span>
+      <span class="nx">@blockStack</span><span class="p">.</span><span class="nx">push</span> <span class="nx">@currCode</span>
+      <span class="vi">@currCode = </span><span class="p">[]</span>
+
+
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;start if&#39;</span><span class="p">,</span> <span class="nx">@blockStack</span>
+    <span class="nx">endIf</span><span class="o">:</span><span class="p">()</span><span class="o">=&gt;</span>
+
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;code after if &#39;</span><span class="p">,</span> <span class="nx">@currCode</span>
+      <span class="c1">#insert jump around on start of block</span>
+      <span class="nx">@currCode</span><span class="p">.</span><span class="nx">unshift</span> <span class="p">(</span><span class="nf">(l)-&gt;</span>
+        <span class="p">()</span><span class="nf">-&gt;</span>
+          <span class="nv">s = </span><span class="nx">@stack</span><span class="p">.</span><span class="nx">pop</span><span class="p">()</span>
+          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">s</span>
+          <span class="k">if</span> <span class="nx">s</span> <span class="o">is</span> <span class="kc">off</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;jumping over if block&#39;</span>
+            <span class="nx">@progP</span><span class="p">.</span><span class="nx">c</span><span class="o">=</span><span class="nx">@progP</span><span class="p">.</span><span class="nx">c</span><span class="o">+</span><span class="nx">l</span>
+          <span class="k">else</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;into if&#39;</span>
+      <span class="p">)(</span><span class="nx">@currCode</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span>
+
+      <span class="c1">#restore prev block</span>
+      <span class="vi">@oldCode = </span><span class="nx">@blockStack</span><span class="p">.</span><span class="nx">pop</span><span class="p">()</span>
+
+      <span class="c1">#append current code to prev block</span>
+      <span class="nx">@oldCode</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">..</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="nx">@currCode</span>
+
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;code after if &#39;</span><span class="p">,</span> <span class="nx">@oldCode</span>
+      <span class="nx">@currCode</span><span class="o">=</span><span class="nx">@oldCode</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;end if&#39;</span><span class="p">,</span> <span class="nx">@blockStack</span>
+    <span class="nx">startElse</span><span class="o">:</span><span class="p">()</span><span class="o">=&gt;</span>
+
+      <span class="c1">#make new block save old one</span>
+      <span class="nx">@blockStack</span><span class="p">.</span><span class="nx">push</span> <span class="nx">@currCode</span>
+      <span class="vi">@currCode = </span><span class="p">[]</span>
+
+
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;start else&#39;</span><span class="p">,</span> <span class="nx">@blockStack</span>
+    <span class="nx">endElse</span><span class="o">:</span><span class="p">()</span><span class="o">=&gt;</span>
+
+      <span class="c1">#insert jump around at the end of the if block</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">@blockStack</span><span class="p">,</span><span class="nx">@blockStack</span><span class="p">[</span><span class="nx">@blockStack</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+      <span class="p">(</span><span class="nx">@blockStack</span><span class="p">[</span><span class="nx">@blockStack</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">]).</span><span class="nx">push</span> <span class="p">(</span><span class="nf">(l)-&gt;</span>
+        <span class="p">()</span><span class="nf">-&gt;</span>
+          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;jumping over else block&#39;</span>
+          <span class="nx">@progP</span><span class="p">.</span><span class="nx">c</span><span class="o">=</span><span class="nx">@progP</span><span class="p">.</span><span class="nx">c</span><span class="o">+</span><span class="nx">l</span>
+      <span class="p">)(</span><span class="nx">@currCode</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span>
+      <span class="c1">#restore prev block</span>
+      <span class="vi">@oldCode = </span><span class="nx">@blockStack</span><span class="p">.</span><span class="nx">pop</span><span class="p">()</span>
+
+      <span class="c1">#append current code to prev block</span>
+      <span class="nx">@oldCode</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">..</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="nx">@currCode</span>
+      <span class="nx">@currCode</span><span class="o">=</span><span class="nx">@oldCode</span>
+
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;end else&#39;</span><span class="p">,</span> <span class="nx">@blockStack</span>
+
+    <span class="nx">cmdToSend</span><span class="o">:</span><span class="s">&#39;&#39;</span>
+    <span class="nx">cmdArr</span><span class="o">:</span><span class="p">[]</span>
+    <span class="nv">addIDENTI: </span><span class="nf">(name)=&gt;</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;push identi &#39;</span><span class="p">,</span> <span class="nx">name</span>
+      <span class="c1">#v= @cmdArr.pop().v</span>
+      
+      <span class="c1">#@cmdArr.push type:v:v[0..-2]</span>
+      <span class="nx">@cmdArr</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">type</span><span class="o">:</span><span class="s">&#39;id&#39;</span><span class="p">,</span><span class="nx">v</span><span class="o">:</span><span class="nx">name</span><span class="p">[</span><span class="mi">1</span><span class="p">..</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span>
+    <span class="nv">addCMD: </span><span class="nf">(name)=&gt;</span>
+      <span class="k">if</span> <span class="nx">name</span><span class="p">[</span><span class="nx">name</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="s">&#39; &#39;</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;dsfdsf :&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="nx">name</span><span class="o">=</span><span class="nx">name</span><span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;push cmd &#39;</span><span class="p">,</span> <span class="nx">name</span>
+      <span class="nx">@cmdArr</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">type</span><span class="o">:</span><span class="s">&#39;str&#39;</span><span class="p">,</span><span class="nx">v</span><span class="o">:</span><span class="nx">name</span><span class="p">)</span>
+    <span class="nx">sendCMD</span><span class="o">:</span><span class="nf">(cmd)-&gt;</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;sendCMD &#39;</span><span class="p">,</span> <span class="nx">cmd</span><span class="p">,</span> <span class="nx">@cmdArr</span>
+      <span class="nx">@currCode</span><span class="p">.</span><span class="nx">push</span> <span class="p">(</span><span class="nf">(v,cmdArr)-&gt;</span>
+        <span class="p">()</span><span class="nf">-&gt;</span>
+          <span class="nx">$this</span><span class="o">=</span><span class="k">this</span>
+          <span class="nv">cmdArrE = </span><span class="nx">cmdArr</span><span class="p">.</span><span class="nx">map</span> <span class="nf">(v,i,l)-&gt;</span>
+            <span class="k">if</span> <span class="nx">v</span><span class="p">.</span><span class="nx">type</span> <span class="o">==</span><span class="s">&#39;id&#39;</span>
+              <span class="nx">$this</span><span class="p">.</span><span class="nx">variables</span><span class="p">[</span><span class="nx">v</span><span class="p">.</span><span class="nx">v</span><span class="p">].</span><span class="nx">value</span>
+            <span class="k">else</span>
+              <span class="nx">v</span><span class="p">.</span><span class="nx">v</span>
+          <span class="nx">@diskotekLib</span><span class="p">.</span><span class="nx">sendCMD</span> <span class="nx">cmdArrE</span>
+        <span class="p">)(</span><span class="nx">cmd</span><span class="p">,</span><span class="nx">@cmdArr</span><span class="p">.</span><span class="nx">slice</span><span class="p">())</span>
+    <span class="nx">end</span><span class="o">:</span><span class="nf">-&gt;</span>
+      <span class="nx">@execCode</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">..</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="nx">@currCode</span>
+
+    <span class="nx">dumpCode</span><span class="o">:</span><span class="nf">-&gt;</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;---------code-----------&#39;</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">dir</span> <span class="nx">@execCode</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;--------------------&#39;</span>
+    <span class="nv">dumpVars: </span><span class="nf">-&gt;</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;---------vars-----------&#39;</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">dir</span> <span class="nx">@variables</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;--------------------&#39;</span>
+
+  <span class="k">class</span> <span class="nx">DiskotekStackMachine</span>
+    <span class="vi">@code: </span> <span class="p">[]</span>
+    <span class="vi">@stack: </span><span class="p">[]</span>
+
+
+
+  <span class="k">class</span> <span class="nx">Runner</span>
+    <span class="nv">constructor: </span><span class="nf">(generator) -&gt;</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;constructing runner&#39;</span>
+      <span class="vi">@progP = </span><span class="nx">generator</span><span class="p">.</span><span class="nx">progP</span>
+      <span class="vi">@stack = </span><span class="nx">generator</span><span class="p">.</span><span class="nx">stack</span>
+      <span class="vi">@variables = </span><span class="nx">generator</span><span class="p">.</span><span class="nx">variables</span>
+      <span class="vi">@execCode = </span><span class="nx">generator</span><span class="p">.</span><span class="nx">execCode</span>
+      <span class="vi">@functions = </span><span class="nx">generator</span><span class="p">.</span><span class="nx">functions</span>
+      <span class="vi">@progP.block = </span><span class="nx">generator</span><span class="p">.</span><span class="nx">execCode</span>
+      <span class="vi">@diskotekLib = </span><span class="nx">diskotekLib</span>
+      <span class="nx">@diskotekLib</span><span class="p">.</span><span class="nx">vm</span><span class="o">=</span><span class="k">this</span>
+      <span class="vi">@currArgs = </span><span class="p">{}</span>
+    <span class="nx">stack</span><span class="o">:</span><span class="p">[]</span>
+    <span class="nx">variables</span><span class="o">:</span><span class="p">[]</span>
+    <span class="nx">execCode</span><span class="o">:</span><span class="p">[]</span>
+    <span class="nx">functions</span><span class="o">:</span><span class="p">{}</span>
+    <span class="c1">#this will be like ip</span>
+    <span class="nx">currArgs</span><span class="o">:</span><span class="p">{}</span>
+    <span class="nx">callStack</span><span class="o">:</span><span class="p">[]</span>
+    <span class="nx">resume</span><span class="o">:</span><span class="p">()</span><span class="nf">-&gt;</span>
+
+    <span class="nv">next: </span><span class="p">()</span> <span class="o">=&gt;</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;---intsr---&#39;</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;c = &#39;</span><span class="o">+</span> <span class="nx">@progP</span><span class="p">.</span><span class="nx">c</span>
+      <span class="nv">ni = </span><span class="nx">@progP</span><span class="p">.</span><span class="nx">block</span><span class="p">[</span><span class="nx">@progP</span><span class="p">.</span><span class="nx">c</span><span class="o">++</span><span class="p">]</span>
+
+      <span class="nv">r = </span><span class="nx">ni</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">)()</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;result of a f call&#39;</span><span class="p">,</span><span class="nx">r</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;stack dump after instr&#39;</span><span class="p">,</span> <span class="nx">@stack</span>
+      <span class="k">if</span> <span class="nx">r</span><span class="o">?</span><span class="p">.</span><span class="nx">memaddres</span><span class="o">?</span> <span class="o">or</span> <span class="nx">r</span><span class="o">?</span><span class="p">.</span><span class="nx">stop</span><span class="o">?</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;exiting for reading &#39;</span>
+        <span class="k">return</span> <span class="mi">2</span>
+
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;---end intsr---&#39;</span>
+      <span class="mi">1</span> <span class="k">if</span> <span class="nx">@progP</span><span class="p">.</span><span class="nx">block</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="nx">@progP</span><span class="p">.</span><span class="nx">c</span>
+    <span class="nv">run: </span><span class="p">()</span> <span class="o">=&gt;</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;started to run&#39;</span>
+      <span class="k">while</span> <span class="p">(</span><span class="nx">v</span><span class="o">=</span><span class="nx">@next</span><span class="p">())</span> <span class="o">is</span> <span class="mi">1</span>
+        <span class="nx">@progP</span><span class="p">.</span><span class="nx">block</span><span class="p">[</span><span class="nx">@progP</span><span class="p">.</span><span class="nx">c</span><span class="p">]</span>
+
+    <span class="k">continue</span><span class="o">:</span><span class="p">()</span><span class="o">=&gt;</span>
+      <span class="nx">run</span><span class="p">()</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>beeScript.yy=new DiskotekStackMGenerator()
+rn = new Runner beeScript.yy
+console.log(beeScript.parse(ex))
+beeScript.yy.end()
+beeScript.yy.dumpCode()
+beeScript.yy.dumpVars()</p></div></div><div class="code"><div class="wrapper">  <span class="c1">#rn.run()</span>
+  <span class="k">class</span> <span class="nx">Toolkit</span>
+    <span class="nx">constructor</span><span class="o">:</span><span class="nf">(options)-&gt;</span>
+      <span class="c1">#{@parser,@generator,@runner,@text}=options</span>
+      <span class="nx">@parser</span><span class="o">=</span><span class="nx">beeScript</span>
+      <span class="nx">@generator</span><span class="o">=</span><span class="k">new</span> <span class="nx">DiskotekStackMGenerator</span><span class="p">()</span>
+      <span class="nx">@parser</span><span class="p">.</span><span class="nx">yy</span><span class="o">=</span><span class="nx">@generator</span>
+      <span class="vi">@runner = </span><span class="k">new</span> <span class="nx">Runner</span> <span class="nx">beeScript</span><span class="p">.</span><span class="nx">yy</span>
+      <span class="vi">@text = </span><span class="nx">options</span><span class="o">?</span><span class="p">.</span><span class="nx">text</span> <span class="o">?</span> <span class="s">&#39;&#39;</span>
+    <span class="nx">generate</span><span class="o">:</span><span class="p">()</span><span class="o">=&gt;</span>
+      <span class="nx">@parser</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">@text</span><span class="p">)</span>
+      <span class="nx">@generator</span><span class="p">.</span><span class="nx">end</span><span class="p">()</span>
+    <span class="nx">run</span><span class="o">:</span><span class="p">()</span><span class="o">=&gt;</span>
+      <span class="nx">@runner</span><span class="p">.</span><span class="nx">run</span><span class="p">()</span>
+    <span class="k">continue</span><span class="o">:</span><span class="p">()</span><span class="o">=&gt;</span>
+      <span class="nx">@runner</span><span class="p">.</span><span class="nx">continue</span><span class="p">()</span>
+    <span class="nx">next</span><span class="o">:</span><span class="p">()</span><span class="o">=&gt;</span>
+      <span class="nx">@runner</span><span class="p">.</span><span class="nx">next</span><span class="p">()</span>
+    <span class="nx">command</span><span class="o">:</span><span class="p">()</span><span class="nf">-&gt;</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;command exec&#39;</span>
+  <span class="nv">t= </span><span class="k">new</span> <span class="nx">Toolkit</span><span class="p">()</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>t.text=ex
+t.generate()</p>
+
+<p>t.parser.yy.end()
+t.parser.yy.dumpCode()
+t.run()</p></div></div><div class="code"><div class="wrapper">  <span class="k">return</span> <span class="nx">t</span>
+  <span class="c1">#beeScript.yy.execCode[0]()</span>
+<span class="k">if</span> <span class="nx">module</span><span class="o">?</span>
+  <span class="nv">beeScript = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;./beeScript&#39;</span><span class="p">).</span><span class="nx">parser</span>
+
+  <span class="nv">Compiler = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;./compiler&#39;</span><span class="p">)</span>
+  <span class="nx">t</span><span class="o">=</span><span class="nx">init</span><span class="p">(</span><span class="nx">beeScript</span><span class="p">,</span><span class="nx">Compiler</span><span class="p">)</span>
+  <span class="nx">t</span><span class="p">.</span><span class="nx">text</span><span class="o">=</span><span class="nx">ex</span>
+  <span class="nx">t</span><span class="p">.</span><span class="nx">generate</span><span class="p">()</span>
+  <span class="nx">t</span><span class="p">.</span><span class="nx">run</span><span class="p">()</span>
+<span class="k">else</span> <span class="k">if</span> <span class="nx">requirejs</span><span class="o">?</span>
+  <span class="nx">define</span> <span class="p">[</span><span class="s">&#39;./beeScript&#39;</span><span class="p">,</span><span class="s">&#39;./compiler&#39;</span><span class="p">],</span><span class="nx">init</span></div></div></div></div></body></html>

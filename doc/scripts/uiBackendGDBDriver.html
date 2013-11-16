@@ -1,0 +1,96 @@
+<!DOCTYPE html><html lang="en"><head><title>scripts/uiBackendGDBDriver</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="scripts/uiBackendGDBDriver"><meta name="groc-project-path" content="app/scripts/uiBackendGDBDriver.coffee"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">app/scripts/uiBackendGDBDriver.coffee</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s">&#39;ldApp&#39;</span><span class="p">).</span><span class="nx">factory</span> <span class="s">&#39;DataDebug&#39;</span><span class="p">,[</span><span class="s">&#39;$rootScope&#39;</span><span class="p">,</span><span class="s">&#39;command&#39;</span><span class="p">,</span><span class="s">&#39;DataDisassemblyParsers&#39;</span><span class="p">,</span> <span class="nf">($rootScope,command,dataParsers) -&gt;</span>
+  <span class="nv">debugData =</span>
+    <span class="nx">arch</span><span class="o">:</span><span class="s">&#39;x86&#39;</span>
+
+    <span class="c1">#transforms command output recived from server into array of instructions</span>
+    <span class="nv">commands:</span>
+      <span class="nv">x86:</span>
+        <span class="nx">disassembly</span><span class="o">:</span><span class="s">&#39;disas /rm $eip-40,$eip+40&#39;</span><span class="c1">#$eip,$eip+40&#39;</span>
+      <span class="p">,</span>
+      <span class="nv">arm:</span>
+        <span class="nx">disassembly</span><span class="o">:</span><span class="s">&#39;disas /rm $pc-80,$pc+80&#39;</span>
+
+
+    <span class="nv">getDissasembly: </span><span class="p">()</span> <span class="nf">-&gt;</span>
+
+      <span class="nx">command</span><span class="p">.</span><span class="nx">commandExecO</span><span class="p">(</span>
+        <span class="nx">ptyPayload</span><span class="o">:</span><span class="nx">debugData</span><span class="p">.</span><span class="nx">commands</span><span class="p">[</span><span class="nx">debugData</span><span class="p">.</span><span class="nx">arch</span><span class="p">].</span><span class="nx">disassembly</span><span class="p">,</span>
+        <span class="nx">callback</span><span class="o">:</span><span class="nf">(data) -&gt;</span>
+          <span class="nx">debugData</span><span class="p">.</span><span class="nx">disassembly</span><span class="o">=</span><span class="nx">dataParsers</span><span class="p">[</span><span class="nx">debugData</span><span class="p">.</span><span class="nx">arch</span><span class="p">].</span><span class="nx">disassemblyParser</span><span class="p">(</span><span class="nx">data</span><span class="p">).</span><span class="nx">combined</span>
+      <span class="p">)</span>
+      <span class="nx">debugData</span><span class="p">.</span><span class="nx">__lookupGetter__</span><span class="p">(</span><span class="s">&quot;disassembly&quot;</span><span class="p">,</span> <span class="nf">(p) -&gt;</span>
+        <span class="k">return</span> <span class="nx">value</span>
+      <span class="p">)</span>
+      <span class="nx">obj</span><span class="p">.</span><span class="nx">callbackQueue</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">debugData</span><span class="p">.</span><span class="nx">dissasemblyCallback</span><span class="p">)</span>
+      <span class="nx">socket</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s">&#39;command&#39;</span><span class="p">,</span>  <span class="nv">ptyPayload: </span><span class="s">&#39;disas $pc-80,$pc+80&#39;</span> <span class="p">)</span>
+
+   <span class="nv">patch: </span><span class="nf">(thing) -&gt;</span>
+     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s">&#39;patch&#39;</span><span class="p">,</span><span class="nx">thing</span><span class="p">)</span>
+
+   <span class="nv">stepOver: </span><span class="p">()</span> <span class="nf">-&gt;</span>
+     <span class="nx">command</span><span class="p">.</span><span class="nx">commandExecO</span><span class="p">(</span><span class="nx">ptyPayload</span><span class="o">:</span><span class="s">&#39;ni&#39;</span><span class="p">)</span>
+
+     <span class="nx">debugData</span><span class="p">.</span><span class="nx">getDissasembly</span><span class="p">()</span>
+     <span class="nx">debugData</span><span class="p">.</span><span class="nx">getRegisterInfo</span><span class="p">()</span>
+
+   <span class="nv">getRegisterInfo: </span><span class="p">()</span> <span class="nf">-&gt;</span>
+     <span class="nx">command</span><span class="p">.</span><span class="nx">commandExecO</span><span class="p">(</span>
+       <span class="nv">callback:getRegInfoC = </span><span class="nf">(result) -&gt;</span>
+         <span class="nv">debugData.registers = </span><span class="nx">result</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">).</span><span class="nx">map</span><span class="p">(</span><span class="nf">(value) -&gt;</span>
+           <span class="nx">s</span><span class="o">=</span><span class="nx">value</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="sr">/(\w+)\s*(\w+)\s*(\w+)/</span><span class="p">)</span>
+           <span class="nx">name</span><span class="o">:</span><span class="nx">s</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+           <span class="nx">value1</span><span class="o">:</span><span class="nx">s</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+           <span class="nx">value2</span><span class="o">:</span><span class="nx">s</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+
+         <span class="p">)</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>if (<em>.pluck(debugData.registers,name:'eip').value1-</em>.pluck(debugData.registersNew,name:'eip').value1)</p></div></div><div class="code"><div class="wrapper">         <span class="nx">$rootScope</span><span class="p">.</span><span class="nx">$emit</span><span class="p">(</span><span class="s">&#39;debugDataLoaded&#39;</span><span class="p">)</span>
+       <span class="p">,</span>
+       <span class="nx">ptyPayload</span><span class="o">:</span><span class="s">&#39;info registers&#39;</span>
+     <span class="p">)</span>
+      <span class="c1">#debugData.callbackQueue.push()</span>
+
+      <span class="c1">#socket.emit(&#39;command&#39;,  ptyPayload: &#39;info registers&#39; )</span>
+
+    <span class="nv">setBreakpoint: </span><span class="nf">(address) -&gt;</span>
+      <span class="c1">#obj.callbackQueue.push(setBreakpointC = () -&gt; )</span>
+      <span class="nx">command</span><span class="p">.</span><span class="nx">commandExecO</span><span class="p">(</span>
+        <span class="nx">ptyPayload</span><span class="o">:</span><span class="s">&#39;break *&#39;</span> <span class="o">+</span> <span class="nx">address</span>
+      <span class="p">)</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>socket.emit('command',
+  ptyPayload: 'break *' + address
+)</p></div></div><div class="code"><div class="wrapper">    <span class="nv">removeBreakpoint: </span><span class="nf">(address) -&gt;</span>
+      <span class="nx">command</span><span class="p">.</span><span class="nx">commandExecO</span><span class="p">(</span>
+        <span class="nv">ptyPayload: </span><span class="s">&#39;clear *&#39;</span> <span class="o">+</span> <span class="nx">address</span>
+      <span class="p">)</span>
+
+    <span class="nv">infoBreakpoints: </span><span class="p">()</span> <span class="nf">-&gt;</span>
+      <span class="c1">#command.callbackQueue.push(</span>
+      <span class="nv">infoBreakpointsC = </span><span class="nf">(result) -&gt;</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">result</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">match</span><span class="p">(</span><span class="sr">/^No.*/</span><span class="p">))</span>
+        <span class="k">else</span>
+          <span class="nv">debugData.breakpoints = </span><span class="nx">result</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="nx">map</span><span class="p">(</span><span class="nf">(value) -&gt;</span>
+            <span class="nv">split = </span><span class="nx">value</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="sr">/\s*(\w+)\s*(\w+)\s*(\w+)\s*(\w+)\s*(\w*)\s*/</span><span class="p">)</span>
+            <span class="nx">num</span><span class="o">:</span><span class="nx">split</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="nx">type</span><span class="o">:</span><span class="nx">split</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="nx">disp</span><span class="o">:</span><span class="nx">split</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+            <span class="nx">enb</span><span class="o">:</span><span class="nx">split</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+            <span class="nx">address</span><span class="o">:</span><span class="nx">split</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+            <span class="nx">what</span><span class="o">:</span><span class="nx">split</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span>
+
+          <span class="p">)</span>
+          <span class="k">if</span><span class="p">(</span><span class="nx">debugData</span><span class="p">.</span><span class="nx">disassembly</span><span class="p">)</span>
+            <span class="nx">_</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">debugData</span><span class="p">.</span><span class="nx">breakpoints</span><span class="p">,</span><span class="nf">(value) -&gt;</span>
+              <span class="nv">elem = </span><span class="nx">_</span><span class="p">.</span><span class="nx">findWhere</span><span class="p">(</span><span class="nx">debugData</span><span class="p">.</span><span class="nx">disassembly</span><span class="p">,</span><span class="s">&#39;address&#39;</span><span class="o">:</span><span class="nx">value</span><span class="p">.</span><span class="nx">address</span><span class="p">)</span>
+              <span class="k">if</span><span class="p">(</span><span class="nx">elem</span><span class="p">)</span>
+                <span class="nv">indexDest = </span><span class="nx">_</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">debugData</span><span class="p">.</span><span class="nx">disassembly</span><span class="p">,</span><span class="nx">elem</span><span class="p">)</span>
+                <span class="k">if</span><span class="p">(</span><span class="nx">indexDest</span><span class="o">!=-</span><span class="mi">1</span><span class="p">)</span>
+                  <span class="nx">elem</span><span class="p">.</span><span class="nx">hasBreakpoint</span><span class="o">=</span><span class="kc">true</span>
+            <span class="p">)</span>
+        <span class="nx">$rootScope</span><span class="p">.</span><span class="nx">$emit</span><span class="p">(</span><span class="s">&#39;debugDataLoaded&#39;</span><span class="p">)</span>
+      <span class="nx">command</span><span class="p">.</span><span class="nx">commandExecO</span><span class="p">(</span>
+        <span class="nx">callback</span><span class="o">:</span><span class="nx">infoBreakpointsC</span><span class="p">,</span>
+        <span class="nx">ptyPayload</span><span class="o">:</span><span class="s">&#39;info break&#39;</span>
+      <span class="p">)</span>
+                                 <span class="c1">#)</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>socket.emit('command',
+ ptyPayload : 'info break'</p></div></div><div class="code"><div class="wrapper">      <span class="c1">#)</span>
+    <span class="k">return</span> <span class="nx">debugData</span>
+
+<span class="p">]</span></div></div></div></div></body></html>

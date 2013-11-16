@@ -29,7 +29,7 @@ var socket;
  * that are on display there
  * */
 angular.module('ldApp')
-  .controller('MainCtrl', function (command,$rootScope,$scope,$http,Data) {
+  .controller('MainCtrl', function (configState,command,$rootScope,$scope,$http,Data) {
     // linkify('a');
 
     $scope.data=Data;
@@ -39,8 +39,7 @@ angular.module('ldApp')
     $scope.commandExecL=function(cmnd,resultVariable,splice1,splice2){
      // $scope.result=cmnd;
       if(_.isFunction(resultVariable)){
-      
-          Data.callbackQueue.push(resultVariable);
+        Data.callbackQueue.push(resultVariable);
       }else{
         if(resultVariable){
           Data.callbackQueue.push(function putStuffinResultC() {
@@ -62,45 +61,65 @@ angular.module('ldApp')
      * this is targets name as observable
      * following code should change
      * */
+    $scope.recording=false;
     $scope.file=Data.sharedData.fileName;
+    $scope.configState=configState;
     $scope.sharedData=Data.sharedData;
     Data.scope=$scope;
-    
+    $scope.bWindows=[];
+    $scope.architecture =configState.architecture;
     /*
      * following scope functions just forward to functions on data module
      * */
+    $scope.recToggle = function(){
+      if ($scope.recording){
+        var v = configState.record.slice().join('\n');
+        configState.bWindows.push(v);
+        configState.record.length=0;
+        configState.recording=false;
+        $scope.recording=false;
+      }else{
+        configState.recording=true;
+        $scope.recording=true;
+      }
+
+
+    }
+    $scope.commandLoad = function(){
+      Data.debugData.arch='x86';
+      Data.status='running';
+      Data.loadCommand(configState.file,$scope.architecture)
+    }
     $scope.commandStart=function(){
-      Data.startCommand($scope.file);
+      Data.debugData.arch='x86';
+      Data.status='running';
+      Data.startCommand(configState.file,$scope.architecture);
     };
     $scope.commandStartVM=function() {
-      Data.startCommandVM($scope.file);
+      Data.startCommandVM(configState.file);
     };
     $scope.registerInfo = function() {
       Data.getRegisterInfo();
 
     };
     $scope.commandDissasemble = function() {
-      Data.disassemblyData.disassemble($scope.file);
+      Data.disassemblyData.disassemble(configState.file,$scope.architecture);
     };
     $scope.stop = function() {
       Data.stop();
+      Data.status='stopped';
     };
     $scope.stepOver = function  () {
-      command.commandExecO({ptyPayload:'ni'});
-      Data.debugData.getDissasembly();
-      Data.debugData.getRegisterInfo();
+      Data.debugData.stepOver();
     };
+
     $scope.cont = function  () {
-      command.commandExecO({ptyPayload:'c'});
-      Data.debugData.getDissasembly();
-      Data.debugData.getRegisterInfo();
-      Data.debugData.infoBreakpoints();
+      Data.debugData.cont();
     };
     $scope.stepInto = function  () {
-      command.commandExecO({ptyPayload:'si'});
-      Data.debugData.getDissasembly();
-      Data.debugData.getRegisterInfo();
+      Data.debugData.stepInto();
     };
+    
 
     $scope.command='';
     $scope.awesomeThings = [

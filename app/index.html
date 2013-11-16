@@ -15,6 +15,7 @@
         <link rel="stylesheet" href="styles/main.css">
         <link rel="stylesheet" href="bower_components/stroll/css/stroll.css">
 
+        <link rel="stylesheet" href="bower_components/ionicons/ionicons.css">
         <link rel="stylesheet" href="bower_components/jqueryuicss/index.css">
         <!-- endbuild -->
 </head>
@@ -32,19 +33,29 @@
  <div id="debugMenu" ng-controller="MainCtrl">
    <div id="status" >
      <div >
-       status: {{sharedData.dUI.statusLine}} 
+       status: {{data.status}} 
      </div>
      
    </div>  
+
    <div id="menuPanel">
       
      <div id="fileItem">
        <label for="name">name</label>
-       <INPUT type="TEXT" ng-model="sharedData.fileName" name="name" value="" id="name">
+       <INPUT type="TEXT" ng-model="configState.file" name="name" value="" id="name">
+       <label for="architectre">architecture</label>
+       <select name="architecture" ng-model="architecture" >
+         <option value="arm elf">arm elf</option>
+         <option value="x86 elf">x86 elf</option>
+         <option value="pe" disabled >pe</option>
+       </select>
        <a href="#/disas" ng-click="commandDissasemble()">disassemble</a>|
-       <a ng-click="commandStart('gdb-multiarch '+$scope.file)">start debugging</a>|
+
+       <a ng-click="commandLoad()">load file</a>|
+       <a ng-click="commandStart('gdb-multiarch '+$scope.configState.file)">start debugging</a>|
        <a ng-click="commandStartVM()">switch to vm</a>|
        <a ng-click="stop()">stop</a>
+       <a ng-click="recToggle()">{{recording?'stop rec':'start rec'}}</a>
      </div>
      <div id="controls">
        <a ng-click="cont()">run </a> 
@@ -73,23 +84,58 @@
    </div>
  </div>
 
- <div class="container" ng-view="">
+ <div id="container" ng-view="">
     
 
     
     
  </div>
 
-
+<div id="scriptingPanel" ng-controller="scriptsController">
+  <div id="newScript" class="icon-document" ng-click="newScript()"></div>
+  <span ng-repeat="w in bWindows track by $index">
+    <beditor >  </beditor>
+  </span>
+</div>
 </body>
+<template id="commandWindT">
+  <div >
+    <div>commandPanel</div>
+    <div>
+      <input type="text" size="10" ng-model="command">
+      <a ng-click="sendCommand(command)">sendCommand</a>&nbsp<a ng-click="clone()">new</a>&nbsp<a ng-click="destroy()">X</a>
+    </div>
+    <div ng-repeat="thing in things track by $index">{{thing}}</div>
+  </div>
+</template>
+<template id="newScriptWT">
+  <div class="scriptPanelWraper" draggable >
+    <div class="sMenu">
+
+      <div class="sm_save icon-ios7-download"></div>
+      <div class="sm_play icon-play"></div>
+      <div class="sm_stepOv icon-arrow-down-c" ng-click="stepOver()"></div>
+      <div class="sm_stepInto icon-arrow-graph-down-right"></div>
+      <div class="sm_discard icon-ios7-trash"></div>
+    </div>
+    <div class="scriptEditor" >
+    </div>
+    <div class="scriptOutput"></div>
+  </div>
+
+</template>
        <script src="bower_components/jquery/jquery.js"></script>
        <script src="http://localhost:8070/socket.io/socket.io.js"></script>
    
         <script src="bower_components/stroll/js/stroll.js"></script>
         <script src="bower_components/raphael/raphael.js"></script>
         <script src="bower_components/underscore/underscore.js"></script>
+        <script src="bower_components/requirejs/require.js"></script>
         <script src="bower_components/d3/d3.js"></script>
 
+        <!--
+        <script src="bacon.js/dist/Bacon.js"></script>
+        -->
         <script src="../flight.js"></script>
 
         <script type="text/javascript">
@@ -124,11 +170,15 @@
              <!-- build:js({.tmp,app}) scripts/scripts.js -->
         <script src="scripts/app.js"></script>
         <script src="scripts/controllers/mainMenuController.js"></script>
+        <script src="scripts/configState.js"></script>
+        <script src="scripts/state.js"></script>
+
+        <script src="scripts/controllers/scriptsController.js"></script>
         <script src="scripts/controllers/Ch.js"></script>
         <script src="scripts/controllers/debugController.js"></script>
         <script src="scripts/controllers/data.js"></script>
         <script src="scripts/directives/customDirectives.js"></script>
-        <script src="scripts/controllers/disas.js"></script>
+        <script src="scripts/controllers/disassemblyController.js"></script>
         <script src="scripts/controllers/chD.js"></script>
         <script src="scripts/controllers/command.js"></script>
 

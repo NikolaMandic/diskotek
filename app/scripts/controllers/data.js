@@ -7,8 +7,8 @@
  *
  */
 angular.module('ldApp')
-.factory('Data',['$rootScope','command','DataDebug','DataDisassembly',
-         function($rootScope,command,DataDebug,DataDisassembly){
+.factory('Data',['$rootScope','command','DataDebug','DataDisassembly','configState',
+         function($rootScope,command,DataDebug,DataDisassembly,configState){
   //gdb service
   var obj={
     debugData:DataDebug,
@@ -33,7 +33,8 @@ angular.module('ldApp')
 
   
 
-
+  //for debugging
+  window.data=obj;
   /*
    * this command will switch to vagrant directory and
    * check output of vagrant status if it's not created it will warn user
@@ -74,12 +75,31 @@ angular.module('ldApp')
    * and target remote command to connect to the emulator
    *
    * */
-  obj.startCommand = function (name) {
+  obj.loadCommand = function (name,architecture){
+
     command.commandExecO({
       msgType:'start',
-      payload:{name:name},
+      payload:{
+        name:name,
+        architecture:architecture,
+        initSteps:['set disassembly-flavor intel\n']
+      },
       callback:null
     });
+
+    obj.disassemblyData.disassemble(configState.file,configState.architecture);
+  }
+  obj.startCommand = function (name,architecture) {
+    command.commandExecO({
+      msgType:'start',
+      payload:{
+        name:name,
+        architecture:architecture,
+        initSteps:['set disassembly-flavor intel\n','break _start\n','run\n']
+      },
+      callback:null
+    });
+
     /*
     command.commandExecO({
       ptyPayload:'set arch arm'
@@ -103,14 +123,17 @@ angular.module('ldApp')
     command.commandExecO({
       ptyPayload:'detach',
       callback:function detachC(){
-      obj.debugData.disassembly=['detached'];
+      obj.debugData.status='detached';
       obj.debugData.registers=[];
       obj.data=[];
       }
     });
+    
     command.commandExecO({
-      ptyPayload:'quit'
+      ptyPayload:'quit',
+      callback:null
     });
+    
     //$scope.commandExecL('quit',null);
   }
   return obj;

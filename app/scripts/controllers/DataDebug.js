@@ -1,153 +1,113 @@
 
-angular.module('ldApp').factory('DataDebug',['$rootScope','command','DataDisassemblyParsers',
-                                function($rootScope,command,dataParsers){
- var debugData = {};
-  //transforms command output recived from server into array of instructions
-  debugData.dissasemblyCallback= function dissasemblyCallback(disassemblyRaw){
-    
-    var dissasembly= disassemblyRaw.slice(0,-1);
-    var b = [];
-    b.push([]);
-    var basicBlocks=[];
-    basicBlocks.push([]);
-
-    var disasArr = [];
-    var disasObjArr = [];
-    //bbBoundaryArr.push({from:0,to:0});
-    var boundaries=[];
-    var branchPreviousInst=false;
-
-    var branchArray=[];
-     _.each(dissasembly,function(value){
-      //detects disassembly line with => in it
-      var disasLineCurrent=/^\=\>\s*(.*):\s+(\w+)([^;]*)(;(.*))?$/;
-      //detects line from gdb output
-      var disasLine=/^\s*(.*):\s+(\w+)([^;]*)(;(.*))?$/;
-
-      var splitedInstruction;
-      var typeOfReg ;
-      var instObj ;
-      if(value.match(disasLineCurrent)){
-        splitedInstruction =  value.split(disasLineCurrent);
-        typeOfReg=1;
-        instObj ={
-          current:true,
-          address: splitedInstruction[1],
-          opcode:  splitedInstruction[2],
-          operands:splitedInstruction[3],
-          comment: splitedInstruction[4],
-        };
-      }else if(value.match(disasLine)){
-        splitedInstruction =  value.split(disasLine);
-        typeOfReg=2;
-        instObj ={
-          current:false,
-          address: splitedInstruction[1],
-          opcode:  splitedInstruction[2],
-          operands:splitedInstruction[3],
-          comment: splitedInstruction[4],
-          uppperBoundary:false,//true if it is upper boundary of basic block
-          downBoundary:false,//bottom boundary
-        };
-      }
-
-      if(splitedInstruction){
-        if (branchPreviousInst){
-          instObj.uppperBoundary=true;
-          boundaries.push(instObj);
-          branchPreviousInst=false;
-        }
-        if(splitedInstruction[2].match(/^b.*/)){
-          branchPreviousInst=true;
-          instObj.bottomBoundary=true;
-          boundaries.push(instObj);
-          branchArray.push(instObj);
-        }else{
-          if(boundaries.length===0){
-            instObj.uppperBoundary=true;
-            boundaries.push(instObj);
-          }
-        }
-        disasArr.push(splitedInstruction);
-        disasObjArr.push(instObj);
-
-      }else{
-
-      }
-
-
-    });
-   debugData.disassembly=disasObjArr;
-/*    
-    disassemblyData.sharedData.disasArr=disasObjArr;
-
-    //find instructions that are jumped on and put it in boundaries
-    _.each(branchArray,function(value){
-      var elem = _.findWhere(disasObjArr,{'address':value.operands.substring(1)});
-      if(elem){
-        var indexDest = _.indexOf(boundaries,elem);
-        if(indexDest===-1){
-          elem.up=true;
-          boundaries.push(elem);
-        }
-      }
-
-    });
-    var boundariesSorted=_.sortBy(boundaries,'address');
-    var boundaryArrC=0;
-    _.each(disasObjArr,function(value){
-      if(value===boundariesSorted[boundaryArrC]){
-        if(value.uppperBoundary===true){
-          basicBlocks.push([]);
-          basicBlocks[basicBlocks.length-1].push(value);
-
-        }
-        if(value.bottomBoundary===true){
-          basicBlocks[basicBlocks.length-1].push(value);
-        }
-        boundaryArrC+=1;
-
-      }else{
-        basicBlocks[basicBlocks.length-1].push(value);
-      }
-    });
-
-    disassemblyData.data=basicBlocks;
-*/
+angular.module('ldApp').factory('DataDebug',['$rootScope','command','DataDisassemblyParsers','configState',
+                                function($rootScope,command,dataParsers,configState){
+  var debugData = {
+    arch:'x86'
   };
- debugData.getDissasembly = function getDissasembly () {
-
+  //transforms command output recived from server into array of instructions
+  debugData.commands = {
+    x86:{
+      disassembly:'disas /rm $eip-40,$eip+40'//$eip,$eip+40'
+    },
+    arm:{
+      disassembly:'disas /rm $pc-80,$pc+80'
+    }
+  };
+  debugData.getDissasembly = function getDissasembly () {
+   
    command.commandExecO({
-     ptyPayload:'disas $pc-80,$pc+80',
-     callback:debugData.dissasemblyCallback
+     ptyPayload:configState.getMemoryCommand('$eip'),//debugData.commands[configState.architecture].disassembly,
+     callback:function(data){
+       debugData.disassembly=dataParsers[configState.architecture].disassemblyParser(data).combined;
+     }
+
    });
+   debugData.__lookupGetter__("disassembly", function(p){
+     return value;
+   });
+              /*       
+   debugData.__defineSetter__("disassembly", function(val){
+     value = val;
+   });
+   debugData.__defineGetter__("registers", function(){
+     return value;
+   });
+                     
+   debugData.__defineSetter__("registers", function(val){
+     value = val;
+   });
+   */
    /*
    obj.callbackQueue.push(debugData.dissasemblyCallback);
    socket.emit('command', { ptyPayload: 'disas $pc-80,$pc+80' });
    */
- };
- debugData.getRegisterInfo = function (){
-   command.commandExecO({
-     callback:function getRegInfoC(result){
-       debugData.registers = result.slice(0,-1).map(function(value){
-         var s=value.split(/(\w+)\s*(\w+)\s*(\w+)/);
-         return {
-           name:s[1],
-           value1:s[2],
-           value2:s[3],
-         };
-       });
+   };
+  debugData.patch = function(thing){
+    console.log('patch',thing);
+  };
 
-      $rootScope.$emit('debugDataLoaded');
-     },
-     ptyPayload:'info registers'
-   });
+  debugData.cont = function  () {
+
+    if (configState.recording){
+      configState.record.push('s c'); 
+    }
+    command.commandExecO({ptyPayload:'c'});
+    debugData.getDissasembly();
+    debugData.getRegisterInfo();
+    debugData.infoBreakpoints();
+  };
+  debugData.stepInto = function  () {
+
+    if (configState.recording){
+      configState.record.push('s si'); 
+    }
+    command.commandExecO({ptyPayload:'si'});
+    debugData.getDissasembly();
+    debugData.getRegisterInfo();
+    debugData.infoBreakpoints();
+  };
+  debugData.stepOver = function(){
+    if (configState.recording){
+     configState.record.push('s ni'); 
+    }
+
+    command.commandExecO({ptyPayload:'ni'});
+    debugData.getDissasembly();
+    debugData.getRegisterInfo();
+  }
+  $rootScope.$on('refreshView',function(){
+    debugData.getDissasembly();
+    debugData.getRegisterInfo();
+  });
+  debugData.getRegisterInfo = function (){
+    command.commandExecO({
+      callback:function getRegInfoC(result){
+        debugData.registers = result.slice(0,-1).map(function(value){
+          var s=value.split(/(\w+)\s*(\w+)\s*(\w+)/);
+          return {
+            name:s[1],
+            value1:s[2],
+            value2:s[3],
+          };
+        });
+        /*
+       if (_.pluck(debugData.registers,{name:'eip'}).value1-_.pluck(debugData.registersNew,{name:'eip'}).value1){
+
+       } 
+       */
+       $rootScope.$emit('debugDataLoaded');
+      },
+      ptyPayload:'info registers'
+    });
     //debugData.callbackQueue.push();
 
     //socket.emit('command', { ptyPayload: 'info registers' });
   };
   debugData.setBreakpoint = function(address) {
     //obj.callbackQueue.push(function setBreakpointC() {});
+    if (configState.recording){
+      configState.record.push('s break *'+address); 
+    }
     command.commandExecO({
       ptyPayload:'break *' + address
     });
@@ -162,7 +122,6 @@ angular.module('ldApp').factory('DataDebug',['$rootScope','command','DataDisasse
     //obj.callbackQueue.push(function removeBreakpointC() {});
     command.commandExecO({
       ptyPayload: 'clear *' + address
-
     });
     /*
     socket.emit('command',{

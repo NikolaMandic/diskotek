@@ -160,7 +160,7 @@ module.exports = function (grunt) {
       options: {
         sassDir: '<%= yeoman.app %>/styles',
         cssDir: '<%= yeoman.app %>/styles',
-        generatedImagesDir: '.tmp/images/generated',
+        generatedImagesDir: '<%= yeoman.app %>/images/generated',
         imagesDir: '<%= yeoman.app %>/images',
         javascriptsDir: '<%= yeoman.app %>/scripts',
         fontsDir: '<%= yeoman.app %>/styles/fonts',
@@ -263,6 +263,13 @@ module.exports = function (grunt) {
     },
     // Put files not handled in other tasks here
     copy: {
+      highlighting:{
+        expand:true,
+        dest: '<%= yeoman.app%>/bower_components/ace/lib/ace/mode',
+        src: [
+          'beeScript*'
+        ]
+      },
       dist: {
         files: [{
           expand: true,
@@ -355,10 +362,12 @@ module.exports = function (grunt) {
       'autoprefixer',
       'connect:livereload',
       'open',
+
       'watch'
     ]);
   });
-
+  grunt.registerTask('cph',[
+      'copy:highlighting']);
   grunt.registerTask('test', [
     'clean:server',
     'concurrent:test',
@@ -374,6 +383,7 @@ module.exports = function (grunt) {
     'autoprefixer',
     'concat',
     'copy:dist',
+
     'cdnify',
     'ngmin',
     'cssmin',

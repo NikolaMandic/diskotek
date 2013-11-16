@@ -13,12 +13,12 @@ body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: #001100;
 }
-.container{
+#container{
 @include make-row();
 }
 /*   top menu   */
 
-#debugMenu,#menuPanel,#status,.container{
+#debugMenu,#menuPanel,#status{
   @include make-row();
 
 }
@@ -118,17 +118,111 @@ body {
 }
 /*   /disassembly view */
 
+/* scripting */
+@mixin milkySprite($n){
+  $iconsInRow:8;
+  $width:48px;
+  $height:48px;
+  $offsetX:0px;
+  $offsetY:0px;
+  background:url(Milky-02.png) ($n/$iconsInRow)*$width+$offsetX ($n%$iconsInRow)*$height+$offsetY;
+}
+@mixin milky($n){
+  float:left;
+  @extend .sprite;
+  @extend .milky-sprite;
+  @extend .milky-a#{$n};
+}
+@import "milky/*.png";
+@include all-milky-sprites;
+#scriptingPanel{
+  display:inline-block;
+  height:200px;
+  left:0px;
+  top:50%;
+  position:fixed;
+}
 
+.sprite{
+  width:64px;
+  height:64px;
+}
+.controlScripts{
+  position:absolute;
+  
+}
+.sMenu{
+  font-size:32px;
+  width:64px*5;
+  height:32px;
+}
 
+.sMenu div{
+
+  float:left;
+}
+.sm_save{
+
+}
+.sm_play{
+
+}
+.sm_stepOv{
+
+}
+.sm_stepInto{
+
+}
+.sm_discard{
+}
+#newScript{
+  @extend .controlScripts;
+  font-size:32px;
+  //@include milky(95)
+}
+.scriptPanelWraper{
+  position:fixed;
+  padding-top:30px;
+  background:rgba(0,0,255,0.1);
+  display:inline-block;
+}
+
+.scriptOutput{
+
+  float:left;
+  width:64px*5;
+  height:500px;
+}
+.scriptEditor{
+  float:left;
+  z-index:1000;
+  width:64px*5;
+  height:500px;
+}
+
+/* /scripting*/
+ 
 /*   debug view      */
 
 #wrapermain{
   @include make-row();
+  @include make-md-column(12);
 }
 .breakpoint{
   background: rgba(220,00,00,0.3);
 }
-
+#disassembly{
+  @include make-md-column(9);
+}
+.lineNumber{
+  @include make-md-column(2);
+}
+.srcCode{
+  @include make-md-column(10);
+}
+.blank{
+  @include make-md-column(12);
+}
 #registers{
   @include make-md-column(3);
   /*
@@ -153,7 +247,7 @@ body {
 } 
 
 .hero-unit {
-  @include make-md-column(6);
+  @include make-md-column(9);
   /*
     margin: auto 0 auto;
     //width: 600px;
@@ -165,17 +259,23 @@ body {
     padding: 0px;
     */
 }
+.inst_selected{
+  background-color: rgba(110,110,0,0.07);
+}
 .inst_row{
   @include make-row();
 }
 .inst_addr{
-  @include make-md-column(3);
+  @include make-md-column(2);
+}
+.inst_raw{
+  @include make-md-column(2);
 }
 .inst_opcode{
   @include make-md-column(2);
 }
 .inst_operands{
-  @include make-md-column(4);
+  @include make-md-column(3);
 }
 .inst_comment{
   @include make-md-column(3);

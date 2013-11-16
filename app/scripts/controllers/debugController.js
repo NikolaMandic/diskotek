@@ -5,15 +5,28 @@ angular.module('ldApp')
     $scope.toggleBreakpoint = function(address,thing) {
       thing.hasBreakpoint = thing.hasBreakpoint?false:true;
       if(thing.hasBreakpoint){
-        Data.setBreakpoint(address);
+        Data.debugData.setBreakpoint(address);
       }else{
-        Date.removeBreakpoint(address);
+        Date.debugData.removeBreakpoint(address);
       }
       
     };
 
     $rootScope.$on("debugDataLoaded",function(){
       $scope.$apply();
+      $("#disassembly span").on("mousemove",function(e){
+        e.stopPropagation();
+      });
+      $("#disassembly span").on("click",function(e){
+        e.stopPropagation();
+      });
+      $("#disassembly span").on("mousedown",function(e){
+        e.stopPropagation();
+      });
+      $("#disassembly span").on("mouseup",function(e){
+        e.stopPropagation();
+      });
+
     });
   });
 
