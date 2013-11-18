@@ -1,0 +1,331 @@
+<!DOCTYPE html><html lang="en"><head><title>directives/customDirectives</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="directives/customDirectives"><meta name="groc-project-path" content="app/scripts/directives/customDirectives.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">app/scripts/directives/customDirectives.js</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">&#39;ldApp&#39;</span><span class="p">).</span><span class="nx">directive</span><span class="p">(</span><span class="s1">&#39;draggable&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">ddo</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">link</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">scope</span><span class="p">,</span><span class="nx">iElement</span><span class="p">,</span><span class="nx">iAttrs</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">$</span><span class="p">(</span><span class="nx">iElement</span><span class="p">).</span><span class="nx">draggable</span><span class="p">({</span>
+        <span class="nx">snap</span><span class="o">:</span><span class="kc">true</span><span class="p">,</span>
+        <span class="nx">grid</span><span class="o">:</span><span class="p">[</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">]</span>
+      <span class="p">});</span>
+
+    <span class="p">}</span>
+  <span class="p">};</span>
+  <span class="k">return</span> <span class="nx">ddo</span><span class="p">;</span>
+<span class="p">});</span>
+<span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">&#39;ldApp&#39;</span><span class="p">).</span><span class="nx">directive</span><span class="p">(</span><span class="s1">&#39;resizable&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">ddo</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">link</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">scope</span><span class="p">,</span><span class="nx">iElement</span><span class="p">,</span><span class="nx">iAttrs</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">$</span><span class="p">(</span><span class="nx">iElement</span><span class="p">).</span><span class="nx">resizable</span><span class="p">({</span>
+        
+        <span class="nx">grid</span><span class="o">:</span><span class="p">[</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">]</span>
+      <span class="p">});</span>
+
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="nx">ddo</span><span class="p">;</span>
+<span class="p">})</span>
+<span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">&#39;ldApp&#39;</span><span class="p">).</span><span class="nx">directive</span><span class="p">(</span><span class="s1">&#39;editable&#39;</span><span class="p">,[</span><span class="s1">&#39;command&#39;</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">command</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">selected</span> <span class="o">=</span> <span class="p">[];</span>
+  <span class="kd">var</span> <span class="nx">instInputBig</span><span class="o">=</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#instInputBig&#39;</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">content</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">rootScope</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">editing</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">data</span><span class="p">;</span>
+  <span class="kd">function</span> <span class="nx">processBig</span><span class="p">(){</span>
+    <span class="kd">var</span> <span class="nx">bytes</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">rawStringCommand</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">editing</span> <span class="o">===</span> <span class="s1">&#39;raw&#39;</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">memlines</span> <span class="o">=</span> <span class="nx">_</span><span class="p">.</span><span class="nx">pluck</span><span class="p">(</span><span class="nx">selected</span><span class="p">,</span><span class="s1">&#39;memraw&#39;</span><span class="p">);</span>
+      <span class="nx">bytes</span><span class="o">=</span><span class="sr">/\w.*\w/</span><span class="p">.</span><span class="nx">exec</span><span class="p">(</span><span class="nx">memlines</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;\n&#39;</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/\n/g</span><span class="p">,</span><span class="s1">&#39; &#39;</span><span class="p">))[</span><span class="mi">0</span><span class="p">].</span><span class="nx">match</span><span class="p">(</span><span class="sr">/\w{2}/g</span><span class="p">);</span>
+
+      <span class="nx">bytesNew</span> <span class="o">=</span> <span class="sr">/\w.*\w/</span><span class="p">.</span><span class="nx">exec</span><span class="p">(</span><span class="nx">instInputBig</span><span class="p">.</span><span class="nx">val</span><span class="p">().</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/\n/g</span><span class="p">,</span><span class="s1">&#39; &#39;</span><span class="p">))[</span><span class="mi">0</span><span class="p">].</span><span class="nx">match</span><span class="p">(</span><span class="sr">/\w{2}/g</span><span class="p">);</span>
+      <span class="k">if</span><span class="p">(</span><span class="nx">bytes</span><span class="p">.</span><span class="nx">length</span><span class="o">&lt;</span> <span class="nx">bytesNew</span><span class="p">.</span><span class="nx">length</span><span class="p">){</span>
+        <span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;no space for extra bytes&#39;</span><span class="p">);</span>
+      <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">reversed</span> <span class="o">=</span> <span class="nx">_</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="sr">/\w.*\w/</span><span class="p">.</span><span class="nx">exec</span><span class="p">(</span><span class="nx">instInputBig</span><span class="p">.</span><span class="nx">val</span><span class="p">().</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/\n/g</span><span class="p">,</span><span class="s1">&#39; &#39;</span><span class="p">))[</span><span class="mi">0</span><span class="p">].</span><span class="nx">match</span><span class="p">(</span><span class="sr">/\w{2}/g</span><span class="p">),</span><span class="kd">function</span><span class="p">(</span><span class="nx">v</span><span class="p">,</span><span class="nx">i</span><span class="p">,</span><span class="nx">l</span><span class="p">){</span>
+          <span class="k">return</span> <span class="nx">l</span><span class="p">[</span><span class="nx">l</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="nx">i</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+        <span class="p">}).</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">);</span>
+     
+
+        <span class="nx">rawStringCommand</span> <span class="o">=</span> <span class="s1">&#39;set {char[&#39;</span> <span class="o">+</span> 
+                            <span class="nx">bytesNew</span><span class="p">.</span><span class="nx">length</span> <span class="o">+</span> 
+                            <span class="s1">&#39;]}&#39;</span><span class="o">+</span> 
+                            <span class="nx">selected</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">address</span>  <span class="o">+</span> 
+                            <span class="s1">&#39;=0x&#39;</span> <span class="o">+</span> <span class="nx">reversed</span>
+                            <span class="p">;</span>
+        <span class="nx">command</span><span class="p">.</span><span class="nx">commandExecO</span><span class="p">({</span>
+          <span class="nx">ptyPayload</span><span class="o">:</span><span class="nx">rawStringCommand</span>
+        <span class="p">});</span>
+        <span class="nx">data</span><span class="p">.</span><span class="nx">debugData</span><span class="p">.</span><span class="nx">getDissasembly</span><span class="p">();</span>
+        <span class="nx">data</span><span class="p">.</span><span class="nx">debugData</span><span class="p">.</span><span class="nx">infoBreakpoints</span><span class="p">();</span>
+      <span class="p">}</span>
+    <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+    
+    <span class="p">}</span>
+  <span class="p">};</span>
+  <span class="kd">function</span> <span class="nx">process</span><span class="p">(){</span>
+  
+  <span class="p">};</span>
+  <span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">keyup</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">which</span><span class="o">===</span><span class="mi">13</span><span class="p">){</span>
+      <span class="k">if</span><span class="p">(</span><span class="nx">selected</span><span class="p">.</span><span class="nx">length</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">){</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">shiftKey</span><span class="p">){</span>
+          <span class="nx">editing</span> <span class="o">=</span> <span class="s1">&#39;raw&#39;</span><span class="p">;</span>
+          <span class="kd">var</span> <span class="nx">memlines</span> <span class="o">=</span> <span class="nx">_</span><span class="p">.</span><span class="nx">pluck</span><span class="p">(</span><span class="nx">selected</span><span class="p">,</span><span class="s1">&#39;memraw&#39;</span><span class="p">);</span>
+          <span class="nx">content</span><span class="o">=</span><span class="nx">memlines</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;\n&#39;</span><span class="p">);</span>
+          <span class="nx">instInputBig</span><span class="p">.</span><span class="nx">attr</span><span class="p">({</span>
+            <span class="nx">rows</span><span class="o">:</span><span class="nx">memlines</span><span class="p">.</span><span class="nx">length</span>
+          <span class="p">});</span> 
+          <span class="nx">instInputBig</span><span class="p">.</span><span class="nx">val</span><span class="p">(</span><span class="nx">content</span><span class="p">);</span>
+          <span class="nx">instInputBig</span><span class="p">.</span><span class="nx">css</span><span class="p">({</span>
+            <span class="nx">position</span><span class="o">:</span><span class="s1">&#39;absolute&#39;</span><span class="p">,</span>
+            <span class="nx">left</span><span class="o">:</span> <span class="nx">selected</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">leftmr</span><span class="p">,</span>
+            <span class="nx">top</span><span class="o">:</span> <span class="nx">selected</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">topmr</span><span class="p">,</span>
+          <span class="p">});</span>
+          <span class="nx">instInputBig</span><span class="p">.</span><span class="nx">show</span><span class="p">();</span>
+
+          <span class="nx">instInputBig</span><span class="p">.</span><span class="nx">focus</span><span class="p">();</span>
+        <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+          <span class="nx">editing</span> <span class="o">=</span> <span class="s1">&#39;op&#39;</span><span class="p">;</span>
+          <span class="kd">var</span> <span class="nx">opcodes</span> <span class="o">=</span> <span class="nx">_</span><span class="p">.</span><span class="nx">pluck</span><span class="p">(</span><span class="nx">selected</span><span class="p">,</span><span class="s1">&#39;opcode&#39;</span><span class="p">);</span>
+          <span class="kd">var</span> <span class="nx">operands</span> <span class="o">=</span> <span class="nx">_</span><span class="p">.</span><span class="nx">pluck</span><span class="p">(</span><span class="nx">selected</span><span class="p">,</span><span class="s1">&#39;operands&#39;</span><span class="p">);</span>
+          <span class="kd">var</span> <span class="nx">instructions</span> <span class="o">=</span> <span class="nx">_</span><span class="p">.</span><span class="nx">zip</span><span class="p">(</span><span class="nx">opcodes</span><span class="p">,</span><span class="nx">operands</span><span class="p">).</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">v</span><span class="p">){</span>
+            <span class="k">return</span> <span class="nx">v</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">);</span>
+          <span class="p">});</span>
+          <span class="nx">content</span><span class="o">=</span><span class="nx">instructions</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;\n&#39;</span><span class="p">);</span>
+          <span class="nx">instInputBig</span><span class="p">.</span><span class="nx">attr</span><span class="p">({</span>
+            <span class="nx">rows</span><span class="o">:</span><span class="nx">instructions</span><span class="p">.</span><span class="nx">length</span>
+          <span class="p">});</span> 
+          <span class="nx">instInputBig</span><span class="p">.</span><span class="nx">val</span><span class="p">(</span><span class="nx">content</span><span class="p">);</span>
+          <span class="nx">instInputBig</span><span class="p">.</span><span class="nx">css</span><span class="p">({</span>
+
+            <span class="nx">position</span><span class="o">:</span><span class="s1">&#39;absolute&#39;</span><span class="p">,</span>
+            <span class="nx">left</span><span class="o">:</span> <span class="nx">selected</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">leftop</span><span class="o">+</span><span class="s1">&#39;px&#39;</span><span class="p">,</span>
+            <span class="nx">top</span><span class="o">:</span> <span class="nx">selected</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">topop</span><span class="o">+</span><span class="s1">&#39;px&#39;</span><span class="p">,</span>
+          <span class="p">});</span>
+          <span class="nx">instInputBig</span><span class="p">.</span><span class="nx">show</span><span class="p">();</span>       
+          <span class="nx">instInputBig</span><span class="p">.</span><span class="nx">focus</span><span class="p">();</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+  <span class="nx">instInputBig</span><span class="p">.</span><span class="nx">keyup</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">e</span><span class="p">.</span><span class="nx">stopPropagation</span><span class="p">();</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">which</span> <span class="o">==</span> <span class="mi">13</span> <span class="o">&amp;&amp;</span> <span class="nx">e</span><span class="p">.</span><span class="nx">ctrlKey</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">processBig</span><span class="p">(</span><span class="nx">content</span><span class="p">);</span>
+      <span class="nx">instInputBig</span><span class="p">.</span><span class="nx">hide</span><span class="p">();</span>
+      <span class="nx">_</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">selected</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">v</span><span class="p">){</span>
+        <span class="nx">v</span><span class="p">.</span><span class="nx">selected</span><span class="o">=</span><span class="kc">false</span><span class="p">;</span>
+      <span class="p">});</span>
+
+      <span class="nx">selected</span><span class="o">=</span><span class="p">[];</span>
+      <span class="nx">rootScope</span><span class="p">.</span><span class="nx">$apply</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">which</span> <span class="o">==</span> <span class="mi">27</span><span class="p">)</span> <span class="p">{</span>
+      <span class="c1">//$scope.process($scope.content);</span>
+      <span class="nx">instInputBig</span><span class="p">.</span><span class="nx">hide</span><span class="p">();</span>
+      <span class="nx">content</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">;</span>
+      <span class="nx">_</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">selected</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">v</span><span class="p">){</span>
+        <span class="nx">v</span><span class="p">.</span><span class="nx">selected</span><span class="o">=</span><span class="kc">false</span><span class="p">;</span>
+      <span class="p">});</span>
+      <span class="nx">selected</span><span class="o">=</span><span class="p">[];</span>
+      <span class="nx">rootScope</span><span class="p">.</span><span class="nx">$apply</span><span class="p">();</span>
+    <span class="p">}</span>
+
+  <span class="p">});</span> 
+
+  <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#instInput&#39;</span><span class="p">).</span><span class="nx">keyup</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">e</span><span class="p">.</span><span class="nx">stopPropagation</span><span class="p">();</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">which</span> <span class="o">==</span> <span class="mi">13</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">process</span><span class="p">(</span><span class="nx">content</span><span class="p">);</span>
+      <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#instInput&#39;</span><span class="p">).</span><span class="nx">hide</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">which</span> <span class="o">==</span> <span class="mi">27</span><span class="p">)</span> <span class="p">{</span>
+      <span class="c1">//$scope.process($scope.content);</span>
+      <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#instInput&#39;</span><span class="p">).</span><span class="nx">hide</span><span class="p">();</span>
+    <span class="p">}</span>
+
+  <span class="p">});</span>
+  <span class="kd">var</span> <span class="nx">ddo</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">scope</span><span class="o">:</span><span class="kc">true</span><span class="p">,</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>replace:true,</p></div></div><div class="code"><div class="wrapper">    <span class="c1">//transclude:true,</span>
+    <span class="c1">//template:$(&#39;#editTemplate&#39;).html(),</span>
+    <span class="nx">controller</span><span class="o">:</span> <span class="kd">function</span> <span class="nx">dcOnt</span><span class="p">(</span><span class="nx">$scope</span><span class="p">,</span> <span class="nx">$element</span><span class="p">,</span><span class="nx">$attrs</span><span class="p">,</span> <span class="nx">$transclude</span><span class="p">,</span><span class="nx">$rootScope</span><span class="p">,</span> <span class="nx">$compile</span><span class="p">,</span><span class="nx">Data</span><span class="p">,</span><span class="nx">$controller</span><span class="p">)</span> <span class="p">{</span>
+      <span class="c1">//fix inject dependency on declaration level</span>
+      <span class="nx">data</span><span class="o">=</span><span class="nx">Data</span><span class="p">;</span>
+      <span class="nx">rootScope</span><span class="o">=</span><span class="nx">$rootScope</span><span class="p">;</span>
+      <span class="nx">$scope</span><span class="p">.</span><span class="nx">mode</span> <span class="o">=</span> <span class="s2">&quot;display&quot;</span><span class="p">;</span>
+      <span class="nx">$scope</span><span class="p">.</span><span class="nx">process</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">content</span><span class="p">){</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">$attrs</span><span class="p">);</span> 
+        <span class="nx">Data</span><span class="p">.</span><span class="nx">debugData</span><span class="p">.</span><span class="nx">patch</span><span class="p">(</span><span class="nx">scope</span><span class="p">.</span><span class="nx">thing</span><span class="p">);</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;console edited&quot;</span><span class="p">,</span><span class="nx">content</span><span class="p">);</span>
+      <span class="p">};</span>
+
+
+
+    <span class="p">},</span>
+    <span class="nx">link</span><span class="o">:</span> <span class="kd">function</span> <span class="nx">lf</span><span class="p">(</span><span class="nx">scope</span><span class="p">,</span><span class="nx">iElement</span><span class="p">,</span><span class="nx">iAttrs</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">offset</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">iElement</span><span class="p">).</span><span class="nx">offset</span><span class="p">();</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">iAttrs</span><span class="p">.</span><span class="nx">editable</span><span class="o">===</span><span class="s2">&quot;raw&quot;</span><span class="p">){</span>
+          <span class="nx">scope</span><span class="p">.</span><span class="nx">thing</span><span class="p">.</span><span class="nx">leftmr</span> <span class="o">=</span> <span class="nx">offset</span><span class="p">.</span><span class="nx">left</span><span class="p">;</span>
+          <span class="nx">scope</span><span class="p">.</span><span class="nx">thing</span><span class="p">.</span><span class="nx">topmr</span> <span class="o">=</span> <span class="nx">offset</span><span class="p">.</span><span class="nx">top</span><span class="p">;</span>
+        <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+          <span class="nx">scope</span><span class="p">.</span><span class="nx">thing</span><span class="p">.</span><span class="nx">leftop</span> <span class="o">=</span> <span class="nx">offset</span><span class="p">.</span><span class="nx">left</span><span class="p">;</span>
+          <span class="nx">scope</span><span class="p">.</span><span class="nx">thing</span><span class="p">.</span><span class="nx">topop</span> <span class="o">=</span> <span class="nx">offset</span><span class="p">.</span><span class="nx">top</span><span class="p">;</span>
+        <span class="p">}</span>
+
+      <span class="nx">$</span><span class="p">(</span><span class="nx">iElement</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+        <span class="nx">selected</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">scope</span><span class="p">.</span><span class="nx">thing</span><span class="p">);</span>
+        <span class="nx">scope</span><span class="p">.</span><span class="nx">thing</span><span class="p">.</span><span class="nx">selected</span><span class="o">=!</span><span class="nx">scope</span><span class="p">.</span><span class="nx">thing</span><span class="p">.</span><span class="nx">selected</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">scope</span><span class="p">.</span><span class="nx">thing</span><span class="p">.</span><span class="nx">selected</span><span class="p">)</span> <span class="p">{</span>
+         <span class="nx">selected</span> <span class="o">=</span> <span class="nx">_</span><span class="p">.</span><span class="nx">without</span><span class="p">(</span><span class="nx">selected</span><span class="p">,</span><span class="nx">scope</span><span class="p">.</span><span class="nx">thing</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="nx">selected</span> <span class="o">=</span> <span class="nx">_</span><span class="p">.</span><span class="nx">sortBy</span><span class="p">(</span><span class="nx">selected</span><span class="p">,</span><span class="s1">&#39;topmr&#39;</span><span class="p">);</span>
+        <span class="nx">scope</span><span class="p">.</span><span class="nx">$apply</span><span class="p">();</span>
+      <span class="p">});</span>
+      <span class="nx">$</span><span class="p">(</span><span class="nx">iElement</span><span class="p">).</span><span class="nx">dblclick</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+        <span class="nx">scope</span><span class="p">.</span><span class="nx">mode</span> <span class="o">=</span> <span class="s2">&quot;edit&quot;</span><span class="p">;</span>
+        <span class="nx">scope</span><span class="p">.</span><span class="nx">content</span><span class="o">=</span><span class="nx">$</span><span class="p">(</span><span class="nx">iElement</span><span class="p">).</span><span class="nx">html</span><span class="p">();</span>
+        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#instInput&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">scope</span><span class="p">.</span><span class="nx">content</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">offset</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">iElement</span><span class="p">).</span><span class="nx">position</span><span class="p">();</span>
+        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#instInput&#39;</span><span class="p">).</span><span class="nx">offset</span><span class="p">({</span>
+          <span class="nx">left</span><span class="o">:</span> <span class="nx">offset</span><span class="p">.</span><span class="nx">left</span><span class="p">,</span>
+          <span class="nx">top</span><span class="o">:</span> <span class="nx">offset</span><span class="p">.</span><span class="nx">top</span><span class="p">,</span>
+        <span class="p">});</span>
+        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#instInput&#39;</span><span class="p">).</span><span class="nx">show</span><span class="p">();</span>
+       
+      <span class="p">});</span>
+    <span class="p">}</span>
+  <span class="p">};</span>
+  <span class="k">return</span> <span class="nx">ddo</span><span class="p">;</span>
+<span class="p">}]);</span>
+<span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">&#39;ldApp&#39;</span><span class="p">).</span><span class="nx">directive</span><span class="p">(</span><span class="s1">&#39;commandwind&#39;</span><span class="p">,</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">ddo</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">scope</span><span class="o">:</span><span class="p">{},</span>
+    <span class="nx">template</span><span class="o">:</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#commandWindT&quot;</span><span class="p">).</span><span class="nx">html</span><span class="p">(),</span>
+    <span class="nx">controller</span><span class="o">:</span> <span class="kd">function</span> <span class="nx">dcOnt</span><span class="p">(</span><span class="nx">configState</span><span class="p">,</span><span class="nx">$scope</span><span class="p">,</span> <span class="nx">$element</span><span class="p">,</span><span class="nx">$attrs</span><span class="p">,</span> <span class="nx">$transclude</span><span class="p">,</span><span class="nx">$rootScope</span><span class="p">,</span> <span class="nx">$compile</span><span class="p">,</span><span class="nx">Data</span><span class="p">,</span><span class="nx">$controller</span><span class="p">,</span><span class="nx">command</span><span class="p">)</span> <span class="p">{</span>
+      <span class="c1">//var Data = $injector.get(&quot;Data&quot;);</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>dcOnt.$new=function(){};</p></div></div><div class="code"><div class="wrapper">      <span class="nx">$scope</span><span class="p">.</span><span class="nx">sendCommand</span><span class="o">=</span><span class="kd">function</span><span class="p">(</span><span class="nx">cmd</span><span class="p">){</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">configState</span><span class="p">.</span><span class="nx">recording</span><span class="p">){</span>
+          <span class="nx">configState</span><span class="p">.</span><span class="nx">record</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">&#39;s &#39;</span> <span class="o">+</span> <span class="nx">cmd</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="nx">command</span><span class="p">.</span><span class="nx">commandExecO</span><span class="p">({</span>
+          <span class="nx">ptyPayload</span><span class="o">:</span><span class="nx">cmd</span><span class="p">,</span>
+          <span class="nx">callback</span><span class="o">:</span><span class="kd">function</span><span class="p">(</span><span class="nx">result</span><span class="p">){</span>
+            <span class="nx">$scope</span><span class="p">.</span><span class="nx">things</span><span class="o">=</span><span class="nx">result</span><span class="p">;</span>
+            <span class="nx">$scope</span><span class="p">.</span><span class="nx">$apply</span><span class="p">();</span>
+          <span class="p">}</span>
+        <span class="p">});</span>
+      <span class="p">}</span>
+      <span class="nx">$scope</span><span class="p">.</span><span class="nx">clone</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">html</span> <span class="o">=</span> <span class="s1">&#39;&lt;div commandWind draggable resizable &gt; &lt;/div&gt;&#39;</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">template</span> <span class="o">=</span> <span class="nx">angular</span><span class="p">.</span><span class="nx">element</span><span class="p">(</span><span class="nx">html</span><span class="p">);</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>var elt= $element.parent().append(template);</p></div></div><div class="code"><div class="wrapper">        <span class="kd">var</span> <span class="nx">linkFn</span> <span class="o">=</span> <span class="nx">$compile</span><span class="p">(</span><span class="nx">template</span><span class="p">);</span>
+        <span class="c1">//var nscope ={$n,$parent:$scope.$parent};</span>
+        <span class="c1">//dcOnt(nscope,template,$compile,Data,$controller);</span>
+        <span class="kd">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="nx">linkFn</span><span class="p">(</span><span class="nx">$rootScope</span><span class="p">.</span><span class="nx">$new</span><span class="p">()</span> <span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">clonedEl</span><span class="p">,</span><span class="nx">scope</span><span class="p">){</span>
+          <span class="kd">var</span> <span class="nx">e</span><span class="o">=</span><span class="nx">$element</span><span class="p">.</span><span class="nx">parent</span><span class="p">().</span><span class="nx">append</span><span class="p">(</span><span class="nx">clonedEl</span><span class="p">);</span>
+          <span class="nx">$</span><span class="p">(</span><span class="nx">clonedEl</span><span class="p">).</span><span class="nx">css</span><span class="p">({</span>
+            <span class="nx">width</span><span class="o">:</span><span class="s1">&#39;300px&#39;</span><span class="p">,</span>
+            <span class="nx">height</span><span class="o">:</span><span class="s1">&#39;100px&#39;</span><span class="p">,</span>
+            <span class="nx">color</span><span class="o">:</span><span class="s1">&#39;#ff0000&#39;</span><span class="p">,</span>
+            <span class="nx">background</span><span class="o">:</span><span class="s2">&quot;rgba(00,00,24,0.2)&quot;</span><span class="p">,</span>
+            <span class="nx">position</span><span class="o">:</span><span class="s2">&quot;absolute&quot;</span><span class="p">,</span>
+          <span class="p">});</span>
+        <span class="p">});</span>
+        <span class="c1">//$scope.$apply();</span>
+      <span class="p">};</span>
+      <span class="nx">$scope</span><span class="p">.</span><span class="nx">destroy</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">//$element.$destroy();</span>
+        <span class="nx">$element</span><span class="p">.</span><span class="nx">remove</span><span class="p">();</span>
+      <span class="p">};</span>
+    <span class="p">},</span>
+    <span class="nx">link</span><span class="o">:</span> <span class="kd">function</span> <span class="nx">lf</span><span class="p">(</span><span class="nx">scope</span><span class="p">,</span><span class="nx">iElement</span><span class="p">,</span><span class="nx">iAttrs</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">$</span><span class="p">(</span><span class="nx">iElement</span><span class="p">).</span><span class="nx">css</span><span class="p">({</span>
+        <span class="nx">width</span><span class="o">:</span><span class="s1">&#39;300px&#39;</span><span class="p">,</span>
+        <span class="nx">height</span><span class="o">:</span><span class="s1">&#39;100px&#39;</span><span class="p">,</span>
+        <span class="nx">color</span><span class="o">:</span><span class="s1">&#39;#ff0000&#39;</span><span class="p">,</span>
+        <span class="nx">position</span><span class="o">:</span><span class="s2">&quot;absolute&quot;</span><span class="p">,</span>
+        <span class="nx">background</span><span class="o">:</span><span class="s2">&quot;rgba(00,00,24,0.02)&quot;</span><span class="p">,</span>
+      <span class="p">});</span>
+    <span class="p">}</span>
+  <span class="p">};</span>
+  <span class="k">return</span> <span class="nx">ddo</span><span class="p">;</span>
+<span class="p">});</span>
+<span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">&#39;ldApp&#39;</span><span class="p">).</span><span class="nx">directive</span><span class="p">(</span><span class="s1">&#39;beditor&#39;</span><span class="p">,[</span><span class="s1">&#39;command&#39;</span><span class="p">,</span><span class="s1">&#39;state&#39;</span><span class="p">,</span><span class="s1">&#39;ace&#39;</span><span class="p">,</span><span class="s1">&#39;beeScript&#39;</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">command</span><span class="p">,</span><span class="nx">state</span><span class="p">,</span><span class="nx">aceS</span><span class="p">,</span><span class="nx">beeScriptS</span><span class="p">)</span> <span class="p">{</span>
+
+  <span class="kd">var</span> <span class="nx">ddo</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">scope</span><span class="o">:</span><span class="p">{},</span>
+    <span class="nx">restrict</span><span class="o">:</span><span class="s1">&#39;E&#39;</span><span class="p">,</span>
+    <span class="nx">template</span><span class="o">:</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#newScriptWT&quot;</span><span class="p">).</span><span class="nx">html</span><span class="p">(),</span>
+    <span class="nx">controller</span><span class="o">:</span> <span class="kd">function</span> <span class="nx">dcOnt</span><span class="p">(</span><span class="nx">configState</span><span class="p">,</span><span class="nx">$scope</span><span class="p">,</span> <span class="nx">$element</span><span class="p">,</span><span class="nx">$attrs</span><span class="p">,</span> <span class="nx">$transclude</span><span class="p">,</span><span class="nx">$rootScope</span><span class="p">,</span> <span class="nx">$compile</span><span class="p">,</span><span class="nx">Data</span><span class="p">,</span><span class="nx">$controller</span><span class="p">,</span><span class="nx">command</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">beeScript</span> <span class="o">=</span> <span class="nx">beeScriptS</span><span class="p">.</span><span class="nx">beeScript</span><span class="p">;</span>
+      <span class="nx">beeScript</span><span class="p">.</span><span class="nx">runner</span><span class="p">.</span><span class="nx">diskotekLib</span><span class="p">.</span><span class="nx">command</span><span class="o">=</span><span class="nx">command</span><span class="p">.</span><span class="nx">commandExecO</span>
+      <span class="nx">beeScript</span><span class="p">.</span><span class="nx">runner</span><span class="p">.</span><span class="nx">diskotekLib</span><span class="p">.</span><span class="nx">state</span> <span class="o">=</span> <span class="nx">state</span>
+      <span class="nx">beeScript</span><span class="p">.</span><span class="nx">runner</span><span class="p">.</span><span class="nx">diskotekLib</span><span class="p">.</span><span class="nx">$rootScope</span><span class="o">=</span><span class="nx">$rootScope</span><span class="p">;</span>
+      <span class="nx">beeScript</span><span class="p">.</span><span class="nx">runner</span><span class="p">.</span><span class="nx">variables</span><span class="p">.</span><span class="nx">fImage</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;fImage&#39;</span><span class="p">,</span>
+                                            <span class="nx">value</span><span class="o">:</span> <span class="nx">Data</span><span class="p">.</span><span class="nx">disassemblyData</span>
+                                          <span class="p">};</span>
+      <span class="nx">$scope</span><span class="p">.</span><span class="nx">running</span><span class="o">=</span><span class="kc">false</span><span class="p">;</span>
+      <span class="nx">$scope</span><span class="p">.</span><span class="nx">dirty</span><span class="o">=</span><span class="kc">false</span><span class="p">;</span>
+      <span class="nx">$scope</span><span class="p">.</span><span class="nx">contents</span><span class="o">=</span><span class="nx">configState</span><span class="p">.</span><span class="nx">bWindows</span><span class="p">[</span><span class="nx">configState</span><span class="p">.</span><span class="nx">bWindows</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+      <span class="nx">$scope</span><span class="p">.</span><span class="nx">save</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+      
+      <span class="p">}</span>
+      <span class="nx">$scope</span><span class="p">.</span><span class="nx">run</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+      
+      <span class="p">}</span>
+      <span class="nx">$scope</span><span class="p">.</span><span class="nx">stepOver</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">$scope</span><span class="p">.</span><span class="nx">dirty</span><span class="p">){</span>
+          <span class="nx">beeScript</span><span class="p">.</span><span class="nx">runner</span><span class="p">.</span><span class="nx">next</span><span class="p">()</span>
+        <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+          <span class="nx">beeScript</span><span class="p">.</span><span class="nx">text</span> <span class="o">=</span> <span class="nx">$scope</span><span class="p">.</span><span class="nx">editor</span><span class="p">.</span><span class="nx">getValue</span><span class="p">();</span>
+          <span class="nx">beeScript</span><span class="p">.</span><span class="nx">reset</span><span class="p">();</span>
+          <span class="nx">beeScript</span><span class="p">.</span><span class="nx">runner</span><span class="p">.</span><span class="nx">diskotekLib</span><span class="p">.</span><span class="nx">command</span><span class="o">=</span><span class="nx">command</span><span class="p">.</span><span class="nx">commandExecO</span>
+          <span class="nx">beeScript</span><span class="p">.</span><span class="nx">runner</span><span class="p">.</span><span class="nx">diskotekLib</span><span class="p">.</span><span class="nx">state</span> <span class="o">=</span> <span class="nx">state</span>
+
+          <span class="nx">beeScript</span><span class="p">.</span><span class="nx">runner</span><span class="p">.</span><span class="nx">diskotekLib</span><span class="p">.</span><span class="nx">$rootScope</span><span class="o">=</span><span class="nx">$rootScope</span><span class="p">;</span>
+          <span class="nx">beeScript</span><span class="p">.</span><span class="nx">runner</span><span class="p">.</span><span class="nx">variables</span><span class="p">.</span><span class="nx">fImage</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;fImage&#39;</span><span class="p">,</span>
+            <span class="nx">value</span><span class="o">:</span> <span class="nx">Data</span><span class="p">.</span><span class="nx">disassemblyData</span>
+          <span class="p">};</span>
+          <span class="nx">beeScript</span><span class="p">.</span><span class="nx">generate</span><span class="p">()</span>
+
+          <span class="nx">beeScript</span><span class="p">.</span><span class="nx">next</span><span class="p">()</span>
+          <span class="nx">$scope</span><span class="p">.</span><span class="nx">running</span><span class="o">=</span><span class="kc">true</span><span class="p">;</span>
+          <span class="nx">$scope</span><span class="p">.</span><span class="nx">dirty</span><span class="o">=</span><span class="kc">false</span><span class="p">;</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+      <span class="nx">$scope</span><span class="p">.</span><span class="nx">stepInto</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+      
+      <span class="p">}</span>
+      <span class="nx">$scope</span><span class="p">.</span><span class="nx">close</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+      
+      <span class="p">}</span>
+      <span class="c1">//var Data = $injector.get(&quot;Data&quot;);</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>,
+dcOnt.$new=function(){};</p></div></div><div class="code"><div class="wrapper">      <span class="nx">$scope</span><span class="p">.</span><span class="nx">sendCommand</span><span class="o">=</span><span class="kd">function</span><span class="p">(</span><span class="nx">cmd</span><span class="p">){</span>
+        <span class="nx">command</span><span class="p">.</span><span class="nx">commandExecO</span><span class="p">({</span>
+          <span class="nx">ptyPayload</span><span class="o">:</span><span class="nx">cmd</span><span class="p">,</span>
+          <span class="nx">callback</span><span class="o">:</span><span class="kd">function</span><span class="p">(</span><span class="nx">result</span><span class="p">){</span>
+            <span class="nx">$scope</span><span class="p">.</span><span class="nx">things</span><span class="o">=</span><span class="nx">result</span><span class="p">;</span>
+            <span class="nx">$scope</span><span class="p">.</span><span class="nx">$apply</span><span class="p">();</span>
+          <span class="p">}</span>
+        <span class="p">});</span>
+
+      <span class="p">}</span>
+      <span class="nx">$scope</span><span class="p">.</span><span class="nx">destroy</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">//$element.$destroy();</span>
+        <span class="nx">$element</span><span class="p">.</span><span class="nx">remove</span><span class="p">();</span>
+      <span class="p">};</span>
+    <span class="p">},</span>
+    <span class="nx">link</span><span class="o">:</span>  <span class="kd">function</span> <span class="nx">lf</span><span class="p">(</span><span class="nx">scope</span><span class="p">,</span><span class="nx">iElement</span><span class="p">,</span><span class="nx">iAttrs</span><span class="p">,</span><span class="nx">$compile</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">ace</span> <span class="o">=</span> <span class="nx">aceS</span><span class="p">.</span><span class="nx">ace</span><span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">editEl</span><span class="o">=</span><span class="nx">$</span><span class="p">(</span><span class="nx">iElement</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="s2">&quot;.scriptEditor&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">];</span>
+      <span class="kd">var</span> <span class="nx">editor</span> <span class="o">=</span> <span class="nx">scope</span><span class="p">.</span><span class="nx">editor</span> <span class="o">=</span> <span class="nx">ace</span><span class="p">.</span><span class="nx">edit</span><span class="p">(</span><span class="nx">editEl</span><span class="p">);</span>
+      <span class="nx">editor</span><span class="p">.</span><span class="nx">setTheme</span><span class="p">(</span><span class="s2">&quot;ace/theme/monokai&quot;</span><span class="p">);</span>
+      <span class="nx">editor</span><span class="p">.</span><span class="nx">getSession</span><span class="p">().</span><span class="nx">setMode</span><span class="p">(</span><span class="s2">&quot;ace/mode/beeScript&quot;</span><span class="p">);</span>
+      <span class="nx">editor</span><span class="p">.</span><span class="nx">setValue</span><span class="p">(</span><span class="nx">scope</span><span class="p">.</span><span class="nx">contents</span><span class="p">);</span>
+      <span class="nx">editor</span><span class="p">.</span><span class="nx">getSession</span><span class="p">().</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;change&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>e.type, etc</p></div></div><div class="code"><div class="wrapper">        <span class="nx">scope</span><span class="p">.</span><span class="nx">dirty</span><span class="o">=</span><span class="kc">true</span><span class="p">;</span>
+      <span class="p">});</span>
+      <span class="nx">$</span><span class="p">(</span><span class="nx">editEl</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;mousemove&quot;</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+        <span class="nx">e</span><span class="p">.</span><span class="nx">stopPropagation</span><span class="p">();</span>
+      <span class="p">});</span>
+
+    <span class="p">}</span>
+  <span class="p">};</span>
+  <span class="k">return</span> <span class="nx">ddo</span><span class="p">;</span>
+<span class="p">}]);</span></div></div></div></div></body></html>
