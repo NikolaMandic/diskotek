@@ -1,0 +1,341 @@
+<!DOCTYPE html><html lang="en"><head><title>controllers/DataDisassemblyParsers</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="controllers/DataDisassemblyParsers"><meta name="groc-project-path" content="app/scripts/controllers/DataDisassemblyParsers.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">app/scripts/controllers/DataDisassemblyParsers.js</div></div><div id="document"><div class="segment"><div class="comments doc-section"><div class="wrapper"><p><span class='doc-section-header'> name dataDisassemblyParsersModule and fileOverview Various parsing functions. </span></p>
+
+<p>this module contains functions for parsing headers when disassembling file</p></div></div><div class="code"><div class="wrapper"><span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">&#39;ldApp&#39;</span><span class="p">).</span><span class="nx">factory</span><span class="p">(</span><span class="s1">&#39;DataDisassemblyParsers&#39;</span><span class="p">,</span><span class="kd">function</span><span class="p">(){</span>
+  <span class="kd">var</span> <span class="nx">parsers</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">arm</span><span class="o">:</span><span class="p">{}</span>
+  <span class="p">};</span>
+
+  <span class="nx">parsers</span><span class="p">[</span><span class="s1">&#39;x86 elf&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">{}</span>
+  <span class="nx">parsers</span><span class="p">.</span><span class="nx">parseXD</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">){</span>
+    <span class="k">return</span> <span class="nx">_</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">v</span><span class="p">){</span>
+      <span class="kd">var</span> <span class="nx">s</span> <span class="o">=</span> <span class="p">(</span><span class="sr">/\s+(\w+)\s*((\w+\s+){1,4})(.*)/</span><span class="p">).</span><span class="nx">exec</span><span class="p">(</span><span class="nx">v</span><span class="p">);</span>
+      <span class="k">return</span> <span class="p">{</span>
+        <span class="nx">address</span><span class="o">:</span><span class="nx">s</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="nx">hex</span><span class="o">:</span><span class="nx">s</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+        <span class="nx">stringDump</span><span class="o">:</span><span class="nx">s</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+      <span class="p">}</span>
+    <span class="p">});</span>
+  <span class="p">};</span>
+  <span class="nx">parsers</span><span class="p">.</span><span class="nx">parseHeaders</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">parseHeaders</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
+    <span class="kd">var</span> <span class="nx">parsedHeaders</span><span class="o">=</span><span class="p">{};</span>
+    <span class="kd">var</span> <span class="nx">elfH</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s2">&quot;\n&quot;</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="nx">elfH</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">20</span><span class="p">);</span>
+
+
+    <span class="kd">var</span> <span class="nx">ehdr</span><span class="o">=</span> <span class="p">[</span>
+      <span class="p">{</span>   <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;unsigned char[16]&#39;</span><span class="p">,</span> <span class="nx">fName</span><span class="o">:</span><span class="s1">&#39;e_ident&#39;</span><span class="p">,</span>          <span class="nx">comment</span><span class="o">:</span><span class="s1">&#39;/* Magic number and other info */&#39;</span>      <span class="p">,</span><span class="nx">content</span><span class="o">:</span><span class="s1">&#39;&#39;</span><span class="p">},</span>
+      <span class="p">{</span>   <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;Elf32_Half&#39;</span><span class="p">,</span>    <span class="nx">fName</span><span class="o">:</span><span class="s1">&#39;e_type&#39;</span><span class="p">,</span>               <span class="nx">comment</span><span class="o">:</span><span class="s1">&#39;/* Object file type */&#39;</span>                 <span class="p">},</span>
+      <span class="p">{</span>   <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;Elf32_Half&#39;</span><span class="p">,</span>    <span class="nx">fName</span><span class="o">:</span><span class="s1">&#39;e_machine&#39;</span><span class="p">,</span>            <span class="nx">comment</span><span class="o">:</span><span class="s1">&#39;/* xArchitecture */&#39;</span>                     <span class="p">},</span>
+      <span class="p">{</span>   <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;Elf32_Word&#39;</span><span class="p">,</span>    <span class="nx">fName</span><span class="o">:</span><span class="s1">&#39;e_version&#39;</span><span class="p">,</span>            <span class="nx">comment</span><span class="o">:</span><span class="s1">&#39;/* Object file version */&#39;</span>              <span class="p">},</span>
+      <span class="p">{</span>   <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;Elf32_Addr&#39;</span><span class="p">,</span>    <span class="nx">fName</span><span class="o">:</span><span class="s1">&#39;e_entry&#39;</span><span class="p">,</span>              <span class="nx">comment</span><span class="o">:</span><span class="s1">&#39;/* Entry point virtual address */&#39;</span>      <span class="p">},</span>
+      <span class="p">{</span>   <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;Elf32_Off&#39;</span> <span class="p">,</span>    <span class="nx">fName</span><span class="o">:</span><span class="s1">&#39;e_phoff&#39;</span><span class="p">,</span>              <span class="nx">comment</span><span class="o">:</span><span class="s1">&#39;/* Program header table file offset */&#39;</span> <span class="p">},</span>
+      <span class="p">{</span>   <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;Elf32_Off&#39;</span> <span class="p">,</span>    <span class="nx">fName</span><span class="o">:</span><span class="s1">&#39;e_shoff&#39;</span><span class="p">,</span>              <span class="nx">comment</span><span class="o">:</span><span class="s1">&#39;/* Section header table file offset */&#39;</span> <span class="p">},</span>
+      <span class="p">{</span>   <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;Elf32_Word&#39;</span><span class="p">,</span>    <span class="nx">fName</span><span class="o">:</span><span class="s1">&#39;e_flags&#39;</span><span class="p">,</span>              <span class="nx">comment</span><span class="o">:</span><span class="s1">&#39;/* Processor-specific flags */&#39;</span>         <span class="p">},</span>
+      <span class="p">{</span>   <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;Elf32_Half&#39;</span><span class="p">,</span>    <span class="nx">fName</span><span class="o">:</span><span class="s1">&#39;e_ehsize&#39;</span><span class="p">,</span>             <span class="nx">comment</span><span class="o">:</span><span class="s1">&#39;/* ELF header size in bytes */&#39;</span>         <span class="p">},</span>
+      <span class="p">{</span>   <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;Elf32_Half&#39;</span><span class="p">,</span>    <span class="nx">fName</span><span class="o">:</span><span class="s1">&#39;e_phentsize&#39;</span><span class="p">,</span>          <span class="nx">comment</span><span class="o">:</span><span class="s1">&#39;/* Program header table entry size */&#39;</span>  <span class="p">},</span>
+      <span class="p">{</span>   <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;Elf32_Half&#39;</span><span class="p">,</span>    <span class="nx">fName</span><span class="o">:</span><span class="s1">&#39;e_phnum&#39;</span><span class="p">,</span>              <span class="nx">comment</span><span class="o">:</span><span class="s1">&#39;/* Program header table entry count */&#39;</span> <span class="p">},</span>
+      <span class="p">{</span>   <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;Elf32_Half&#39;</span><span class="p">,</span>    <span class="nx">fName</span><span class="o">:</span><span class="s1">&#39;e_shentsize&#39;</span><span class="p">,</span>          <span class="nx">comment</span><span class="o">:</span><span class="s1">&#39;/* Section header table entry size */&#39;</span>  <span class="p">},</span>
+      <span class="p">{</span>   <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;Elf32_Half&#39;</span><span class="p">,</span>    <span class="nx">fName</span><span class="o">:</span><span class="s1">&#39;e_shnum&#39;</span><span class="p">,</span>              <span class="nx">comment</span><span class="o">:</span><span class="s1">&#39;/* Section header table entry count */&#39;</span> <span class="p">},</span>
+      <span class="p">{</span>   <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;Elf32_Half&#39;</span><span class="p">,</span>    <span class="nx">fName</span><span class="o">:</span><span class="s1">&#39;e_shstrndx&#39;</span><span class="p">,</span>           <span class="nx">comment</span><span class="o">:</span><span class="s1">&#39;/* Section header string table index */&#39;</span><span class="p">}</span>
+    <span class="p">];</span>
+    <span class="kd">var</span> <span class="nx">phdr</span> <span class="o">=</span>  <span class="p">[</span>
+      <span class="p">{</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;Elf32_Word&#39;</span><span class="p">,</span>    <span class="nx">fName</span><span class="o">:</span><span class="s1">&#39;p_type&#39;</span>  <span class="p">,</span>    <span class="nx">comment</span><span class="o">:</span><span class="s1">&#39;/* Segment type */&#39;</span><span class="p">},</span>
+      <span class="p">{</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;Elf32_Off&#39;</span><span class="p">,</span>     <span class="nx">fName</span><span class="o">:</span><span class="s1">&#39;p_offset&#39;</span><span class="p">,</span>    <span class="nx">comment</span><span class="o">:</span><span class="s1">&#39;/* Segment file offset */&#39;</span><span class="p">},</span>
+      <span class="p">{</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;Elf32_Addr&#39;</span><span class="p">,</span>    <span class="nx">fName</span><span class="o">:</span><span class="s1">&#39;p_vaddr&#39;</span> <span class="p">,</span>    <span class="nx">comment</span><span class="o">:</span><span class="s1">&#39;/* Segment virtual address */&#39;</span><span class="p">},</span>
+      <span class="p">{</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;Elf32_Addr&#39;</span><span class="p">,</span>    <span class="nx">fName</span><span class="o">:</span><span class="s1">&#39;p_paddr&#39;</span> <span class="p">,</span>    <span class="nx">comment</span><span class="o">:</span><span class="s1">&#39;/* Segment physical address */&#39;</span><span class="p">},</span>
+      <span class="p">{</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;Elf32_Word&#39;</span><span class="p">,</span>    <span class="nx">fName</span><span class="o">:</span><span class="s1">&#39;p_filesz&#39;</span><span class="p">,</span>    <span class="nx">comment</span><span class="o">:</span><span class="s1">&#39;/* Segment size in file */&#39;</span><span class="p">},</span>
+      <span class="p">{</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;Elf32_Word&#39;</span><span class="p">,</span>    <span class="nx">fName</span><span class="o">:</span><span class="s1">&#39;p_memsz&#39;</span> <span class="p">,</span>    <span class="nx">comment</span><span class="o">:</span><span class="s1">&#39;/* Segment size in memory */&#39;</span><span class="p">},</span>
+      <span class="p">{</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;Elf32_Word&#39;</span><span class="p">,</span>    <span class="nx">fName</span><span class="o">:</span><span class="s1">&#39;p_flags&#39;</span> <span class="p">,</span>    <span class="nx">comment</span><span class="o">:</span><span class="s1">&#39;/* Segment flags */&#39;</span><span class="p">},</span>
+      <span class="p">{</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;Elf32_Word&#39;</span><span class="p">,</span>    <span class="nx">fName</span><span class="o">:</span><span class="s1">&#39;p_align&#39;</span> <span class="p">,</span>    <span class="nx">comment</span><span class="o">:</span><span class="s1">&#39;/* Segment alignment */&#39;</span><span class="p">}</span>
+    <span class="p">]</span> <span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">sl</span><span class="o">=</span> <span class="nx">el</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">6</span><span class="p">);</span><span class="c1">//magic number etc.</span>
+    <span class="nx">sl</span><span class="p">.</span><span class="nx">unshift</span><span class="p">(</span><span class="nx">el</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">).</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">));</span> <span class="c1">// put info related to magic number as first element</span>
+    <span class="nx">_</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">ehdr</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">v</span><span class="p">){</span>
+      <span class="nx">v</span><span class="p">.</span><span class="nx">size</span> <span class="o">=</span> <span class="nx">tSize</span><span class="p">(</span><span class="nx">v</span><span class="p">.</span><span class="nx">type</span><span class="p">);</span>
+    <span class="p">});</span>
+    <span class="nx">_</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">phdr</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">v</span><span class="p">){</span>
+      <span class="nx">v</span><span class="p">.</span><span class="nx">size</span><span class="o">=</span><span class="nx">tSize</span><span class="p">(</span><span class="nx">v</span><span class="p">.</span><span class="nx">type</span><span class="p">);</span>
+    <span class="p">});</span>
+
+    <span class="nx">_</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">sl</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">v</span><span class="p">,</span><span class="nx">i</span><span class="p">,</span><span class="nx">l</span><span class="p">){</span>
+      <span class="kd">var</span> <span class="nx">splited</span> <span class="o">=</span> <span class="p">(</span><span class="sr">/\s+([^\:]+):\s+(.*?)\s*$/</span><span class="p">).</span><span class="nx">exec</span><span class="p">(</span><span class="nx">v</span><span class="p">);</span>
+      <span class="nx">ehdr</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">content</span><span class="o">=</span><span class="nx">splited</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+    <span class="p">});</span>
+    <span class="nx">parsedHeaders</span><span class="p">.</span><span class="nx">ehdr</span><span class="o">=</span><span class="nx">ehdr</span><span class="p">;</span>
+    <span class="kd">function</span> <span class="nx">tSize</span><span class="p">(</span><span class="nx">t</span><span class="p">){</span>
+      <span class="k">switch</span><span class="p">(</span><span class="nx">t</span><span class="p">){</span>
+        <span class="k">case</span> <span class="s1">&#39;unsigned char[16]&#39;</span><span class="o">:</span>
+          <span class="k">return</span> <span class="mi">16</span><span class="p">;</span>
+        <span class="k">case</span> <span class="s1">&#39;Elf32_Half&#39;</span><span class="o">:</span>
+          <span class="k">return</span> <span class="mi">2</span><span class="p">;</span>
+        <span class="k">case</span> <span class="s1">&#39;Elf32_Word&#39;</span><span class="o">:</span>
+          <span class="k">return</span> <span class="mi">4</span><span class="p">;</span>
+        <span class="k">case</span> <span class="s1">&#39;Elf32_Off&#39;</span><span class="o">:</span>
+          <span class="k">return</span> <span class="mi">4</span><span class="p">;</span>
+        <span class="k">case</span> <span class="s1">&#39;Elf32_Addr&#39;</span><span class="o">:</span>
+          <span class="k">return</span> <span class="mi">4</span><span class="p">;</span>
+        <span class="k">default</span><span class="o">:</span>
+          <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+      <span class="p">}</span>
+    <span class="p">}</span> 
+    <span class="kd">var</span> <span class="nx">progH</span> <span class="o">=</span> <span class="nx">elfH</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">23</span><span class="p">,</span><span class="mi">23</span><span class="o">+</span><span class="nb">parseInt</span><span class="p">(</span><span class="nx">ehdr</span><span class="p">[</span><span class="mi">10</span><span class="p">].</span><span class="nx">content</span><span class="p">,</span><span class="mi">10</span><span class="p">));</span>
+
+    <span class="nx">parsedHeaders</span><span class="p">.</span><span class="nx">phdr</span><span class="o">=</span><span class="p">[];</span>
+    <span class="nx">_</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">progH</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">v</span><span class="p">,</span><span class="nx">i</span><span class="p">,</span><span class="nx">l</span><span class="p">){</span>
+      <span class="kd">var</span> <span class="nx">parsed</span><span class="o">=</span><span class="p">(</span><span class="sr">/\s+(\w+)\s+(\w+)\s+(\w+)\s+(\w+)\s+(\w+)\s+(\w+)\s+(.{3})\s+(\w+)/</span><span class="p">).</span><span class="nx">exec</span><span class="p">(</span><span class="nx">v</span><span class="p">);</span>
+      <span class="k">if</span><span class="p">(</span><span class="nx">parsed</span><span class="p">){</span>
+       <span class="c1">///////////////////////</span>
+        <span class="nx">parsedHeaders</span><span class="p">.</span><span class="nx">phdr</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">phdr</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">v</span><span class="p">,</span><span class="nx">i</span><span class="p">,</span><span class="nx">l</span><span class="p">){</span>
+          <span class="nx">v</span><span class="p">.</span><span class="nx">content</span><span class="o">=</span><span class="nx">parsed</span><span class="p">[</span><span class="nx">i</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span>
+          <span class="k">return</span> <span class="nx">v</span><span class="p">;</span>
+        <span class="p">}));</span>
+      <span class="p">}</span>
+      <span class="k">else</span><span class="p">{</span>
+        <span class="nx">parsedHeaders</span><span class="p">.</span><span class="nx">phdr</span><span class="p">.</span><span class="nx">push</span><span class="p">([{</span>
+          <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;unsigned char[16]&#39;</span><span class="p">,</span>
+          <span class="nx">content</span><span class="o">:</span> <span class="nx">v</span><span class="p">,</span>
+          <span class="nx">size</span><span class="o">:</span><span class="mi">16</span>
+        <span class="p">}]);</span>
+      <span class="p">}</span>
+    <span class="p">});</span>
+    <span class="k">return</span> <span class="nx">parsedHeaders</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="nx">parsers</span><span class="p">.</span><span class="nx">parseSHeaders</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
+    <span class="kd">var</span> <span class="nx">parsed</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">elfH</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s2">&quot;\n&quot;</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="nx">elfH</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">j</span> <span class="o">=</span> <span class="nx">el</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot;\n&quot;</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">jj</span><span class="o">=</span> <span class="nx">j</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="sr">/\s{2}[0-9]{1,3}\s{1}/</span><span class="p">);</span>
+    <span class="nx">jj</span> <span class="o">=</span> <span class="nx">jj</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="c1">//console.log(jj);</span>
+    <span class="nx">jj</span> <span class="o">=</span> <span class="nx">jj</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">v</span><span class="p">,</span><span class="nx">i</span><span class="p">,</span><span class="nx">l</span><span class="p">){</span>
+      <span class="nx">v</span><span class="o">=</span><span class="nx">v</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="s2">&quot;\n&quot;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">);</span>
+      <span class="kd">var</span> <span class="nx">vs</span> <span class="o">=</span> <span class="sr">/([\w\.\-]+)\s+(\w+)\s+(\w+)\s+(\w+)\s+(\w+)\s+([\w*]+)\s+(.+)/</span><span class="p">.</span><span class="nx">exec</span><span class="p">(</span><span class="nx">v</span><span class="p">);</span>
+      <span class="c1">//console.log(vs);</span>
+      <span class="k">return</span> <span class="p">{</span>
+        <span class="nx">name</span><span class="o">:</span> <span class="nx">vs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="nx">size</span><span class="o">:</span> <span class="nx">vs</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+        <span class="nx">VMA</span><span class="o">:</span> <span class="nx">vs</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+        <span class="nx">LMA</span><span class="o">:</span> <span class="nx">vs</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+        <span class="nx">fOff</span><span class="o">:</span> <span class="nx">vs</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+        <span class="nx">align</span><span class="o">:</span> <span class="nx">vs</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
+        <span class="nx">flags</span><span class="o">:</span> <span class="nx">vs</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span>       
+      <span class="p">};</span>
+    <span class="p">});</span>
+    <span class="k">return</span> <span class="nx">jj</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="nx">parsers</span><span class="p">.</span><span class="nx">processData</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">processData</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
+    <span class="k">return</span> <span class="nx">_</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;\n\nD&#39;</span><span class="p">).</span><span class="nx">splice</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="kd">function</span><span class="p">(</span><span class="nx">item</span><span class="p">,</span><span class="nx">index</span><span class="p">){</span>
+      <span class="kd">var</span> <span class="nx">split</span> <span class="o">=</span> <span class="nx">item</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;\n\n&#39;</span><span class="p">);</span>
+      <span class="c1">//console.log(&quot;splited&quot;);</span>
+      <span class="c1">//console.log(split);</span>
+      <span class="kd">var</span> <span class="nx">re</span> <span class="o">=</span> <span class="sr">/([\w\.\-]+)\:$/g</span><span class="p">;</span>
+      <span class="c1">//var re = /(\.?\w+)\:$/g;</span>
+      <span class="kd">var</span> <span class="nx">sectionName</span> <span class="o">=</span> <span class="nx">re</span><span class="p">.</span><span class="nx">exec</span><span class="p">(</span><span class="nx">split</span><span class="p">[</span><span class="mi">0</span><span class="p">])[</span><span class="mi">1</span><span class="p">];</span>
+      <span class="kd">var</span> <span class="nx">sectionContentRaw</span><span class="o">=</span><span class="nx">split</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+      <span class="kd">var</span> <span class="nx">cont</span><span class="o">=</span><span class="nx">split</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+
+      <span class="kd">var</span> <span class="nx">sectionContent</span> <span class="o">=</span> <span class="nx">cont</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">sitem</span><span class="p">,</span><span class="nx">sindex</span><span class="p">){</span>
+        <span class="kd">var</span> <span class="nx">c</span> <span class="o">=</span> <span class="nx">sitem</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;\n&#39;</span><span class="p">);</span>
+        <span class="c1">//console.log(c);</span>
+        <span class="kd">var</span> <span class="nx">symName</span> <span class="o">=</span> <span class="p">(</span><span class="sr">/&lt;(.+)&gt;\:$/g</span><span class="p">).</span><span class="nx">exec</span><span class="p">(</span><span class="nx">c</span><span class="p">[</span><span class="mi">0</span><span class="p">])[</span><span class="mi">1</span><span class="p">];</span>
+        <span class="c1">//console.log(symName);</span>
+        <span class="kd">var</span> <span class="nx">cs</span><span class="o">=</span><span class="nx">c</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">symContent</span> <span class="o">=</span> <span class="nx">cs</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">vitem</span><span class="p">,</span><span class="nx">vindex</span><span class="p">){</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>console.log(vitem);</p></div></div><div class="code"><div class="wrapper">          <span class="c1">//console.log(&#39;vindex&#39;+vindex);</span>
+          <span class="kd">var</span> <span class="nx">re</span> <span class="o">=</span> <span class="p">(</span><span class="sr">/\s*(\w+):\s*([a-f0-9]+)\s*(\w+)\s+([^;]+)\s*(;.*)?/g</span><span class="p">);</span>
+          <span class="kd">var</span> <span class="nx">instr</span> <span class="o">=</span> <span class="nx">re</span><span class="p">.</span><span class="nx">exec</span><span class="p">(</span><span class="nx">vitem</span><span class="p">);</span>
+          <span class="k">if</span><span class="p">(</span><span class="nx">vitem</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="nx">re</span><span class="p">)){</span>
+            <span class="k">return</span> <span class="p">{</span>
+              <span class="nx">address</span><span class="o">:</span><span class="nx">instr</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+              <span class="nx">memraw</span><span class="o">:</span><span class="nx">instr</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+              <span class="nx">op</span><span class="o">:</span> <span class="nx">instr</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span> <span class="nx">instr</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+              <span class="nx">opcode</span><span class="o">:</span><span class="nx">instr</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+              <span class="nx">operands</span><span class="o">:</span><span class="nx">instr</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+              <span class="nx">comments</span><span class="o">:</span> <span class="nx">instr</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+            <span class="p">};</span>
+          <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+            <span class="k">return</span><span class="p">{</span>
+              <span class="nx">address</span><span class="o">:</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+              <span class="nx">memraw</span><span class="o">:</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+              <span class="nx">op</span><span class="o">:</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+              <span class="nx">comments</span><span class="o">:</span><span class="s1">&#39;&#39;</span>
+            <span class="p">};</span>
+          <span class="p">}</span>
+        <span class="p">});</span>
+        <span class="c1">//console.log(&#39;sindex&#39;+sindex);</span>
+        <span class="k">return</span> <span class="p">{</span>
+          <span class="nx">symName</span><span class="o">:</span><span class="nx">symName</span><span class="p">,</span>
+          <span class="nx">symContent</span><span class="o">:</span><span class="nx">symContent</span>
+        <span class="p">};</span>
+      <span class="p">});</span>
+      <span class="k">return</span> <span class="p">{</span>
+        <span class="nx">sectionName</span><span class="o">:</span><span class="nx">sectionName</span><span class="p">,</span>
+        <span class="nx">sectionContentRaw</span><span class="o">:</span><span class="nx">sectionContentRaw</span><span class="p">,</span>
+        <span class="nx">sectionContent</span><span class="o">:</span><span class="nx">sectionContent</span>
+      <span class="p">};</span>
+    <span class="p">});</span>
+  <span class="p">};</span>
+  <span class="nx">parsers</span><span class="p">[</span><span class="s1">&#39;arm&#39;</span><span class="p">].</span><span class="nx">disassemblyParser</span><span class="o">=</span><span class="nx">parsers</span><span class="p">[</span><span class="s1">&#39;x86 elf&#39;</span><span class="p">].</span><span class="nx">disassemblyParser</span><span class="o">=</span> <span class="kd">function</span> <span class="nx">dissasemblyx86Callback</span><span class="p">(</span><span class="nx">disassemblyRaw</span><span class="p">){</span>
+       <span class="kd">var</span> <span class="nx">dissasembly</span><span class="o">=</span> <span class="nx">disassemblyRaw</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">2</span><span class="p">);</span>
+
+    <span class="kd">var</span> <span class="nx">instructions</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="kd">var</span> <span class="nx">src</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="kd">var</span> <span class="nx">combined</span> <span class="o">=</span><span class="p">[];</span>
+
+    <span class="kd">var</span> <span class="nx">obj</span><span class="p">;</span>
+    <span class="nx">_</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">dissasembly</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">){</span>
+      <span class="c1">//detects line from gdb output</span>
+      <span class="kd">var</span> <span class="nx">disasLine</span><span class="o">=</span><span class="sr">/^(\s*\=\&gt;\s*)?\s*([^&lt;]+)?\s*(&lt;[^&gt;]*&gt;)?:\s+((\w{2}\s+)*)\s*(\w+)\s*([^&lt;;]+)?(&lt;[^&gt;]*&gt;)?\s*(;(.*))?$/</span><span class="p">;</span>
+      <span class="c1">//old regexp bellow</span>
+      <span class="c1">///^(\s*\=\&gt;\s*)?\s*([^&lt;]+)\s+(&lt;[^&gt;]*&gt;):\s+((\w{2}\s+)*)\s*(\w+)\s+([^&lt;;]+)?(&lt;[^&gt;]*&gt;)?\s*(;(.*))?$/;</span>
+      <span class="kd">var</span> <span class="nx">disasLineSRC</span><span class="o">=</span><span class="sr">/^(\d+)\s+(.*)$/</span><span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">splitedInstruction</span><span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">instruction</span><span class="p">;</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">value</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="nx">disasLine</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nx">splitedInstruction</span> <span class="o">=</span>  <span class="nx">value</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="nx">disasLine</span><span class="p">);</span>
+        <span class="nx">obj</span><span class="o">=</span><span class="nx">instruction</span> <span class="o">=</span><span class="p">{</span>
+          <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;instruction&#39;</span><span class="p">,</span>
+          <span class="nx">current</span><span class="o">:</span><span class="nx">splitedInstruction</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">!==</span><span class="kc">undefined</span><span class="p">,</span>
+          <span class="nx">address</span><span class="o">:</span> <span class="nx">splitedInstruction</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+          <span class="nx">addressr</span><span class="o">:</span> <span class="nx">splitedInstruction</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+          <span class="nx">memraw</span><span class="o">:</span>  <span class="nx">splitedInstruction</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+          <span class="nx">opcode</span><span class="o">:</span>  <span class="nx">splitedInstruction</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
+          <span class="nx">operands</span><span class="o">:</span><span class="nx">splitedInstruction</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span>
+          <span class="nx">symbolOperands</span><span class="o">:</span> <span class="nx">splitedInstruction</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span>
+          <span class="nx">comment</span><span class="o">:</span> <span class="nx">splitedInstruction</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span>
+        <span class="p">};</span>
+        <span class="nx">instructions</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">instruction</span><span class="p">);</span>
+      <span class="p">}</span><span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">value</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="nx">disasLineSRC</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nx">splitedInstruction</span> <span class="o">=</span>  <span class="nx">value</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="nx">disasLineSRC</span><span class="p">);</span>
+        <span class="nx">obj</span><span class="o">=</span><span class="p">{</span>
+          <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;src&#39;</span><span class="p">,</span>
+          <span class="nx">lineNumber</span><span class="o">:</span><span class="nx">splitedInstruction</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+          <span class="nx">code</span><span class="o">:</span> <span class="nx">splitedInstruction</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="p">};</span>
+        <span class="nx">src</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">obj</span><span class="p">);</span>
+      
+      <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+        <span class="nx">obj</span><span class="o">=</span><span class="p">{</span><span class="nx">type</span><span class="o">:</span><span class="s1">&#39;blank&#39;</span><span class="p">};</span>
+      <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>console.log(obj);</p></div></div><div class="code"><div class="wrapper">      <span class="nx">combined</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">obj</span><span class="p">);</span>
+
+    <span class="p">});</span>
+   <span class="k">return</span> <span class="p">{</span>
+     <span class="nx">instructions</span><span class="o">:</span><span class="nx">instructions</span><span class="p">,</span>
+     <span class="nx">src</span><span class="o">:</span><span class="nx">src</span><span class="p">,</span>
+     <span class="nx">combined</span><span class="o">:</span><span class="nx">combined</span>
+   <span class="p">};</span>
+   <span class="c1">//console.log(combined);</span>
+ <span class="p">};</span>
+  <span class="nx">parsers</span><span class="p">.</span><span class="nx">disassemblyParser</span><span class="o">=</span><span class="kd">function</span> <span class="nx">dissasemblyCallback</span><span class="p">(){</span>
+   <span class="nx">obj</span><span class="p">.</span><span class="nx">sharedData</span><span class="p">.</span><span class="nx">dissasembly</span><span class="o">=</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">sharedData</span><span class="p">.</span><span class="nx">result</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">b</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="nx">b</span><span class="p">.</span><span class="nx">push</span><span class="p">([]);</span>
+    <span class="kd">var</span> <span class="nx">basicBlocks</span><span class="o">=</span><span class="p">[];</span>
+    <span class="nx">basicBlocks</span><span class="p">.</span><span class="nx">push</span><span class="p">([]);</span>
+
+    <span class="kd">var</span> <span class="nx">disasArr</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="kd">var</span> <span class="nx">disasObjArr</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="c1">//bbBoundaryArr.push({from:0,to:0});</span>
+    <span class="kd">var</span> <span class="nx">boundaries</span><span class="o">=</span><span class="p">[];</span>
+    <span class="kd">var</span> <span class="nx">branchPreviousInst</span><span class="o">=</span><span class="kc">false</span><span class="p">;</span>
+
+    <span class="kd">var</span> <span class="nx">branchArray</span><span class="o">=</span><span class="p">[];</span>
+    <span class="nx">_</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">obj</span><span class="p">.</span><span class="nx">sharedData</span><span class="p">.</span><span class="nx">dissasembly</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">){</span>
+      <span class="c1">//detects disassembly line with =&gt; in it</span>
+      <span class="kd">var</span> <span class="nx">disasLineCurrent</span><span class="o">=</span><span class="sr">/^\=\&gt;\s*(.*):\s+(\w+)([^;]*)(;(.*))?$/</span><span class="p">;</span>
+      <span class="c1">//detects line from gdb output</span>
+      <span class="kd">var</span> <span class="nx">disasLine</span><span class="o">=</span><span class="sr">/^\s*(.*):\s+(\w+)([^;]*)(;(.*))?$/</span><span class="p">;</span>
+
+      <span class="kd">var</span> <span class="nx">splitedInstruction</span><span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">typeOfReg</span> <span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">instObj</span> <span class="p">;</span>
+      <span class="k">if</span><span class="p">(</span><span class="nx">value</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="nx">disasLineCurrent</span><span class="p">)){</span>
+        <span class="nx">splitedInstruction</span> <span class="o">=</span>  <span class="nx">value</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="nx">disasLineCurrent</span><span class="p">);</span>
+        <span class="nx">typeOfReg</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+        <span class="nx">instObj</span> <span class="o">=</span><span class="p">{</span>
+          <span class="nx">current</span><span class="o">:</span><span class="kc">true</span><span class="p">,</span>
+          <span class="nx">address</span><span class="o">:</span> <span class="nx">splitedInstruction</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+          <span class="nx">opcode</span><span class="o">:</span>  <span class="nx">splitedInstruction</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+          <span class="nx">operands</span><span class="o">:</span><span class="nx">splitedInstruction</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+          <span class="nx">comment</span><span class="o">:</span> <span class="nx">splitedInstruction</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+        <span class="p">};</span>
+      <span class="p">}</span><span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">value</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="nx">disasLine</span><span class="p">)){</span>
+        <span class="nx">splitedInstruction</span> <span class="o">=</span>  <span class="nx">value</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="nx">disasLine</span><span class="p">);</span>
+        <span class="nx">typeOfReg</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span>
+        <span class="nx">instObj</span> <span class="o">=</span><span class="p">{</span>
+          <span class="nx">current</span><span class="o">:</span><span class="kc">false</span><span class="p">,</span>
+          <span class="nx">address</span><span class="o">:</span> <span class="nx">splitedInstruction</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+          <span class="nx">opcode</span><span class="o">:</span>  <span class="nx">splitedInstruction</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+          <span class="nx">operands</span><span class="o">:</span><span class="nx">splitedInstruction</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+          <span class="nx">comment</span><span class="o">:</span> <span class="nx">splitedInstruction</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+          <span class="nx">uppperBoundary</span><span class="o">:</span><span class="kc">false</span><span class="p">,</span><span class="c1">//true if it is upper boundary of basic block</span>
+          <span class="nx">downBoundary</span><span class="o">:</span><span class="kc">false</span><span class="p">,</span><span class="c1">//bottom boundary</span>
+        <span class="p">};</span>
+      <span class="p">}</span>
+
+      <span class="k">if</span><span class="p">(</span><span class="nx">splitedInstruction</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">branchPreviousInst</span><span class="p">){</span>
+          <span class="nx">instObj</span><span class="p">.</span><span class="nx">uppperBoundary</span><span class="o">=</span><span class="kc">true</span><span class="p">;</span>
+          <span class="nx">boundaries</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">instObj</span><span class="p">);</span>
+          <span class="nx">branchPreviousInst</span><span class="o">=</span><span class="kc">false</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">splitedInstruction</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="nx">match</span><span class="p">(</span><span class="sr">/^b.*/</span><span class="p">)){</span>
+          <span class="nx">branchPreviousInst</span><span class="o">=</span><span class="kc">true</span><span class="p">;</span>
+          <span class="nx">instObj</span><span class="p">.</span><span class="nx">bottomBoundary</span><span class="o">=</span><span class="kc">true</span><span class="p">;</span>
+          <span class="nx">boundaries</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">instObj</span><span class="p">);</span>
+          <span class="nx">branchArray</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">instObj</span><span class="p">);</span>
+        <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+          <span class="k">if</span><span class="p">(</span><span class="nx">boundaries</span><span class="p">.</span><span class="nx">length</span><span class="o">===</span><span class="mi">0</span><span class="p">){</span>
+            <span class="nx">instObj</span><span class="p">.</span><span class="nx">uppperBoundary</span><span class="o">=</span><span class="kc">true</span><span class="p">;</span>
+            <span class="nx">boundaries</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">instObj</span><span class="p">);</span>
+          <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="nx">disasArr</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">splitedInstruction</span><span class="p">);</span>
+        <span class="nx">disasObjArr</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">instObj</span><span class="p">);</span>
+
+      <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+
+      <span class="p">}</span>
+
+
+    <span class="p">});</span>
+
+
+    <span class="nx">obj</span><span class="p">.</span><span class="nx">sharedData</span><span class="p">.</span><span class="nx">disasArr</span><span class="o">=</span><span class="nx">disasObjArr</span><span class="p">;</span>
+
+    <span class="c1">//find instructions that are jumped on and put it in boundaries</span>
+    <span class="nx">_</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">branchArray</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">){</span>
+      <span class="kd">var</span> <span class="nx">elem</span> <span class="o">=</span> <span class="nx">_</span><span class="p">.</span><span class="nx">findWhere</span><span class="p">(</span><span class="nx">disasObjArr</span><span class="p">,{</span><span class="s1">&#39;address&#39;</span><span class="o">:</span><span class="nx">value</span><span class="p">.</span><span class="nx">operands</span><span class="p">.</span><span class="nx">substring</span><span class="p">(</span><span class="mi">1</span><span class="p">)});</span>
+      <span class="k">if</span><span class="p">(</span><span class="nx">elem</span><span class="p">){</span>
+        <span class="kd">var</span> <span class="nx">indexDest</span> <span class="o">=</span> <span class="nx">_</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">boundaries</span><span class="p">,</span><span class="nx">elem</span><span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">indexDest</span><span class="o">===-</span><span class="mi">1</span><span class="p">){</span>
+          <span class="nx">elem</span><span class="p">.</span><span class="nx">up</span><span class="o">=</span><span class="kc">true</span><span class="p">;</span>
+          <span class="nx">boundaries</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">elem</span><span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+
+    <span class="p">});</span>
+    <span class="kd">var</span> <span class="nx">boundariesSorted</span><span class="o">=</span><span class="nx">_</span><span class="p">.</span><span class="nx">sortBy</span><span class="p">(</span><span class="nx">boundaries</span><span class="p">,</span><span class="s1">&#39;address&#39;</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">boundaryArrC</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+    <span class="nx">_</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">disasObjArr</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">){</span>
+      <span class="k">if</span><span class="p">(</span><span class="nx">value</span><span class="o">===</span><span class="nx">boundariesSorted</span><span class="p">[</span><span class="nx">boundaryArrC</span><span class="p">]){</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">value</span><span class="p">.</span><span class="nx">uppperBoundary</span><span class="o">===</span><span class="kc">true</span><span class="p">){</span>
+          <span class="nx">basicBlocks</span><span class="p">.</span><span class="nx">push</span><span class="p">([]);</span>
+          <span class="nx">basicBlocks</span><span class="p">[</span><span class="nx">basicBlocks</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nx">push</span><span class="p">(</span><span class="nx">value</span><span class="p">);</span>
+
+        <span class="p">}</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">value</span><span class="p">.</span><span class="nx">bottomBoundary</span><span class="o">===</span><span class="kc">true</span><span class="p">){</span>
+          <span class="nx">basicBlocks</span><span class="p">[</span><span class="nx">basicBlocks</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nx">push</span><span class="p">(</span><span class="nx">value</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="nx">boundaryArrC</span><span class="o">+=</span><span class="mi">1</span><span class="p">;</span>
+
+      <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+        <span class="nx">basicBlocks</span><span class="p">[</span><span class="nx">basicBlocks</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nx">push</span><span class="p">(</span><span class="nx">value</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">});</span>
+    <span class="c1">//legacy code :-D </span>
+    <span class="nx">obj</span><span class="p">.</span><span class="nx">data</span><span class="o">=</span><span class="nx">basicBlocks</span><span class="p">;</span>
+
+  <span class="p">};</span>
+  <span class="k">return</span> <span class="nx">parsers</span><span class="p">;</span>
+<span class="p">});</span></div></div></div></div></body></html>

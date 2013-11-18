@@ -1,0 +1,103 @@
+<!DOCTYPE html><html lang="en"><head><title>controllers/mainMenuController</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="controllers/mainMenuController"><meta name="groc-project-path" content="app/scripts/controllers/mainMenuController.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">app/scripts/controllers/mainMenuController.js</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="s1">&#39;use strict&#39;</span><span class="p">;</span>
+<span class="cm">/*global _:false */</span>
+<span class="cm">/*global io:false */</span>
+
+<span class="kd">var</span> <span class="nx">supports3DTransforms</span> <span class="o">=</span>  <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">webkitPerspective</span> <span class="o">!==</span> <span class="kc">undefined</span> <span class="o">||</span>
+                            <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">MozPerspective</span> <span class="o">!==</span> <span class="kc">undefined</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>this is a linkify function from hakim.se site
+it enables cool looking anchor tags but is commented out for now</p></div></div><div class="code"><div class="wrapper"><span class="kd">function</span> <span class="nx">linkify</span><span class="p">(</span> <span class="nx">selector</span> <span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span><span class="p">(</span> <span class="nx">supports3DTransforms</span> <span class="p">)</span> <span class="p">{</span>
+
+    <span class="kd">var</span> <span class="nx">nodes</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelectorAll</span><span class="p">(</span> <span class="nx">selector</span> <span class="p">);</span>
+    <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="nx">len</span><span class="o">=</span><span class="nx">nodes</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">len</span><span class="p">;</span><span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+      <span class="kd">var</span> <span class="nx">node</span><span class="o">=</span><span class="nx">nodes</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+      <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="nx">node</span><span class="p">.</span><span class="nx">className</span> <span class="o">||</span> <span class="o">!</span><span class="nx">node</span><span class="p">.</span><span class="nx">className</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span> <span class="sr">/roll/g</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="nx">node</span><span class="p">.</span><span class="nx">className</span> <span class="o">+=</span> <span class="s1">&#39; roll&#39;</span><span class="p">;</span>
+        <span class="nx">node</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;&lt;span data-title=&quot;&#39;</span><span class="o">+</span> <span class="nx">node</span><span class="p">.</span><span class="nx">text</span> <span class="o">+</span><span class="s1">&#39;&quot;&gt;&#39;</span> <span class="o">+</span> <span class="nx">node</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">+</span> <span class="s1">&#39;&lt;/span&gt;&#39;</span><span class="p">;</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">socket</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>main controller is used to control the header of the page and controlls 
+that are on display there</p></div></div><div class="code"><div class="wrapper"><span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">&#39;ldApp&#39;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">controller</span><span class="p">(</span><span class="s1">&#39;MainCtrl&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">configState</span><span class="p">,</span><span class="nx">command</span><span class="p">,</span><span class="nx">$rootScope</span><span class="p">,</span><span class="nx">$scope</span><span class="p">,</span><span class="nx">$http</span><span class="p">,</span><span class="nx">Data</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>linkify('a');</p></div></div><div class="code"><div class="wrapper">    <span class="nx">$scope</span><span class="p">.</span><span class="nx">data</span><span class="o">=</span><span class="nx">Data</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>old function not to be used</p></div></div><div class="code"><div class="wrapper">    <span class="nx">$scope</span><span class="p">.</span><span class="nx">commandExecL</span><span class="o">=</span><span class="kd">function</span><span class="p">(</span><span class="nx">cmnd</span><span class="p">,</span><span class="nx">resultVariable</span><span class="p">,</span><span class="nx">splice1</span><span class="p">,</span><span class="nx">splice2</span><span class="p">){</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>$scope.result=cmnd;</p></div></div><div class="code"><div class="wrapper">      <span class="k">if</span><span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">isFunction</span><span class="p">(</span><span class="nx">resultVariable</span><span class="p">)){</span>
+        <span class="nx">Data</span><span class="p">.</span><span class="nx">callbackQueue</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">resultVariable</span><span class="p">);</span>
+      <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">resultVariable</span><span class="p">){</span>
+          <span class="nx">Data</span><span class="p">.</span><span class="nx">callbackQueue</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="kd">function</span> <span class="nx">putStuffinResultC</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">Data</span><span class="p">.</span><span class="nx">sharedData</span><span class="p">[</span><span class="nx">resultVariable</span><span class="p">]</span><span class="o">=</span><span class="nx">Data</span><span class="p">.</span><span class="nx">sharedData</span><span class="p">.</span><span class="nx">result</span><span class="p">;</span>
+          <span class="p">});</span>
+        <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+          <span class="k">if</span><span class="p">(</span><span class="nx">resultVariable</span><span class="o">!==</span><span class="kc">null</span> <span class="p">){</span>
+            <span class="nx">Data</span><span class="p">.</span><span class="nx">callbackQueue</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="kd">function</span> <span class="nx">anonCallback</span><span class="p">()</span> <span class="p">{});</span>
+          <span class="p">}</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+      <span class="nx">Data</span><span class="p">.</span><span class="nx">sock</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s1">&#39;command&#39;</span><span class="p">,{</span>
+        <span class="nx">ptyPayload</span><span class="o">:</span><span class="nx">cmnd</span>
+      <span class="p">});</span>
+
+    <span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>this is targets name as observable
+following code should change</p></div></div><div class="code"><div class="wrapper">    <span class="nx">$scope</span><span class="p">.</span><span class="nx">recording</span><span class="o">=</span><span class="kc">false</span><span class="p">;</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">file</span><span class="o">=</span><span class="nx">Data</span><span class="p">.</span><span class="nx">sharedData</span><span class="p">.</span><span class="nx">fileName</span><span class="p">;</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">configState</span><span class="o">=</span><span class="nx">configState</span><span class="p">;</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">sharedData</span><span class="o">=</span><span class="nx">Data</span><span class="p">.</span><span class="nx">sharedData</span><span class="p">;</span>
+    <span class="nx">Data</span><span class="p">.</span><span class="nx">scope</span><span class="o">=</span><span class="nx">$scope</span><span class="p">;</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">bWindows</span><span class="o">=</span><span class="p">[];</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">architecture</span> <span class="o">=</span><span class="nx">configState</span><span class="p">.</span><span class="nx">architecture</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>following scope functions just forward to functions on data module</p></div></div><div class="code"><div class="wrapper">    <span class="nx">$scope</span><span class="p">.</span><span class="nx">recToggle</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">$scope</span><span class="p">.</span><span class="nx">recording</span><span class="p">){</span>
+        <span class="kd">var</span> <span class="nx">v</span> <span class="o">=</span> <span class="nx">configState</span><span class="p">.</span><span class="nx">record</span><span class="p">.</span><span class="nx">slice</span><span class="p">().</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;\n&#39;</span><span class="p">);</span>
+        <span class="nx">configState</span><span class="p">.</span><span class="nx">bWindows</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">v</span><span class="p">);</span>
+        <span class="nx">configState</span><span class="p">.</span><span class="nx">record</span><span class="p">.</span><span class="nx">length</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+        <span class="nx">configState</span><span class="p">.</span><span class="nx">recording</span><span class="o">=</span><span class="kc">false</span><span class="p">;</span>
+        <span class="nx">$scope</span><span class="p">.</span><span class="nx">recording</span><span class="o">=</span><span class="kc">false</span><span class="p">;</span>
+      <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+        <span class="nx">configState</span><span class="p">.</span><span class="nx">recording</span><span class="o">=</span><span class="kc">true</span><span class="p">;</span>
+        <span class="nx">$scope</span><span class="p">.</span><span class="nx">recording</span><span class="o">=</span><span class="kc">true</span><span class="p">;</span>
+      <span class="p">}</span>
+
+
+    <span class="p">}</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">commandLoad</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="nx">Data</span><span class="p">.</span><span class="nx">debugData</span><span class="p">.</span><span class="nx">arch</span><span class="o">=</span><span class="s1">&#39;x86&#39;</span><span class="p">;</span>
+      <span class="nx">Data</span><span class="p">.</span><span class="nx">status</span><span class="o">=</span><span class="s1">&#39;running&#39;</span><span class="p">;</span>
+      <span class="nx">Data</span><span class="p">.</span><span class="nx">loadCommand</span><span class="p">(</span><span class="nx">configState</span><span class="p">.</span><span class="nx">file</span><span class="p">,</span><span class="nx">$scope</span><span class="p">.</span><span class="nx">architecture</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">commandStart</span><span class="o">=</span><span class="kd">function</span><span class="p">(){</span>
+      <span class="nx">Data</span><span class="p">.</span><span class="nx">debugData</span><span class="p">.</span><span class="nx">arch</span><span class="o">=</span><span class="s1">&#39;x86&#39;</span><span class="p">;</span>
+      <span class="nx">Data</span><span class="p">.</span><span class="nx">status</span><span class="o">=</span><span class="s1">&#39;running&#39;</span><span class="p">;</span>
+      <span class="nx">Data</span><span class="p">.</span><span class="nx">startCommand</span><span class="p">(</span><span class="nx">configState</span><span class="p">.</span><span class="nx">file</span><span class="p">,</span><span class="nx">$scope</span><span class="p">.</span><span class="nx">architecture</span><span class="p">);</span>
+    <span class="p">};</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">commandStartVM</span><span class="o">=</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="nx">Data</span><span class="p">.</span><span class="nx">startCommandVM</span><span class="p">(</span><span class="nx">configState</span><span class="p">.</span><span class="nx">file</span><span class="p">);</span>
+    <span class="p">};</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">registerInfo</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="nx">Data</span><span class="p">.</span><span class="nx">getRegisterInfo</span><span class="p">();</span>
+
+    <span class="p">};</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">commandDissasemble</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="nx">Data</span><span class="p">.</span><span class="nx">disassemblyData</span><span class="p">.</span><span class="nx">disassemble</span><span class="p">(</span><span class="nx">configState</span><span class="p">.</span><span class="nx">file</span><span class="p">,</span><span class="nx">$scope</span><span class="p">.</span><span class="nx">architecture</span><span class="p">);</span>
+    <span class="p">};</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">stop</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="nx">Data</span><span class="p">.</span><span class="nx">stop</span><span class="p">();</span>
+      <span class="nx">Data</span><span class="p">.</span><span class="nx">status</span><span class="o">=</span><span class="s1">&#39;stopped&#39;</span><span class="p">;</span>
+    <span class="p">};</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">stepOver</span> <span class="o">=</span> <span class="kd">function</span>  <span class="p">()</span> <span class="p">{</span>
+      <span class="nx">Data</span><span class="p">.</span><span class="nx">debugData</span><span class="p">.</span><span class="nx">stepOver</span><span class="p">();</span>
+    <span class="p">};</span>
+
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">cont</span> <span class="o">=</span> <span class="kd">function</span>  <span class="p">()</span> <span class="p">{</span>
+      <span class="nx">Data</span><span class="p">.</span><span class="nx">debugData</span><span class="p">.</span><span class="nx">cont</span><span class="p">();</span>
+    <span class="p">};</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">stepInto</span> <span class="o">=</span> <span class="kd">function</span>  <span class="p">()</span> <span class="p">{</span>
+      <span class="nx">Data</span><span class="p">.</span><span class="nx">debugData</span><span class="p">.</span><span class="nx">stepInto</span><span class="p">();</span>
+    <span class="p">};</span>
+    
+
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">command</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">;</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">awesomeThings</span> <span class="o">=</span> <span class="p">[</span>
+      <span class="s1">&#39;HTML5 Boilerplate&#39;</span><span class="p">,</span>
+      <span class="s1">&#39;AngularJS&#39;</span><span class="p">,</span>
+      <span class="s1">&#39;Karma&#39;</span><span class="p">,</span>
+    <span class="p">];</span>
+  <span class="p">});</span></div></div></div></div></body></html>

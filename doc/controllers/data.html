@@ -1,0 +1,117 @@
+<!DOCTYPE html><html lang="en"><head><title>controllers/data</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="controllers/data"><meta name="groc-project-path" content="app/scripts/controllers/data.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">app/scripts/controllers/data.js</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="s1">&#39;use strict&#39;</span><span class="p">;</span>
+<span class="cm">/*global _:false */</span>
+<span class="cm">/*global io:false */</span>
+<span class="cm">/*global confirm:false */</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>this is the main module that keeps state of the application on the frontend</p></div></div><div class="code"><div class="wrapper"><span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">&#39;ldApp&#39;</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">factory</span><span class="p">(</span><span class="s1">&#39;Data&#39;</span><span class="p">,[</span><span class="s1">&#39;$rootScope&#39;</span><span class="p">,</span><span class="s1">&#39;command&#39;</span><span class="p">,</span><span class="s1">&#39;DataDebug&#39;</span><span class="p">,</span><span class="s1">&#39;DataDisassembly&#39;</span><span class="p">,</span><span class="s1">&#39;configState&#39;</span><span class="p">,</span>
+         <span class="kd">function</span><span class="p">(</span><span class="nx">$rootScope</span><span class="p">,</span><span class="nx">command</span><span class="p">,</span><span class="nx">DataDebug</span><span class="p">,</span><span class="nx">DataDisassembly</span><span class="p">,</span><span class="nx">configState</span><span class="p">){</span>
+  <span class="c1">//gdb service</span>
+  <span class="kd">var</span> <span class="nx">obj</span><span class="o">=</span><span class="p">{</span>
+    <span class="nx">debugData</span><span class="o">:</span><span class="nx">DataDebug</span><span class="p">,</span>
+    <span class="nx">disassemblyData</span><span class="o">:</span><span class="nx">DataDisassembly</span><span class="p">,</span>
+
+
+    <span class="nx">data</span><span class="o">:</span><span class="p">[],</span>
+    <span class="nx">sharedData</span><span class="o">:</span><span class="p">{</span>
+      <span class="nx">fileName</span><span class="o">:</span><span class="s1">&#39;proba&#39;</span><span class="p">,</span>
+      <span class="nx">dUI</span><span class="o">:</span><span class="p">{</span>
+        <span class="nx">statusLine</span><span class="o">:</span><span class="s1">&#39;&#39;</span>
+      <span class="p">},</span>
+      <span class="nx">result</span><span class="o">:</span><span class="p">[],</span>
+      <span class="nx">resultRaw</span><span class="o">:</span><span class="p">[],</span>
+      <span class="nx">registers</span><span class="o">:</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+      <span class="nx">breakpoints</span><span class="o">:</span><span class="p">[],</span>
+      <span class="nx">disasViewData</span><span class="o">:</span><span class="p">{</span><span class="nx">sectionD</span><span class="o">:</span><span class="p">[{}]}</span>
+    <span class="p">},</span>
+    <span class="nx">sock</span><span class="o">:</span><span class="kc">null</span>
+  <span class="p">};</span>
+
+
+  
+
+  <span class="c1">//for debugging</span>
+  <span class="nb">window</span><span class="p">.</span><span class="nx">data</span><span class="o">=</span><span class="nx">obj</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>this command will switch to vagrant directory and
+check output of vagrant status if it's not created it will warn user
+that a vm should be first downloaded and then provisioned
+it can take a long time and can use up a lot of cpu installing
+all of the stuff needed on a clean system like node bower and
+modules and all of the components needed</p></div></div><div class="code"><div class="wrapper">  <span class="nx">obj</span><span class="p">.</span><span class="nx">startCommandVM</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">command</span><span class="p">.</span><span class="nx">commandExecO</span><span class="p">({</span>
+      <span class="nx">msgType</span><span class="o">:</span><span class="s1">&#39;exec&#39;</span><span class="p">,</span>
+      <span class="nx">ptyPayload</span><span class="o">:</span><span class="s1">&#39;cd vdir; vagrant status; cd ../&#39;</span><span class="p">,</span>
+      <span class="nx">callback</span><span class="o">:</span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
+        <span class="kd">var</span> <span class="nx">status</span> <span class="o">=</span> <span class="p">(</span><span class="sr">/.*default\s+(\w+\s*\w+).*/</span><span class="p">).</span><span class="nx">exec</span><span class="p">(</span><span class="nx">data</span><span class="p">)[</span><span class="mi">1</span><span class="p">];</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">status</span><span class="o">===</span><span class="s1">&#39;not created&#39;</span><span class="p">){</span>
+          <span class="k">if</span><span class="p">(</span><span class="nx">confirm</span><span class="p">(</span><span class="s1">&#39;VM is not created. If you click ok then background software will download 300+MB and do a bunch of CPU intensive config. Continue? &#39;</span><span class="p">)){</span>
+            <span class="nx">socket</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s1">&#39;debugInVM&#39;</span><span class="p">,{</span>
+              <span class="nx">name</span><span class="o">:</span><span class="nx">name</span>
+            <span class="p">});</span>
+            <span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;debugInVMStatus&#39;</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
+              <span class="nx">obj</span><span class="p">.</span><span class="nx">sharedData</span><span class="p">.</span><span class="nx">dUI</span><span class="p">.</span><span class="nx">statusLine</span><span class="o">=</span><span class="nx">data</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
+              <span class="k">if</span><span class="p">(</span><span class="s1">&#39;scope&#39;</span> <span class="k">in</span> <span class="nx">obj</span><span class="p">){</span>
+                <span class="nx">obj</span><span class="p">.</span><span class="nx">scope</span><span class="p">.</span><span class="nx">$apply</span><span class="p">();</span>
+              <span class="p">}</span>
+            <span class="p">});</span>
+          <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+
+          <span class="p">}</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">});</span>
+  <span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>start command is going to start qemu user emulator that will 
+run this target and wait for a debuger to attach on 12345 port 
+also it will start gdb that will load target from disk and then
+commands set arch arm will be sent to the gdb
+and target remote command to connect to the emulator</p></div></div><div class="code"><div class="wrapper">  <span class="nx">obj</span><span class="p">.</span><span class="nx">loadCommand</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">name</span><span class="p">,</span><span class="nx">architecture</span><span class="p">){</span>
+
+    <span class="nx">command</span><span class="p">.</span><span class="nx">commandExecO</span><span class="p">({</span>
+      <span class="nx">msgType</span><span class="o">:</span><span class="s1">&#39;start&#39;</span><span class="p">,</span>
+      <span class="nx">payload</span><span class="o">:</span><span class="p">{</span>
+        <span class="nx">name</span><span class="o">:</span><span class="nx">name</span><span class="p">,</span>
+        <span class="nx">architecture</span><span class="o">:</span><span class="nx">architecture</span><span class="p">,</span>
+        <span class="nx">initSteps</span><span class="o">:</span><span class="p">[</span><span class="s1">&#39;set disassembly-flavor intel\n&#39;</span><span class="p">]</span>
+      <span class="p">},</span>
+      <span class="nx">callback</span><span class="o">:</span><span class="kc">null</span>
+    <span class="p">});</span>
+
+    <span class="nx">obj</span><span class="p">.</span><span class="nx">disassemblyData</span><span class="p">.</span><span class="nx">disassemble</span><span class="p">(</span><span class="nx">configState</span><span class="p">.</span><span class="nx">file</span><span class="p">,</span><span class="nx">configState</span><span class="p">.</span><span class="nx">architecture</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="nx">obj</span><span class="p">.</span><span class="nx">startCommand</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">name</span><span class="p">,</span><span class="nx">architecture</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">command</span><span class="p">.</span><span class="nx">commandExecO</span><span class="p">({</span>
+      <span class="nx">msgType</span><span class="o">:</span><span class="s1">&#39;start&#39;</span><span class="p">,</span>
+      <span class="nx">payload</span><span class="o">:</span><span class="p">{</span>
+        <span class="nx">name</span><span class="o">:</span><span class="nx">name</span><span class="p">,</span>
+        <span class="nx">architecture</span><span class="o">:</span><span class="nx">architecture</span><span class="p">,</span>
+        <span class="nx">initSteps</span><span class="o">:</span><span class="p">[</span><span class="s1">&#39;set disassembly-flavor intel\n&#39;</span><span class="p">,</span><span class="s1">&#39;break _start\n&#39;</span><span class="p">,</span><span class="s1">&#39;run\n&#39;</span><span class="p">]</span>
+      <span class="p">},</span>
+      <span class="nx">callback</span><span class="o">:</span><span class="kc">null</span>
+    <span class="p">});</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>command.commandExecO({
+  ptyPayload:'set arch arm'
+});
+command.commandExecO({
+  ptyPayload:'target remote :12345'
+});</p></div></div><div class="code"><div class="wrapper">    <span class="nx">obj</span><span class="p">.</span><span class="nx">debugData</span><span class="p">.</span><span class="nx">getDissasembly</span><span class="p">();</span>
+    <span class="nx">obj</span><span class="p">.</span><span class="nx">debugData</span><span class="p">.</span><span class="nx">getRegisterInfo</span><span class="p">();</span>
+    <span class="nx">obj</span><span class="p">.</span><span class="nx">debugData</span><span class="p">.</span><span class="nx">infoBreakpoints</span><span class="p">();</span>
+
+  <span class="p">};</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>stop command will send command to the gdb that will detach the debugger
+qemu emulator exits at that point
+then a quit command is sent and gdb exits</p></div></div><div class="code"><div class="wrapper">  <span class="nx">obj</span><span class="p">.</span><span class="nx">stop</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+  
+    <span class="nx">command</span><span class="p">.</span><span class="nx">commandExecO</span><span class="p">({</span>
+      <span class="nx">ptyPayload</span><span class="o">:</span><span class="s1">&#39;detach&#39;</span><span class="p">,</span>
+      <span class="nx">callback</span><span class="o">:</span><span class="kd">function</span> <span class="nx">detachC</span><span class="p">(){</span>
+      <span class="nx">obj</span><span class="p">.</span><span class="nx">debugData</span><span class="p">.</span><span class="nx">status</span><span class="o">=</span><span class="s1">&#39;detached&#39;</span><span class="p">;</span>
+      <span class="nx">obj</span><span class="p">.</span><span class="nx">debugData</span><span class="p">.</span><span class="nx">registers</span><span class="o">=</span><span class="p">[];</span>
+      <span class="nx">obj</span><span class="p">.</span><span class="nx">data</span><span class="o">=</span><span class="p">[];</span>
+      <span class="p">}</span>
+    <span class="p">});</span>
+    
+    <span class="nx">command</span><span class="p">.</span><span class="nx">commandExecO</span><span class="p">({</span>
+      <span class="nx">ptyPayload</span><span class="o">:</span><span class="s1">&#39;quit&#39;</span><span class="p">,</span>
+      <span class="nx">callback</span><span class="o">:</span><span class="kc">null</span>
+    <span class="p">});</span>
+    
+    <span class="c1">//$scope.commandExecL(&#39;quit&#39;,null);</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="nx">obj</span><span class="p">;</span>
+<span class="p">}]);</span></div></div></div></div></body></html>
