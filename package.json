@@ -1,7 +1,9 @@
 {
   "name": "diskotek",
   "version": "0.0.0",
-  "dependencies": {},
+  "dependencies": {
+    "lodash": "~2.3.0"
+  },
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-contrib-copy": "~0.4.1",
@@ -40,7 +42,7 @@
     "jison": "*",
     "socket.io": "*",
     "express": "3.x",
-    "bower":"latest"
+    "bower": "latest"
   },
   "engines": {
     "node": "~0.10.17"
