@@ -10,16 +10,10 @@ angular.module('ldApp').controller "scriptsController", (configState,command,$ro
   search = (termList, stringList)->
     _.filter stringList, (el)->
       result = true
-      r =  _.map termList,(v)->
-        el.match(v)
-      f=(e)->
-        if e
-          return true
-      ff= _.filter(r ,f )
-      if ff.length
-        true
-      else
-        false
+      
+      r =  _.each termList,(v)->
+        result = result && el.match(v)
+      result
 
   $scope.$watch('scriptName',(n,o)->
     console.log search(n.split(" "),_.pluck($scope.scriptsList,'scriptName'))

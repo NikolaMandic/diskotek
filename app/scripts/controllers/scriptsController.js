@@ -15,22 +15,12 @@
     };
     search = function(termList, stringList) {
       return _.filter(stringList, function(el) {
-        var f, ff, r, result;
+        var r, result;
         result = true;
-        r = _.map(termList, function(v) {
-          return el.match(v);
+        r = _.each(termList, function(v) {
+          return result = result && el.match(v);
         });
-        f = function(e) {
-          if (e) {
-            return true;
-          }
-        };
-        ff = _.filter(r, f);
-        if (ff.length) {
-          return true;
-        } else {
-          return false;
-        }
+        return result;
       });
     };
     $scope.$watch('scriptName', function(n, o) {
