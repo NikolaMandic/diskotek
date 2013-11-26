@@ -7,11 +7,6 @@ angular.module('ldApp').controller "scriptsController", (configState,command,$ro
   ]
   $scope.newScript = ()->
     name = "newScript"+(store.store.getAll().length ||'' )
-    scriptO =
-      scriptName:name
-      scriptDescription:"empty Desc"
-
-    store.store.set(store.store.getAll().length,scriptO)
     $scope.bWindows.push('this is a script placeholder')
   search = (termList, stringList)->
     _.filter stringList, (el)->
@@ -25,6 +20,7 @@ angular.module('ldApp').controller "scriptsController", (configState,command,$ro
     $scope.scriptsList= search(n.split(" "),_.values(store.store.getAll()))
 
   )
+
   $scope.scriptSearch = false
   $scope.toggleScriptSearch = ()->
     $scope.scriptSearch = !$scope.scriptSearch

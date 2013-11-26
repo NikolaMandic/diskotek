@@ -253,7 +253,7 @@ angular.module('ldApp').directive('commandwind',function() {
   };
   return ddo;
 });
-angular.module('ldApp').directive('beditor',['command','state','ace','beeScript',function(command,state,aceS,beeScriptS) {
+angular.module('ldApp').directive('beditor',['command','state','ace','beeScript','store',function(command,state,aceS,beeScriptS,store) {
 
   var ddo = {
     scope:{},
@@ -270,6 +270,47 @@ angular.module('ldApp').directive('beditor',['command','state','ace','beeScript'
       $scope.running=false;
       $scope.dirty=false;
       $scope.contents=configState.bWindows[configState.bWindows.length-1]
+      $scope.newScriptSaveShow = false;
+      $scope.newScriptSaveControlsToggle = function(){
+        $scope.newScriptSaveShow= !$scope.newScriptSaveShow;
+      }
+
+      $scope.newScriptName="";
+      $scope.newScriptDesc="";
+      $scope.$watch('newScriptName',function(n,old){
+        if (store.store.get(n)){
+          store.store.remove(old);
+        }else{
+          store.store.remove(old);
+          var scriptO ={
+            scriptName:$scope.newScriptName,
+            scriptDescription:$scope.newScriptDesc,
+            scriptContent:$scope.contents
+          };
+
+          store.store.set($scope.newScriptName,scriptO);
+        }
+      });
+      $scope.$watch('newScriptDesc',function(n,old){
+
+
+        var scriptO ={
+          scriptName:$scope.newScriptName,
+          scriptDescription:$scope.newScriptDesc,
+          scriptContent:$scope.contents
+        };
+
+        store.store.set($scope.newScriptName,scriptO);
+      });
+      $scope.$watch('contents',function(n,old){
+        var scriptO ={
+          scriptName:$scope.newScriptName,
+          scriptDescription:$scope.newScriptDesc,
+          scriptContent:$scope.contents
+        };
+
+        store.store.set($scope.newScriptName,scriptO);
+      });
       $scope.save = function(){
       
       }
@@ -329,7 +370,9 @@ angular.module('ldApp').directive('beditor',['command','state','ace','beeScript'
       editor.setValue(scope.contents);
       editor.getSession().on('change', function(e) {
         // e.type, etc
+        scope.contents=editor.getValue();
         scope.dirty=true;
+        scope.$digest();
       });
       $(editEl).on("mousemove",function(e){
         e.stopPropagation();

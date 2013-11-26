@@ -11,13 +11,8 @@
       }
     ];
     $scope.newScript = function() {
-      var name, scriptO;
+      var name;
       name = "newScript" + (store.store.getAll().length || '');
-      scriptO = {
-        scriptName: name,
-        scriptDescription: "empty Desc"
-      };
-      store.store.set(store.store.getAll().length, scriptO);
       return $scope.bWindows.push('this is a script placeholder');
     };
     search = function(termList, stringList) {

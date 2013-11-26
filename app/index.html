@@ -124,11 +124,15 @@
   <div class="scriptPanelWraper" draggable >
     <div class="sMenu">
 
-      <div class="sm_save icon-ios7-download"></div>
-      <div class="sm_play icon-play"></div>
-      <div class="sm_stepOv icon-arrow-down-c" ng-click="stepOver()"></div>
-      <div class="sm_stepInto icon-arrow-graph-down-right"></div>
-      <div class="sm_discard icon-ios7-trash"></div>
+      <div class="sm_save ion-ios7-download" ng-click="newScriptSaveControlsToggle()"></div>
+      <div class="sm_play ion-play"></div>
+      <div class="sm_stepOv ion-arrow-down-c" ng-click="stepOver()"></div>
+      <div class="sm_stepInto ion-arrow-graph-down-right"></div>
+      <div class="sm_discard ion-ios7-trash"></div>
+      <div ng-show="newScriptSaveShow">
+        <input type="text" name="newScriptName" ng-model="newScriptName" value="">
+        <input type="text" name="newScriptDesc" ng-model="newScriptDesc" value="">
+      </div>
     </div>
     <div class="scriptEditor" >
     </div>
