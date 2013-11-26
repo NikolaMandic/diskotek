@@ -13,7 +13,8 @@ require.config({
     paths:{
       //'es5-shim':'../bower_components/ace/lib/ace/lib'
       //
-      'sprintf':'../bower_components/sprintf/src/sprintf'
+      'sprintf':'../bower_components/sprintf/src/sprintf',
+      'store':'../bower_components/store-js/store'
     }
 });
 
@@ -38,15 +39,15 @@ angular.module('ldApp', ['ngRoute'])
 
 
 angular.module('ldApp').factory('store', function() {
-  var store={
+  var stor={
     store:null
   };
 
   require(['store'],function(store){
-      store.store=store;
+      stor.store=store;
   });
   //factory function body that constructs shinyNewServiceInstance
-  return store;
+  return stor;
 });
 angular.module('ldApp').factory('beeScript', function() {
   var bScript={
