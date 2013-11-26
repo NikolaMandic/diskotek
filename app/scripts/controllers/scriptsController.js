@@ -18,15 +18,19 @@
         var r, result;
         result = true;
         r = _.each(termList, function(v) {
-          return result = result && el.match(v);
+          return result = result && el.scriptName.match(v);
         });
         return result;
       });
     };
     $scope.$watch('scriptName', function(n, o) {
-      return console.log(search(n.split(" "), _.pluck($scope.scriptsList, 'scriptName')));
+      return $scope.scriptsList = search(n.split(" "), $scope.scriptsListO);
     });
-    return $scope.scriptsList = [
+    $scope.scriptSearch = false;
+    $scope.toggleScriptSearch = function() {
+      return $scope.scriptSearch = !$scope.scriptSearch;
+    };
+    return $scope.scriptsListO = [
       {
         scriptName: 'name',
         scriptDescription: 'desc a'

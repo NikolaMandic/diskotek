@@ -12,14 +12,17 @@ angular.module('ldApp').controller "scriptsController", (configState,command,$ro
       result = true
       
       r =  _.each termList,(v)->
-        result = result && el.match(v)
+        result = result && el.scriptName.match(v)
       result
 
   $scope.$watch('scriptName',(n,o)->
-    console.log search(n.split(" "),_.pluck($scope.scriptsList,'scriptName'))
+    $scope.scriptsList= search(n.split(" "),$scope.scriptsListO)
 
   )
-  $scope.scriptsList= [
+  $scope.scriptSearch = false
+  $scope.toggleScriptSearch = ()->
+    $scope.scriptSearch = !$scope.scriptSearch
+  $scope.scriptsListO= [
        scriptName:'name', scriptDescription:'desc a',
          scriptName:'name one', scriptDescription:'desc bb',
        scriptName:'name two', scriptDescription:'descer wer',

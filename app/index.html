@@ -15,7 +15,7 @@
         <link rel="stylesheet" href="styles/main.css">
         <link rel="stylesheet" href="bower_components/stroll/css/stroll.css">
 
-        <link rel="stylesheet" href="bower_components/ionicons/ionicons.css">
+        <link rel="stylesheet" href="bower_components/ionicons/css/ionicons.css">
         <link rel="stylesheet" href="bower_components/jqueryuicss/index.css">
         <!-- endbuild -->
 </head>
@@ -92,9 +92,9 @@
  </div>
 
 <div id="scriptingPanel" ng-controller="scriptsController">
-  <div id="newScript" class="icon-document" ng-click="newScript()"></div>
-  <div id="scriptList" class="icon-document" >
-
+  <div id="newScript" class="ion-document" ng-click="newScript()"></div>
+  <div id="scriptList" class="ion-navicon-round" ng-click="toggleScriptSearch()" ></div>
+  <div ng-show="scriptSearch">
     <input type="text" name="scriptName" value="" ng-model="scriptName">
     <span ng-repeat="script in scriptsList track by $index">
       <div class="scriptName">
@@ -104,7 +104,6 @@
         {{script.scriptDescription}}
       </div>
     </span>
-
   </div>
   <span ng-repeat="w in bWindows track by $index">
     <beditor >  </beditor>

@@ -133,8 +133,6 @@ body {
   @extend .milky-sprite;
   @extend .milky-a#{$n};
 }
-@import "milky/*.png";
-@include all-milky-sprites;
 #scriptingPanel{
   display:inline-block;
   height:200px;
@@ -175,8 +173,7 @@ body {
 }
 .sm_discard{
 }
-#newScript{
-  @extend .controlScripts;
+#newScript, #scriptList{
   font-size:32px;
   //@include milky(95)
 }
