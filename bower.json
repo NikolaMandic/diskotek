@@ -26,7 +26,8 @@
     "keypress":"https://github.com/dmauro/Keypress/",
     "sprintf":"https://github.com/alexei/sprintf.js",
     "store-js":"*",
-    "sprintf":"*"
+    "sprintf":"*",
+    "Snap.svg":"*"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.0",

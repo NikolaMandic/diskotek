@@ -383,7 +383,33 @@ angular.module('ldApp').directive('beditor',['command','state','ace','beeScript'
   return ddo;
 }]);
 
+/*
+ 
+ 
+window.s.remove();
+var s = window.s = Snap();
+function f(x,y){
+  this.x=x;
+  this.y=y;
+  this.width=50;
+  this.height=200;
 
+  this.render = function(){
+    var fHeader = s.rect(this.x,this.y,this.width,50);
+    fHeader.attr({fill:'#00FF00'});
+    fHeader = s.rect(this.x,this.y+50,this.width,this.height);
+    fHeader.attr({fill:'#FF0000'});
+  }
+  
+}
+
+a = new f(50,50);
+a.render();
+
+
+
+
+  */
 
 
 

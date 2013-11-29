@@ -70,3 +70,8 @@ angular.module('ldApp').factory('ace', function() {
   //factory function body that constructs shinyNewServiceInstance
   return ace;
 });
+
+var s = Snap();
+
+
+s.rect(10, 10, 50, 50);

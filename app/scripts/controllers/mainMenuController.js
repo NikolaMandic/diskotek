@@ -30,7 +30,7 @@ var socket;
  * */
 angular.module('ldApp')
   .controller('MainCtrl', function (configState,command,$rootScope,$scope,$http,Data) {
-    // linkify('a');
+    //linkify('a');
 
     $scope.data=Data;
     /*
