@@ -18,6 +18,12 @@ body {
 }
 /*   top menu   */
 
+#mainOpen{
+  position:fixed;
+  left:0px;
+  top:0px;
+  font-size: 32px;
+}
 #debugMenu,#menuPanel,#status{
   @include make-row();
 
@@ -140,7 +146,6 @@ body {
   top:50%;
   position:fixed;
 }
-
 .sprite{
   width:64px;
   height:64px;

@@ -30,17 +30,21 @@
     <![endif]-->
 
     <!-- Add your site or application content here -->
- <div id="debugMenu" ng-controller="MainCtrl">
+    <div id="debugMenu" ng-controller="MainCtrl">
+      <div id="mainOpen" class="ion-ios7-world"  ng-click="toggleMain()">
+
+         
+          
+      </div>
    <div id="status" >
      <div >
        status: {{data.status}} 
      </div>
      
    </div>  
-
    <div id="menuPanel">
-      
-     <div id="fileItem">
+     
+     <div id="fileItem" ng-show="mainShow">
        <label for="name">name</label>
        <INPUT type="TEXT" ng-model="configState.file" name="name" value="" id="name">
        <label for="architectre">architecture</label>
@@ -68,7 +72,6 @@
        views:
        <a  href="#/">debug</a>
        <a  href="#/disas">disassembly</a>
-       <button onclick="TogetherJS(this); return false;">Start TogetherJS</button>
      <!--  
            <a    href="#/ch">graph</a>
            -->
@@ -77,9 +80,11 @@
 
  
      <div id="commandItem">
+      <!--
        <INPUT type="TEXT" ng-model="command"/>
        <a ng-click="commandExecL(command,'commandResult')">send command  </a>
-      
+       -->  
+       <button onclick="TogetherJS(this); return false;">Start TogetherJS</button>
      </div>
    </div>
  </div>

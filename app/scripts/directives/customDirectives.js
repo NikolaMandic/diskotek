@@ -1,3 +1,7 @@
+'use strict';
+/*global _:false */
+/*global $:false */
+
 angular.module('ldApp').directive('draggable', function() {
   var ddo = {
     link: function(scope,iElement,iAttrs) {
@@ -14,14 +18,14 @@ angular.module('ldApp').directive('resizable', function() {
   var ddo = {
     link: function(scope,iElement,iAttrs) {
       $(iElement).resizable({
-        
+
         grid:[20,20]
       });
 
     }
-  }
+  };
   return ddo;
-})
+});
 angular.module('ldApp').directive('editable',['command',function(command){
   var selected = [];
   var instInputBig=$('#instInputBig');
@@ -29,6 +33,7 @@ angular.module('ldApp').directive('editable',['command',function(command){
   var rootScope;
   var editing;
   var data;
+  var bytesNew;
   function processBig(){
     var bytes;
     var rawStringCommand='';
@@ -38,17 +43,17 @@ angular.module('ldApp').directive('editable',['command',function(command){
 
       bytesNew = /\w.*\w/.exec(instInputBig.val().replace(/\n/g,' '))[0].match(/\w{2}/g);
       if(bytes.length< bytesNew.length){
-        alert('no space for extra bytes');
+        //alert('no space for extra bytes');
       }else{
         var reversed = _.map(/\w.*\w/.exec(instInputBig.val().replace(/\n/g,' '))[0].match(/\w{2}/g),function(v,i,l){
           return l[l.length-i-1];
-        }).join("");
-     
+        }).join('');
 
-        rawStringCommand = 'set {char[' + 
-                            bytesNew.length + 
-                            ']}'+ 
-                            selected[0].address  + 
+
+        rawStringCommand = 'set {char[' +
+                            bytesNew.length +
+                            ']}'+
+                            selected[0].address  +
                             '=0x' + reversed
                             ;
         command.commandExecO({
@@ -58,12 +63,12 @@ angular.module('ldApp').directive('editable',['command',function(command){
         data.debugData.infoBreakpoints();
       }
     }else{
-    
+
     }
-  };
+  }
   function process(){
-  
-  };
+
+  }
   $(window).keyup(function(e){
     if(e.which===13){
       if(selected.length>0){
@@ -73,7 +78,7 @@ angular.module('ldApp').directive('editable',['command',function(command){
           content=memlines.join('\n');
           instInputBig.attr({
             rows:memlines.length
-          }); 
+          });
           instInputBig.val(content);
           instInputBig.css({
             position:'absolute',
@@ -88,12 +93,12 @@ angular.module('ldApp').directive('editable',['command',function(command){
           var opcodes = _.pluck(selected,'opcode');
           var operands = _.pluck(selected,'operands');
           var instructions = _.zip(opcodes,operands).map(function(v){
-            return v.join(" ");
+            return v.join(' ');
           });
           content=instructions.join('\n');
           instInputBig.attr({
             rows:instructions.length
-          }); 
+          });
           instInputBig.val(content);
           instInputBig.css({
 
@@ -101,7 +106,7 @@ angular.module('ldApp').directive('editable',['command',function(command){
             left: selected[0].leftop+'px',
             top: selected[0].topop+'px',
           });
-          instInputBig.show();       
+          instInputBig.show();
           instInputBig.focus();
         }
       }
@@ -109,7 +114,7 @@ angular.module('ldApp').directive('editable',['command',function(command){
   });
   instInputBig.keyup(function(e) {
     e.stopPropagation();
-    if(e.which == 13 && e.ctrlKey) {
+    if(e.which === 13 && e.ctrlKey) {
       processBig(content);
       instInputBig.hide();
       _.each(selected,function(v){
@@ -119,7 +124,7 @@ angular.module('ldApp').directive('editable',['command',function(command){
       selected=[];
       rootScope.$apply();
     }
-    if(e.which == 27) {
+    if(e.which === 27) {
       //$scope.process($scope.content);
       instInputBig.hide();
       content='';
@@ -130,15 +135,15 @@ angular.module('ldApp').directive('editable',['command',function(command){
       rootScope.$apply();
     }
 
-  }); 
+  });
 
   $('#instInput').keyup(function(e) {
     e.stopPropagation();
-    if(e.which == 13) {
+    if(e.which === 13) {
       process(content);
       $('#instInput').hide();
     }
-    if(e.which == 27) {
+    if(e.which === 27) {
       //$scope.process($scope.content);
       $('#instInput').hide();
     }
@@ -153,11 +158,11 @@ angular.module('ldApp').directive('editable',['command',function(command){
       //fix inject dependency on declaration level
       data=Data;
       rootScope=$rootScope;
-      $scope.mode = "display";
+      $scope.mode = 'display';
       $scope.process = function(content){
-        console.log($attrs); 
-        Data.debugData.patch(scope.thing);
-        console.log("console edited",content);
+        console.log($attrs);
+        Data.debugData.patch($scope.thing);
+        console.log('console edited',content);
       };
 
 
@@ -165,25 +170,25 @@ angular.module('ldApp').directive('editable',['command',function(command){
     },
     link: function lf(scope,iElement,iAttrs) {
       var offset = $(iElement).offset();
-        if(iAttrs.editable==="raw"){
-          scope.thing.leftmr = offset.left;
-          scope.thing.topmr = offset.top;
-        }else{
-          scope.thing.leftop = offset.left;
-          scope.thing.topop = offset.top;
-        }
+      if(iAttrs.editable==='raw'){
+        scope.thing.leftmr = offset.left;
+        scope.thing.topmr = offset.top;
+      }else{
+        scope.thing.leftop = offset.left;
+        scope.thing.topop = offset.top;
+      }
 
       $(iElement).click(function(){
         selected.push(scope.thing);
         scope.thing.selected=!scope.thing.selected;
         if (!scope.thing.selected) {
-         selected = _.without(selected,scope.thing);
+          selected = _.without(selected,scope.thing);
         }
         selected = _.sortBy(selected,'topmr');
         scope.$apply();
       });
       $(iElement).dblclick(function(){
-        scope.mode = "edit";
+        scope.mode = 'edit';
         scope.content=$(iElement).html();
         $('#instInput').val(scope.content);
         var offset = $(iElement).position();
@@ -192,7 +197,7 @@ angular.module('ldApp').directive('editable',['command',function(command){
           top: offset.top,
         });
         $('#instInput').show();
-       
+
       });
     }
   };
@@ -201,7 +206,7 @@ angular.module('ldApp').directive('editable',['command',function(command){
 angular.module('ldApp').directive('commandwind',function() {
   var ddo = {
     scope:{},
-    template: $("#commandWindT").html(),
+    template: $('#commandWindT').html(),
     controller: function dcOnt(configState,$scope, $element,$attrs, $transclude,$rootScope, $compile,Data,$controller,command) {
       //var Data = $injector.get("Data");
      // dcOnt.$new=function(){};
@@ -216,7 +221,7 @@ angular.module('ldApp').directive('commandwind',function() {
             $scope.$apply();
           }
         });
-      }
+      };
       $scope.clone = function() {
         var html = '<div commandWind draggable resizable > </div>';
         var template = angular.element(html);
@@ -230,8 +235,8 @@ angular.module('ldApp').directive('commandwind',function() {
             width:'300px',
             height:'100px',
             color:'#ff0000',
-            background:"rgba(00,00,24,0.2)",
-            position:"absolute",
+            background:'rgba(00,00,24,0.2)',
+            position:'absolute',
           });
         });
         //$scope.$apply();
@@ -246,8 +251,8 @@ angular.module('ldApp').directive('commandwind',function() {
         width:'300px',
         height:'100px',
         color:'#ff0000',
-        position:"absolute",
-        background:"rgba(00,00,24,0.02)",
+        position:'absolute',
+        background:'rgba(00,00,24,0.02)',
       });
     }
   };
@@ -258,25 +263,25 @@ angular.module('ldApp').directive('beditor',['command','state','ace','beeScript'
   var ddo = {
     scope:{},
     restrict:'E',
-    template: $("#newScriptWT").html(),
+    template: $('#newScriptWT').html(),
     controller: function dcOnt(configState,$scope, $element,$attrs, $transclude,$rootScope, $compile,Data,$controller,command) {
       var beeScript = beeScriptS.beeScript;
-      beeScript.runner.diskotekLib.command=command.commandExecO
-      beeScript.runner.diskotekLib.state = state
+      beeScript.runner.diskotekLib.command=command.commandExecO;
+      beeScript.runner.diskotekLib.state = state;
       beeScript.runner.diskotekLib.$rootScope=$rootScope;
       beeScript.runner.variables.fImage = { name: 'fImage',
                                             value: Data.disassemblyData
                                           };
       $scope.running=false;
       $scope.dirty=false;
-      $scope.contents=configState.bWindows[configState.bWindows.length-1]
+      $scope.contents=configState.bWindows[configState.bWindows.length-1];
       $scope.newScriptSaveShow = false;
       $scope.newScriptSaveControlsToggle = function(){
         $scope.newScriptSaveShow= !$scope.newScriptSaveShow;
-      }
+      };
 
-      $scope.newScriptName="";
-      $scope.newScriptDesc="";
+      $scope.newScriptName='';
+      $scope.newScriptDesc='';
       $scope.$watch('newScriptName',function(n,old){
         if (store.store.get(n)){
           store.store.remove(old);
@@ -312,37 +317,37 @@ angular.module('ldApp').directive('beditor',['command','state','ace','beeScript'
         store.store.set($scope.newScriptName,scriptO);
       });
       $scope.save = function(){
-      
-      }
+
+      };
       $scope.run = function(){
-      
-      }
+
+      };
       $scope.stepOver = function(){
         if (!$scope.dirty){
-          beeScript.runner.next()
+          beeScript.runner.next();
         }else{
           beeScript.text = $scope.editor.getValue();
           beeScript.reset();
-          beeScript.runner.diskotekLib.command=command.commandExecO
-          beeScript.runner.diskotekLib.state = state
+          beeScript.runner.diskotekLib.command=command.commandExecO;
+          beeScript.runner.diskotekLib.state = state;
 
           beeScript.runner.diskotekLib.$rootScope=$rootScope;
           beeScript.runner.variables.fImage = { name: 'fImage',
             value: Data.disassemblyData
           };
-          beeScript.generate()
+          beeScript.generate();
 
-          beeScript.next()
+          beeScript.next();
           $scope.running=true;
           $scope.dirty=false;
         }
-      }
+      };
       $scope.stepInto = function(){
-      
-      }
+
+      };
       $scope.close = function(){
-      
-      }
+
+      };
       //var Data = $injector.get("Data");
      // ,
       // dcOnt.$new=function(){};
@@ -355,7 +360,7 @@ angular.module('ldApp').directive('beditor',['command','state','ace','beeScript'
           }
         });
 
-      }
+      };
       $scope.destroy = function() {
         //$element.$destroy();
         $element.remove();
@@ -363,10 +368,10 @@ angular.module('ldApp').directive('beditor',['command','state','ace','beeScript'
     },
     link:  function lf(scope,iElement,iAttrs,$compile) {
       var ace = aceS.ace;
-      var editEl=$(iElement).find(".scriptEditor")[0];
+      var editEl=$(iElement).find('.scriptEditor')[0];
       var editor = scope.editor = ace.edit(editEl);
-      editor.setTheme("ace/theme/monokai");
-      editor.getSession().setMode("ace/mode/beeScript");
+      editor.setTheme('ace/theme/monokai');
+      editor.getSession().setMode('ace/mode/beeScript');
       editor.setValue(scope.contents);
       editor.getSession().on('change', function(e) {
         // e.type, etc
@@ -374,7 +379,7 @@ angular.module('ldApp').directive('beditor',['command','state','ace','beeScript'
         scope.dirty=true;
         scope.$digest();
       });
-      $(editEl).on("mousemove",function(e){
+      $(editEl).on('mousemove',function(e){
         e.stopPropagation();
       });
 
@@ -383,13 +388,7 @@ angular.module('ldApp').directive('beditor',['command','state','ace','beeScript'
   return ddo;
 }]);
 
-/*
- 
- 
 
-
-window.s.remove();
-var s = window.s = Snap();
 function Module(x,y,module){
   this.x=x;
   this.y=y;
@@ -399,39 +398,28 @@ function Module(x,y,module){
   this.render = function(){
     var file = s.rect(this.x,this.y,this.width,this.fileHeaderHeight);
     file.attr({fill:'#00FF00'});
-    
+
     var fHeader = s.rect(this.x,this.y+50,this.width,this.height);
     fHeader.attr({fill:'#FF0000'});
-    
+
   }
-  
+
 }
-function File(x,y,file){
-  this.x=x;
-  this.y=y;
-  this.width=100;
-  this.height=200;
-  this.fileHeaderHeight = 50;
-  this.render = function(){
-    // render file representation
-    var file = s.rect(this.x,this.y,this.width,this.fileHeaderHeight);
-    file.attr({fill:'#00FF00'});
-    
-    // render file header
-    var fHeader = s.rect(this.x,this.y+50,this.width,this.height);
-    fHeader.attr({fill:'#FF0000'});
-    // render section/program headers
-    
-    
-  }
-  
-}
+
+/*
+
+
+
+
+window.s.remove();
+var s = window.s = Snap();
+
 file = {
   fileHeader:{},
   programHeaders:[{},{}],
 };
 module = {
-  
+
 };
 a = new File(50,50,file);
 b = new Module(200,50,module);

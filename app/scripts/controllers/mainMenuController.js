@@ -85,6 +85,10 @@ angular.module('ldApp')
 
 
     }
+    $scope.mainShow=false;
+    $scope.toggleMain = function(){
+      $scope.mainShow=!$scope.mainShow;
+    }
     $scope.commandLoad = function(){
       Data.debugData.arch='x86';
       Data.status='running';

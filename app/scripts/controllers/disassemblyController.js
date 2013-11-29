@@ -107,9 +107,37 @@ angular.module('ldApp')
    
       
     };
+    /*
+      fileHeaders: {
+       ehdr:[
+       {
+        size:3
+        fName:    
+        content:
+        comment:
+       
+       }]
+       phdr:[
+       {
+        size:3
+        fName:    
+        content:
+        comment:
+       
+       }]
+
+       
+       }
+
+
+
+       */
+     
+
     $scope.renderDisasembly=function(disassembly){
      // Data.getHeaders();
       var disassemblyData=Data.disassemblyData;
+      (new File(0,0,disassemblyData)).render();
       $scope.selected='header';
       $scope.$apply();
      // $scope.$watch('Data.sharedData.disasViewData.sheaders',function(n,o){
@@ -175,7 +203,7 @@ angular.module('ldApp')
           });
         });
     
-
+return;
 
         
          
@@ -244,4 +272,34 @@ angular.module('ldApp')
 
 
 });
+function File(x,y,file){
+  this.x=x;
+  this.y=y;
+  this.width=100;
+  this.height=200;
+  this.fileHeaderHeight = 50;
+  this.render = function(){
+    // render file representation
+    var s = Snap();
+    var currentY;
+    s.rect(this.x,this.y,this.width,this.height).attr({fill:'#00FF00'});
+    var fil = s.rect(this.x,this.y,this.width,this.height*0.1);
+    currentY=this.height*0.1;
+    fil.attr({fill:'#FF0000'});
+    
+    _.each(file.fileHeaders.phdr,(function(ii,index,list){
 
+      var phdr = s.rect(this.x,this.y+currentY,this.width,this.height*0.1);
+    currentY+=this.height*0.1;
+      phdr.attr({
+        fill:'#0000BB',
+        stroke:"#f00"
+      });
+    }).bind(this));
+    // render file header
+    // render section/program headers
+
+
+  }
+
+}
