@@ -386,26 +386,57 @@ angular.module('ldApp').directive('beditor',['command','state','ace','beeScript'
 /*
  
  
+
+
 window.s.remove();
 var s = window.s = Snap();
-function f(x,y){
+function Module(x,y,module){
   this.x=x;
   this.y=y;
-  this.width=50;
+  this.width=100;
   this.height=200;
-
+  this.fileHeaderHeight = 50;
   this.render = function(){
-    var fHeader = s.rect(this.x,this.y,this.width,50);
-    fHeader.attr({fill:'#00FF00'});
-    fHeader = s.rect(this.x,this.y+50,this.width,this.height);
+    var file = s.rect(this.x,this.y,this.width,this.fileHeaderHeight);
+    file.attr({fill:'#00FF00'});
+    
+    var fHeader = s.rect(this.x,this.y+50,this.width,this.height);
     fHeader.attr({fill:'#FF0000'});
+    
   }
   
 }
-
-a = new f(50,50);
+function File(x,y,file){
+  this.x=x;
+  this.y=y;
+  this.width=100;
+  this.height=200;
+  this.fileHeaderHeight = 50;
+  this.render = function(){
+    // render file representation
+    var file = s.rect(this.x,this.y,this.width,this.fileHeaderHeight);
+    file.attr({fill:'#00FF00'});
+    
+    // render file header
+    var fHeader = s.rect(this.x,this.y+50,this.width,this.height);
+    fHeader.attr({fill:'#FF0000'});
+    // render section/program headers
+    
+    
+  }
+  
+}
+file = {
+  fileHeader:{},
+  programHeaders:[{},{}],
+};
+module = {
+  
+};
+a = new File(50,50,file);
+b = new Module(200,50,module);
 a.render();
-
+b.render();
 
 
 
