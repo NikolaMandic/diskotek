@@ -37,11 +37,16 @@
           main 
         </div>
 
-        <div id="mainDebug" class="ion-wrench"  ng-click="toggleMain()">
-         debug 
+        <div id="mainDebug" class="ion-wrench"  >
+          <a href="#/">
+            debug 
+          </a>
         </div>
-        <div id="mainDisassemble" class="ion-drag"  ng-click="toggleMain()">
-          disassemble 
+        <div id="mainDisassemble" class="ion-drag" >
+
+          <a href="#/disas">
+            disassemble 
+          </a>
         </div>
       </div>
    <div id="status" >
@@ -70,20 +75,12 @@
        <a ng-click="recToggle()">{{recording?'stop rec':'start rec'}}</a>
      </div>
      <div id="controls">
-       <a ng-click="cont()">run </a> 
-       
-       <a  ng-click="stepOver()">step over</a> 
-       <a ng-click="stepInto()">step into</a> 
-    
-     </div>
-     <div id="views">
-       views:
-       <a  href="#/">debug</a>
-       <a  href="#/disas">disassembly</a>
-     <!--  
-           <a    href="#/ch">graph</a>
-           -->
 
+       <a class="ion-play" ng-click="cont()">run </a> 
+       
+       <a class="ion-arrow-down-c"  ng-click="stepOver()">step over</a> 
+       <a class="ion-arrow-graph-down-right" ng-click="stepInto()">step into</a> 
+    
      </div>
 
  

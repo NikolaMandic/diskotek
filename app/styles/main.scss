@@ -19,10 +19,14 @@ body {
 /*   top menu   */
 
 #mainOpen{
-  position:fixed;
-  left:0px;
-  top:0px;
-  font-size: 32px;
+  @include make-lg-column(2);
+}
+#mainDebug{
+
+  @include make-lg-column(2);
+}
+#mainDisassemble{
+  @include make-lg-column(2);
 }
 #debugMenu,#menuPanel,#status{
   @include make-row();
