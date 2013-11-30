@@ -278,24 +278,46 @@ function File(x,y,file){
   this.width=100;
   this.height=200;
   this.fileHeaderHeight = 50;
-  this.render = function(){
-    // render file representation
-    var s = Snap();
-    var currentY;
-    s.rect(this.x,this.y,this.width,this.height).attr({fill:'#00FF00'});
-    var fil = s.rect(this.x,this.y,this.width,this.height*0.1);
-    currentY=this.height*0.1;
-    fil.attr({fill:'#FF0000'});
+  this.currentY=0;
+  var s=null;
+  this.fileColor = '#00ff00'; 
+  this.fileHeaderColor = '#ff0000';
+  this.fileHeaderHeight = 0;
+  this.sectionHeaderHeight = 0;
+  this.sectionHeaderColor = '#0000ff';
+
+  this.rFileRepresentation = function(){
+  
+    s.rect(this.x,this.y,this.width,this.height).attr({fill:this.fileColor});
     
+  };
+
+  this.rFileHeader = function(){
+  
+    s.rect(this.x,this.y,this.width,this.fileHeaderHeight).attr({fill:this.fileHeaderColor});
+    this.currentY+=this.fileHeaderHeight;
+  };
+
+  this.rSectionHeaders = function(){
     _.each(file.fileHeaders.phdr,(function(ii,index,list){
 
-      var phdr = s.rect(this.x,this.y+currentY,this.width,this.height*0.1);
-    currentY+=this.height*0.1;
-      phdr.attr({
-        fill:'#0000BB',
-        stroke:"#f00"
+      var phdr = s.rect(this.x,this.y+this.currentY,this.width,this.sectionHeaderHeight).attr({
+        fill:this.sectionHeaderColor
       });
+      this.currentY+=this.sectionHeaderHeight;
     }).bind(this));
+  };
+
+  this.render = function(){
+    // render file representation
+    s = Snap();
+    // render file header
+    this.fileHeaderHeight=10;
+    this.sectionHeaderHeight =10;
+  
+    this.rFileRepresentation();
+    this.rFileHeader();
+    this.rSectionHeaders();
     // render file header
     // render section/program headers
 
