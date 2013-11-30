@@ -2,7 +2,7 @@ $iconSpritePath: "../images/glyphicons-halflings.png";
 $iconWhiteSpritePath: "../images/glyphicons-halflings-white.png";
 
 @import "bootstrap-sass/lib/bootstrap";
-
+@import 'bourbon/bourbon';
 /* Put your CSS here */
 html, body {
   margin: 20px;
@@ -33,6 +33,14 @@ body {
 
 }
 
+#debugMenu{
+//  background:rgba(100,100,100,0.5);,
+//,
+@include border-top-radius(5px);
+
+@include border-bottom-radius(5px);
+@include linear-gradient(to top,#efefef 0%,  #ffffff 50%, #efefef 100%);
+}
 #fileItem{
   @include make-lg-column(5);
 }
