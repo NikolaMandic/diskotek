@@ -123,7 +123,9 @@ angular.module('ldApp')
     $scope.stepInto = function  () {
       Data.debugData.stepInto();
     };
-    
+    $scope.setMenu = function(view){
+      $scope.view=view;
+    }    
 
     $scope.command='';
     $scope.awesomeThings = [

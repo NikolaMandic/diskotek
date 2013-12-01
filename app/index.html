@@ -38,13 +38,13 @@
         </div>
 
         <div id="mainDebug" class="ion-wrench"  >
-          <a href="#/">
+          <a href="#/" ng-click="setMenu('debug')" >
             debug 
           </a>
         </div>
         <div id="mainDisassemble" class="ion-drag" >
 
-          <a href="#/disas">
+          <a href="#/disas" ng-click="setMenu('disas')">
             disassemble 
           </a>
         </div>
@@ -74,7 +74,7 @@
        <a ng-click="stop()">stop</a>
        <a ng-click="recToggle()">{{recording?'stop rec':'start rec'}}</a>
      </div>
-     <div id="controls">
+     <div id="controls" ng-show="view=='debug'">
 
        <a class="ion-play" ng-click="cont()"> run </a> 
        
