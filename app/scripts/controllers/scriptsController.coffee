@@ -2,7 +2,7 @@ angular.module('ldApp').controller "scriptsController", (configState,command,$ro
   $scope.bWindows=configState.bWindows
   $scope.scriptName=''
   $scope.scriptsList= [
-       scriptName:'name', scriptDescription:'desc'
+       scriptName:'name', scriptDescription:'desc',scriptContent:'asdasd'
 
   ]
   $scope.newScript = ()->
@@ -24,3 +24,5 @@ angular.module('ldApp').controller "scriptsController", (configState,command,$ro
   $scope.scriptSearch = false
   $scope.toggleScriptSearch = ()->
     $scope.scriptSearch = !$scope.scriptSearch
+  $scope.openScript = (script)->
+    $scope.bWindows.push script.scriptContent

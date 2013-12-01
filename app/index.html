@@ -106,7 +106,7 @@
   <div id="scriptList" class="ion-navicon-round" ng-click="toggleScriptSearch()" ></div>
   <div ng-show="scriptSearch">
     <input type="text" name="scriptName" value="" ng-model="scriptName">
-    <span ng-repeat="script in scriptsList track by $index">
+    <span ng-repeat="script in scriptsList track by $index" ng-click="openScript(script)">
       <div class="scriptName">
         {{script.scriptName}}
       </div> 
