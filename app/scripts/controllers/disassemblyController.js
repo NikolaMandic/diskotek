@@ -282,8 +282,8 @@ function File(x,y,file){
   var s=null;
   this.fileColor = '#00ff00'; 
   this.fileHeaderColor = '#ff0000';
-  this.fileHeaderHeight = 0;
-  this.sectionHeaderHeight = 0;
+  this.fileHeaderHeight = 20;
+  this.sectionHeaderHeight = 20;
   this.sectionHeaderColor = '#0000ff';
 
   this.rFileRepresentation = function(){
@@ -295,6 +295,15 @@ function File(x,y,file){
   this.rFileHeader = function(){
   
     s.rect(this.x,this.y,this.width,this.fileHeaderHeight).attr({fill:this.fileHeaderColor});
+    var ehdr=file.fileHeaders.ehdr;
+    var c=0;
+    for (field in ehdr){
+      s.rect(this.x+c+(field>>>0),this.y+this.currentY,ehdr[field].size,5).attr({
+          fill:'#FFFFFF'
+        });
+        
+        c+=ehdr[field].size>>>0;
+      }
     this.currentY+=this.fileHeaderHeight;
   };
 
@@ -304,12 +313,20 @@ function File(x,y,file){
       var phdr = s.rect(this.x,this.y+this.currentY,this.width,this.sectionHeaderHeight).attr({
         fill:this.sectionHeaderColor
       });
+      var c=0;
+      for (field in ii){
+        s.rect(this.x+ii[field].size*c+1*c,this.y+this.currentY,ii[field].size,5).attr({
+          fill:'#FFFFFF'
+        });
+        c++;
+      }
       this.currentY+=this.sectionHeaderHeight;
     }).bind(this));
   };
 
   this.render = function(){
     // render file representation
+    $('svg').remove();
     s = Snap();
     // render file header
     this.fileHeaderHeight=10;
