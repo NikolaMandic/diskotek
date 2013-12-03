@@ -272,6 +272,83 @@ return;
 
 
 });
+function ToolTip(options){
+  this.on = true;
+  this.width = options.width || 200;
+  this.height = options.height || 200;
+  this.x = options.x || 0;
+  this.y = options.y || 0;
+  var s = this.s = options.s ;
+  this.el = options.el;
+  this.overEl=false;
+  this.overTT=false;
+  this.text = options.text;
+  var proto = Object.getPrototypeOf(this);
+  proto.currentElement=0;
+  this.render = function(){
+    var bbox = this.el.getBBox();
+    var ax,ay,bx,by,cx,cy;
+    ax = bbox.cx;
+    ay = bbox.cy-bbox.height/2;
+    bx = ax-2;
+    by = ay-3
+    cx = ax+2;
+    cy = ay+3;
+    
+    this.polygon = s.polygon([ax,ay,bx,by,cx,cy]);
+    this.toolt = s.rect(ax-2-this.width/2,ay-this.height,this.width,this.height);
+    this.text = s.text (ax-2-this.width/2,ay-this.height+30,this.text).attr({
+      fill:'#fff'
+    });
+    var g = proto.g = s.g(this.polygon,this.toolt,this.text);
+    proto.g.hover(function(){
+      proto.overTT=true;
+      //this.render();
+    },function(){
+      proto.overTT=false;
+      setTimeout((function(){
+        if (!proto.overEl && !proto.overTT){
+          this.close();
+          proto.currentElement=0;
+        }
+      
+      }).bind(this),500);
+    },this,this);
+  };
+  this.close = function(){
+    proto.g.remove();  
+    
+  };
+  
+  this.el.hover(function(){
+    if(proto.currentElement!=this.el){
+      if(proto.g){
+        proto.g.remove();
+      }
+      proto.currentElement=this.el;
+      //if (!this.overEl && !this.overTT){
+      
+        proto.overEl=true;
+        this.render();
+      //}
+    }else{
+      
+      
+    }
+
+  },function(){
+    proto.overEl=false;
+    setTimeout((function(){
+      if (!proto.overEl && !proto.overTT){
+        this.close();
+        proto.currentElement=0;
+      }
+      
+    }).bind(this),500);
+  },this,this);
+
+  
+}
 function File(x,y,file){
   this.x=x;
   this.y=y;
@@ -285,10 +362,11 @@ function File(x,y,file){
   this.fileHeaderHeight = 20;
   this.sectionHeaderHeight = 20;
   this.sectionHeaderColor = '#0000ff';
-
+  this.byteSizeInPixels = 5;
+  this.rowHeight = 5;
   this.rFileRepresentation = function(){
   
-    s.rect(this.x,this.y,this.width,this.height).attr({fill:this.fileColor});
+    s.rect(this.x=300,this.y=300,this.width,this.height).attr({fill:this.fileColor});
     
   };
 
@@ -296,14 +374,26 @@ function File(x,y,file){
   
     s.rect(this.x,this.y,this.width,this.fileHeaderHeight).attr({fill:this.fileHeaderColor});
     var ehdr=file.fileHeaders.ehdr;
-    var c=0;
+    var currentX=0;
+    var fieldSizeInPixels;
+    
     for (field in ehdr){
-      s.rect(this.x+c+(field>>>0),this.y+this.currentY,ehdr[field].size,5).attr({
+      fieldSizeInPixels=(ehdr[field].size>>>0)*this.byteSizeInPixels;
+      if(currentX+fieldSizeInPixels>this.width){
+        this.currentY+=this.rowHeight+2;
+        currentX=0;
+        
+      }
+      
+      
+      var el = s.rect(this.x+currentX,this.y+this.currentY,fieldSizeInPixels,this.rowHeight).attr({
           fill:'#FFFFFF'
         });
-        
-        c+=ehdr[field].size>>>0;
-      }
+      new ToolTip({el:el,s:s,text:ehdr[field].comment});
+      
+      currentX += fieldSizeInPixels + 3;
+
+    }
     this.currentY+=this.fileHeaderHeight;
   };
 
@@ -315,7 +405,7 @@ function File(x,y,file){
       });
       var c=0;
       for (field in ii){
-        s.rect(this.x+ii[field].size*c+1*c,this.y+this.currentY,ii[field].size,5).attr({
+        s.rect(this.x+ii[field].size*c+1*c,this.y+this.currentY,ii[field].size*this.byteSizeInPixels,5).attr({
           fill:'#FFFFFF'
         });
         c++;
