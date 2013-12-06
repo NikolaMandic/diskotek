@@ -272,6 +272,10 @@ return;
 
 
 });
+function estimateTextSize(text){
+  
+  
+}
 function ToolTip(options){
   this.on = true;
   this.width = options.width || 200;
@@ -282,9 +286,26 @@ function ToolTip(options){
   this.el = options.el;
   this.overEl=false;
   this.overTT=false;
-  this.text = options.text;
-  this.textWidth=15;
-  this.width = options.text.length*this.textWidth;
+  this.textWidth=10;
+  this.textHeight=11;
+  this.widthLimit=300;
+  if (options.text.length*this.textWidth>this.widthLimit){
+    this.width = this.widthLimit;
+    var num = (options.text.length*this.textWidth/this.widthLimit);
+    this.height = this.textHeight * num+50;
+    this.text = [];
+    var x = 0;
+    var numOfChars = this.width/this.textWidth;
+    for (x = 0;x<num;x++){
+      this.text.push(options.text.slice(x*numOfChars,(x+1)*numOfChars));
+    }
+    
+  }else{
+    this.width=options.text.length*this.textWidth;
+    this.height = this.textHeight+20;
+    this.text = [options.text];
+  }
+  
   var proto = Object.getPrototypeOf(this);
   proto.currentElement=0;
   this.render = function(){
@@ -301,10 +322,20 @@ function ToolTip(options){
     this.toolt = s.rect(ax-2-this.width/2,ay-this.height,this.width,this.height);
     //var ar=[];
     //_.each(this.text,function(v){ar.push(v);});
-    this.text = s.text (ax-2-this.width/2,ay+30-this.height,this.text).attr({
-      fill:'#0f0'
-    });
-    var g = proto.g = s.g(this.polygon,this.toolt,this.text);
+    var i = 0;
+    var toolTipGroup=[];
+    toolTipGroup.push(this.polygon);
+    toolTipGroup.push(this.toolt);
+    for (line in this.text){
+      
+      var textEl = s.text (ax-2-this.width/2+5,ay+this.textHeight-this.height + i*this.textHeight,this.text[i]).attr({
+        fill:'#0f0'
+      });
+      toolTipGroup.push(textEl);
+      i++;
+    }
+
+    var g = proto.g = s.g.apply(s,toolTipGroup);
     proto.g.hover(function(){
       proto.overTT=true;
       console.log("true");
