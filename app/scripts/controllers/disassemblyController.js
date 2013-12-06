@@ -275,7 +275,7 @@ return;
 function ToolTip(options){
   this.on = true;
   this.width = options.width || 200;
-  this.height = options.height || 200;
+  this.height = options.height || 50;
   this.x = options.x || 0;
   this.y = options.y || 0;
   var s = this.s = options.s ;
@@ -283,6 +283,8 @@ function ToolTip(options){
   this.overEl=false;
   this.overTT=false;
   this.text = options.text;
+  this.textWidth=15;
+  this.width = options.text.length*this.textWidth;
   var proto = Object.getPrototypeOf(this);
   proto.currentElement=0;
   this.render = function(){
@@ -297,15 +299,19 @@ function ToolTip(options){
     
     this.polygon = s.polygon([ax,ay,bx,by,cx,cy]);
     this.toolt = s.rect(ax-2-this.width/2,ay-this.height,this.width,this.height);
-    this.text = s.text (ax-2-this.width/2,ay-this.height+30,this.text).attr({
-      fill:'#fff'
+    //var ar=[];
+    //_.each(this.text,function(v){ar.push(v);});
+    this.text = s.text (ax-2-this.width/2,ay+30-this.height,this.text).attr({
+      fill:'#0f0'
     });
     var g = proto.g = s.g(this.polygon,this.toolt,this.text);
     proto.g.hover(function(){
       proto.overTT=true;
+      console.log("true");
       //this.render();
     },function(){
       proto.overTT=false;
+      console.log("false");
       setTimeout((function(){
         if (!proto.overEl && !proto.overTT){
           this.close();
@@ -350,8 +356,8 @@ function ToolTip(options){
   
 }
 function File(x,y,file){
-  this.x=x;
-  this.y=y;
+  this.x=x=200;
+  this.y=y=200;
   this.width=100;
   this.height=200;
   this.fileHeaderHeight = 50;
@@ -366,7 +372,7 @@ function File(x,y,file){
   this.rowHeight = 5;
   this.rFileRepresentation = function(){
   
-    s.rect(this.x=300,this.y=300,this.width,this.height).attr({fill:this.fileColor});
+    s.rect(this.x,this.y,this.width,this.height).attr({fill:this.fileColor});
     
   };
 
@@ -389,7 +395,7 @@ function File(x,y,file){
       var el = s.rect(this.x+currentX,this.y+this.currentY,fieldSizeInPixels,this.rowHeight).attr({
           fill:'#FFFFFF'
         });
-      new ToolTip({el:el,s:s,text:ehdr[field].comment});
+      new ToolTip({el:el,s:s,text:ehdr[field].content.slice(3,-3)});
       
       currentX += fieldSizeInPixels + 3;
 
