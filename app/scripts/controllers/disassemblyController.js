@@ -278,7 +278,7 @@ function estimateTextSize(text){
 }
 function ToolTip(options){
   this.on = true;
-  this.width = options.width || 200;
+  this.width = options.width || 0;
   this.height = options.height || 50;
   this.x = options.x || 0;
   this.y = options.y || 0;
@@ -287,25 +287,48 @@ function ToolTip(options){
   this.overEl=false;
   this.overTT=false;
   this.textWidth=10;
-  this.textHeight=11;
+  this.textHeight=15;
   this.widthLimit=300;
-  if (options.text.length*this.textWidth>this.widthLimit){
-    this.width = this.widthLimit;
-    var num = (options.text.length*this.textWidth/this.widthLimit);
-    this.height = this.textHeight * num+50;
-    this.text = [];
-    var x = 0;
-    var numOfChars = this.width/this.textWidth;
-    for (x = 0;x<num;x++){
-      this.text.push(options.text.slice(x*numOfChars,(x+1)*numOfChars));
+  if ((typeof options.text) === "string"){
+    options.text = options.text.replace(/[ ]+/g," ");
+    if (options.text.length*this.textWidth>this.widthLimit){
+      this.width = this.widthLimit;
+      var num = (options.text.length*this.textWidth/this.widthLimit);
+      this.height = this.textHeight * num+50;
+      this.text = [];
+      var x = 0;
+      var numOfChars = this.width/this.textWidth;
+      for (x = 0;x<num;x++){
+        this.text.push(options.text.slice(x*numOfChars,(x+1)*numOfChars));
+      }
+      
+    }else{
+      this.width=options.text.length*this.textWidth;
+      this.height = this.textHeight+20;
+      this.text = [options.text];
     }
-    
   }else{
-    this.width=options.text.length*this.textWidth;
+    this.text = options.text;
     this.height = this.textHeight+20;
-    this.text = [options.text];
+    for (line in options.text){
+      if (options.text[line].length*this.textWidth>this.widthLimit){
+        //TODO fix
+        this.width = this.widthLimit;
+        var num = (options.text[line].length*this.textWidth/this.widthLimit);
+        this.height = this.textHeight * num+50;
+        this.text = [];
+        var x = 0;
+        var numOfChars = this.width/this.textWidth;
+        for (x = 0;x<num;x++){
+          this.text.push(options.text[line].slice(x*numOfChars,(x+1)*numOfChars));
+        }
+        
+      }else{
+        this.width=(options.text[line].length*this.textWidth>this.width)?(options.text[line].length*this.textWidth):this.width;
+
+      }
+    }
   }
-  
   var proto = Object.getPrototypeOf(this);
   proto.currentElement=0;
   this.render = function(){
@@ -426,7 +449,13 @@ function File(x,y,file){
       var el = s.rect(this.x+currentX,this.y+this.currentY,fieldSizeInPixels,this.rowHeight).attr({
           fill:'#FFFFFF'
         });
-      new ToolTip({el:el,s:s,text:ehdr[field].content.slice(3,-3)});
+      var toolTipText;
+      if(field === "0"){
+        toolTipText=ehdr[field].content.slice(3,-3);
+      }else{
+        toolTipText = [ehdr[field].fName,ehdr[field].content];
+      }
+      new ToolTip({el:el,s:s,text:toolTipText});
       
       currentX += fieldSizeInPixels + 3;
 
