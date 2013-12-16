@@ -46,3 +46,7 @@ Pictures
 ![](https://raw.github.com/NikolaMandic/ld/master/qa.png)
 
 
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/NikolaMandic/diskotek/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
