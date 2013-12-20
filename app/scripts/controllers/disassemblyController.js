@@ -7,6 +7,9 @@ angular.module('ldApp')
 
     $scope.sharedData=Data.sharedData;
     $scope.data=Data;
+    
+    $scope.miniViewShown=false;
+    
     $scope.$watch('Data.sharedData.disasViewData.sectionD[0]',function(n,o){
       $scope.selectedSection=n;
       $scope.selected='section';
@@ -20,6 +23,7 @@ angular.module('ldApp')
         scrollTop: section.position.y
       }, 2000);
     };
+    
     $scope.scrollToHeader = function (header) {
         // body...
        $('html, body').animate({

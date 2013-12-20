@@ -1,7 +1,7 @@
-<div id="wrapermain">
+<div id="wrapermain" >
     
-  <div id="disassembly" draggable resizable>
-
+  <div id="disassembly" class="nano" draggable resizable>
+<div class = "content">
     <div ng-switch="thing.type" class="{{thing.current?'inst_row_current':'inst_row'}}  {{thing.selected?' inst_selected':'' }}"
       ng-repeat="thing in data.debugData.disassembly">
 
@@ -61,7 +61,7 @@
 
           <div ng-switch-when="blank" class="blankRow">
           </div>
-
+</div>
     </div>
   </div>
    <!--

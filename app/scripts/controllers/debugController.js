@@ -26,7 +26,8 @@ angular.module('ldApp')
       $("#disassembly span").on("mouseup",function(e){
         e.stopPropagation();
       });
-
+      $("#wrapermain").css({height:'500px'});
+      $(".nano").nanoScroller();
     });
   });
 

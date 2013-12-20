@@ -152,8 +152,19 @@ angular.module('ldApp').factory('DataDisassembly',['$rootScope','command','DataD
   disassemblyData.disassemble = function(file,architecture) {
     disassemblyData.getSectionDisassembly(file);
     disassemblyData.getHeaders(file);
+    disassemblyData.getSize(file);
   };
-  
+  disassemblyData.getSize = function(file){
+    command.commandExecO({
+      callback: function(result){
+        // parse result of a -D command
+        disassemblyData.fileSize=parsers.processFileSize(result);
+      },
+      msgType: 'exec',
+      ptyPayload:commands[configState.architecture].getFileSize + file
+
+    });
+  };
   // transforms command output recived from server into array of instructions
   disassemblyData.dissasemblyCallback= function 
     dissasemblyCallback(disassemblyRaw){
