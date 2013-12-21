@@ -83,16 +83,14 @@
        <a class="ion-arrow-graph-down-right" ng-click="stepInto()"> step into</a> 
     
      </div>
-
- 
-     <div id="commandItem">
+    </div>
+    <div id="commandItem">
       <!--
        <INPUT type="TEXT" ng-model="command"/>
        <a ng-click="commandExecL(command,'commandResult')">send command  </a>
        -->  
-       <button onclick="TogetherJS(this); return false;">Start TogetherJS</button>
+       <a class="" onclick="TogetherJS(this); return false;">Start TogetherJS</a>
      </div>
-   </div>
  </div>
 
  <div id="container" ng-view="">
@@ -140,6 +138,7 @@
       <div class="sm_stepOv ion-arrow-down-c" ng-click="stepOver()"></div>
       <div class="sm_stepInto ion-arrow-graph-down-right"></div>
       <div class="sm_discard ion-ios7-trash"></div>
+      <div class="sm_close ion-close" ng-click="destroy()"></div>
       <div ng-show="newScriptSaveShow">
         <input type="text" name="newScriptName" ng-model="newScriptName" value="">
         <input type="text" name="newScriptDesc" ng-model="newScriptDesc" value="">
