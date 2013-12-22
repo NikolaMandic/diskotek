@@ -27,7 +27,8 @@
     "sprintf": "*",
     "store-js": "*",
     "Snap.svg": "*",
-    "nanoscroller": "https://github.com/jamesflorentino/nanoScrollerJS.git#~0.7.6"
+    "nanoscroller": "https://github.com/jamesflorentino/nanoScrollerJS.git#~0.7.6",
+    "bourbon":"*"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.0",

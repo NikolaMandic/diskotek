@@ -6,3 +6,6 @@ git pull master
 git branch --set-upstream-to origin/master
 git add .
 git pull origin master
+cp beeScript* app/bower_components/ace/lib/ace/mode/
+cd app/styles
+bourbon install
