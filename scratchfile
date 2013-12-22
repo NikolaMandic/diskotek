@@ -1,7 +1,0 @@
-epI = 4
-ep = fImage.fileHeaders.ehdr..epI.content
-s break *#ep 
-
-s run
-
-render()

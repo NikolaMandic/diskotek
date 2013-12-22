@@ -39,11 +39,11 @@ now app is being debugged inside a virtual machine<br/>
 
 Pictures
 ==
-![](https://raw.github.com/NikolaMandic/ld/master/a.png)
-![](https://raw.github.com/NikolaMandic/ld/master/aa.png)
-![](https://raw.github.com/NikolaMandic/ld/master/qb.png)
-![](https://raw.github.com/NikolaMandic/ld/master/qq.png)
-![](https://raw.github.com/NikolaMandic/ld/master/qa.png)
+![](https://raw.github.com/NikolaMandic/ld/master/pics/a.png)
+![](https://raw.github.com/NikolaMandic/ld/master/pics/aa.png)
+![](https://raw.github.com/NikolaMandic/ld/master/pics/qb.png)
+![](https://raw.github.com/NikolaMandic/ld/master/pics/qq.png)
+![](https://raw.github.com/NikolaMandic/ld/master/pics/qa.png)
 
 
 
