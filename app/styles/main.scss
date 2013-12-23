@@ -195,7 +195,7 @@ body {
   //@include milky(95)
 }
 .scriptPanelWraper{
-  position:fixed;
+  position:absolute;
   padding-top:30px;
   background:rgba(0,0,255,0.1);
   display:inline-block;
@@ -204,14 +204,14 @@ body {
 .scriptOutput{
 
   float:left;
-  width:64px*5;
-  height:500px;
+  width:64px*5*2;
+  height:150px;
 }
 .scriptEditor{
   float:left;
   z-index:1000;
-  width:64px*5;
-  height:500px;
+  width:64px*5*2;
+  height:300px;
 }
 
 /* /scripting*/

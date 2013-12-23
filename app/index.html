@@ -115,7 +115,9 @@
     </span>
   </div>
   <span ng-repeat="w in bWindows track by $index">
-    <beditor >  </beditor>
+    <div wind >
+    <beditor  >  </beditor>
+    </div>
   </span>
 </div>
 </body>
@@ -130,7 +132,7 @@
   </div>
 </template>
 <template id="newScriptWT">
-  <div class="scriptPanelWraper" draggable >
+  <div class="scriptPanelWraper"    >
     <div class="sMenu">
 
       <div class="sm_save ion-ios7-download" ng-click="newScriptSaveControlsToggle()"></div>
@@ -150,6 +152,27 @@
   </div>
 
 </template>
+<template id="decoratorWind">
+<div class="wind" draggable>
+  <div class="titlebar">
+      <div class="close ion-arrow-down-c">
+          
+      </div>
+      <div class="minimize ion-close">
+          
+      </div>
+  </div>
+  <div class="windContent" ng-transclude>
+      
+  </div>
+</div>
+</template>
+<template>
+<div class="windowBar">
+    <div ng-repeat="thing in windows track by $index" class="windowBarWind">{{thing.title}}</div>
+</div>
+</template>
+
        <script src="bower_components/jquery/jquery.js"></script>
        <script src="http://localhost:8070/socket.io/socket.io.js"></script>
    

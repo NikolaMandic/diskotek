@@ -258,11 +258,35 @@ angular.module('ldApp').directive('commandwind',function() {
   };
   return ddo;
 });
+angular.module('ldApp').directive('wind',['jsX',function(jsX){
+  var windF = null;
+  var ddo = {
+    priority:99,
+    template: $('#decoratorWind').html(),
+    transclude:true,
+    controller: function dcOnt(configState,$scope, $element,$attrs, $transclude,$rootScope, $compile,Data,$controller,command) {
+      console.log();
+    },
+    link:  function postLink(scope,iElement,iAttrs,$compile) {
+      if(windF === null){
+        windF = jsX.module();
+        }
+      /*
+      windF({
+        content:iElement,
+        decorator:$(iElement).find('.windContent')[0]
+      })
+      */
+    }
+  };
+  return ddo;
+}]);
 angular.module('ldApp').directive('beditor',['command','state','ace','beeScript','store',function(command,state,aceS,beeScriptS,store) {
 
   var ddo = {
     scope:{},
     restrict:'E',
+    priority:999,
     template: $('#newScriptWT').html(),
     controller: function dcOnt(configState,$scope, $element,$attrs, $transclude,$rootScope, $compile,Data,$controller,command) {
       var beeScript = beeScriptS.beeScript;
@@ -366,7 +390,7 @@ angular.module('ldApp').directive('beditor',['command','state','ace','beeScript'
         $element.remove();
       };
     },
-    link:  function lf(scope,iElement,iAttrs,$compile) {
+    link:  function postLink(scope,iElement,iAttrs,$compile) {
       var ace = aceS.ace;
       var editEl=$(iElement).find('.scriptEditor')[0];
       var editor = scope.editor = ace.edit(editEl);

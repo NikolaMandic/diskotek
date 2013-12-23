@@ -14,7 +14,8 @@ require.config({
       //'es5-shim':'../bower_components/ace/lib/ace/lib'
       //
       'sprintf':'../bower_components/sprintf/src/sprintf',
-      'store':'../bower_components/store-js/store'
+      'store':'../bower_components/store-js/store',
+      'jsX':'../bower_components/jsX/main'
     }
 });
 
@@ -37,7 +38,17 @@ angular.module('ldApp', ['ngRoute'])
       });
   }]);
 
+angular.module('ldApp').factory('jsX', function() {
+  var obj={
+    module:null
+  };
 
+  require(['jsX'],function(module){
+      obj.module=module;
+  });
+  //factory function body that constructs shinyNewServiceInstance
+  return obj;
+});
 angular.module('ldApp').factory('store', function() {
   var stor={
     store:null

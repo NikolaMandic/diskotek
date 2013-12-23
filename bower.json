@@ -28,7 +28,8 @@
     "store-js": "*",
     "Snap.svg": "*",
     "nanoscroller": "https://github.com/jamesflorentino/nanoScrollerJS.git#~0.7.6",
-    "bourbon":"*"
+    "bourbon": "*",
+    "jsX": "https://github.com/NikolaMandic/jsX.git"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.0",
