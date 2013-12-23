@@ -140,7 +140,6 @@
       <div class="sm_stepOv ion-arrow-down-c" ng-click="stepOver()"></div>
       <div class="sm_stepInto ion-arrow-graph-down-right"></div>
       <div class="sm_discard ion-ios7-trash"></div>
-      <div class="sm_close ion-close" ng-click="destroy()"></div>
       <div ng-show="newScriptSaveShow">
         <input type="text" name="newScriptName" ng-model="newScriptName" value="">
         <input type="text" name="newScriptDesc" ng-model="newScriptDesc" value="">
@@ -148,17 +147,23 @@
     </div>
     <div class="scriptEditor" >
     </div>
-    <div class="scriptOutput"></div>
+    <div class="scriptOutput">
+    
+    <div ng-repeat="o in scriptOutput track by $index" >
+      {{o}}
+     </div>
+    
+    </div>
   </div>
 
 </template>
 <template id="decoratorWind">
 <div class="wind" draggable>
   <div class="titlebar">
-      <div class="close ion-arrow-down-c">
+      <div class="close ion-arrow-down-c" ng-click="minimize()">
           
       </div>
-      <div class="minimize ion-close">
+      <div class="minimize ion-close" ng-click="close()">
           
       </div>
   </div>
