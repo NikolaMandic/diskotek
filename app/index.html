@@ -125,8 +125,8 @@
   </div>
   <div id="windowBar" ng-show="windowBarShowFlag">
     <span ng-repeat="w in bWindows track by $index">
-      <div minimizedWind >
-        {{w}}
+      <div minimizedWind class="minimizedWind" ng-click="w.toggleMinimize()">
+        {{w.title}}
       </div>
     </span>
   </div>

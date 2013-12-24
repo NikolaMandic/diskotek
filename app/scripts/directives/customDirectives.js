@@ -265,23 +265,25 @@ angular.module('ldApp').directive('wind',['jsX',function(jsX){
     template: $('#decoratorWind').html(),
     transclude:true,
     controller: function dcOnt(configState,$scope, $element,$attrs, $transclude,$rootScope, $compile,Data,$controller,command) {
+      configState.bWindows[configState.bWindows.length-1].container=$element;
       $scope.close = function(){
         $element.remove()
       }
       $scope.minimize = function(){
-        
+        $element.toggle();
       }
     },
     link:  function postLink(scope,iElement,iAttrs,$compile) {
       if(windF === null){
         windF = jsX.module();
       }
-      /*
+      
       windF({
-        content:iElement,
-        decorator:$(iElement).find('.windContent')[0]
+        content:iElement
+        //,
+        //  decorator:$(iElement).find('.windContent')[0]
       })
-      */
+      
     }
   };
   return ddo;
@@ -304,7 +306,8 @@ angular.module('ldApp').directive('beditor',['command','state','ace','beeScript'
       $scope.running=false;
       $scope.dirty=false;
       $scope.scriptOutput;
-      $scope.contents=configState.bWindows[configState.bWindows.length-1];
+      $scope.windowObj=configState.bWindows[configState.bWindows.length-1];
+      $scope.contents=configState.bWindows[configState.bWindows.length-1].contents;
       $scope.newScriptSaveShow = false;
       $scope.newScriptSaveControlsToggle = function(){
         $scope.newScriptSaveShow= !$scope.newScriptSaveShow;

@@ -184,11 +184,18 @@ body {
 }
 .sm_stepOv{
 
+
 }
 .sm_stepInto{
 
 }
 .sm_discard{
+}
+.minimizedWind{
+  float:left;
+  max-width:100px;
+  max-height:20px;
+  overflow:hidden;
 }
 #windowBar{
   position:fixed;

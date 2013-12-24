@@ -1,4 +1,4 @@
-angular.module('ldApp').factory 'configState', ()->
+angular.module('ldApp').factory 'configState', (jsX)->
   configState =
     architecture: 'x86 elf'
     file:'hw'

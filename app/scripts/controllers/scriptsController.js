@@ -1,6 +1,6 @@
 (function() {
-  angular.module('ldApp').controller("scriptsController", function(configState, command, $rootScope, $scope, $http, Data, store) {
-    var search;
+  angular.module('ldApp').controller("scriptsController", function(configState, command, $rootScope, $scope, $http, Data, store, jsX) {
+    var search, windFact;
     $scope.bWindows = configState.bWindows;
     $scope.scriptName = '';
     $scope.scriptsList = [
@@ -14,10 +14,18 @@
     $scope.toggleWindowBar = function() {
       return $scope.windowBarShowFlag = !$scope.windowBarShowFlag;
     };
+    windFact = null;
     $scope.newScript = function() {
-      var name;
+      var name, windNew;
       name = "newScript" + (store.store.getAll().length || '');
-      return $scope.bWindows.push('this is a script placeholder');
+      if (!windFact) {
+        windFact = jsX.module();
+      }
+      windNew = windFact({
+        title: name,
+        content: '//' + name + '\n'
+      });
+      return $scope.bWindows.push(windNew);
     };
     search = function(termList, stringList) {
       return _.filter(stringList, function(el) {

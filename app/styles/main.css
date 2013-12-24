@@ -8088,14 +8088,22 @@ body {
   float: left;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003193}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003194}}
+.minimizedWind {
+  float: left;
+  max-width: 100px;
+  max-height: 20px;
+  overflow: hidden;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003200}}
 #windowBar {
   position: fixed;
   bottom: 0px;
   left: 32px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003198}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003205}}
 #windowBarToggle {
   font-size: 32px;
   position: fixed;
@@ -8103,12 +8111,12 @@ body {
   left: 0px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003204}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003211}}
 #newScript, #scriptList {
   font-size: 32px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003208}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003215}}
 .scriptPanelWraper {
   position: absolute;
   padding-top: 30px;
@@ -8116,14 +8124,14 @@ body {
   display: inline-block;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003215}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003222}}
 .scriptOutput {
   float: left;
   width: 640px;
   height: 150px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003221}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003228}}
 .scriptEditor {
   float: left;
   z-index: 1000;
@@ -8133,7 +8141,7 @@ body {
 
 /* /scripting*/
 /*   debug view      */
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003232}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003239}}
 #wrapermain {
   margin-left: -15px;
   margin-right: -15px;
@@ -8153,19 +8161,19 @@ body {
   clear: both;
 }
 @media (min-width: 992px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003232}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003239}}
   #wrapermain {
     float: left;
     width: 100%;
   }
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003236}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003243}}
 .breakpoint {
   background: rgba(220, 0, 0, 0.3);
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003239}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003246}}
 #disassembly {
   position: relative;
   min-height: 1px;
@@ -8173,14 +8181,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003239}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003246}}
   #disassembly {
     float: left;
     width: 75%;
   }
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003242}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003249}}
 .lineNumber {
   position: relative;
   min-height: 1px;
@@ -8188,14 +8196,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003242}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003249}}
   .lineNumber {
     float: left;
     width: 16.66667%;
   }
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003245}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003252}}
 .srcCode {
   position: relative;
   min-height: 1px;
@@ -8203,14 +8211,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003245}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003252}}
   .srcCode {
     float: left;
     width: 83.33333%;
   }
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003248}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003255}}
 .blank {
   position: relative;
   min-height: 1px;
@@ -8218,14 +8226,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003248}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003255}}
   .blank {
     float: left;
     width: 100%;
   }
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003251}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003258}}
 #registers {
   position: relative;
   min-height: 1px;
@@ -8244,14 +8252,14 @@ body {
 */
 }
 @media (min-width: 992px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003251}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003258}}
   #registers {
     float: left;
     width: 25%;
   }
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003265}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003272}}
 #commandResult {
   position: relative;
   min-height: 1px;
@@ -8259,19 +8267,19 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003265}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003272}}
   #commandResult {
     float: left;
     width: 25%;
   }
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003270}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003277}}
 #registers li:nth-child(16) {
   background: rgba(192, 57, 43, 0.09);
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003274}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003281}}
 .hero-unit {
   position: relative;
   min-height: 1px;
@@ -8289,19 +8297,19 @@ body {
     */
 }
 @media (min-width: 992px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003274}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003281}}
   .hero-unit {
     float: left;
     width: 75%;
   }
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003287}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003294}}
 .inst_selected {
   background-color: rgba(110, 110, 0, 0.07);
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003290}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003297}}
 .inst_row {
   margin-left: -15px;
   margin-right: -15px;
@@ -8317,7 +8325,7 @@ body {
   clear: both;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003293}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003300}}
 .inst_addr {
   position: relative;
   min-height: 1px;
@@ -8325,14 +8333,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003293}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003300}}
   .inst_addr {
     float: left;
     width: 16.66667%;
   }
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003296}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003303}}
 .inst_raw {
   position: relative;
   min-height: 1px;
@@ -8340,14 +8348,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003296}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003303}}
   .inst_raw {
     float: left;
     width: 16.66667%;
   }
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003299}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003306}}
 .inst_opcode {
   position: relative;
   min-height: 1px;
@@ -8355,14 +8363,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003299}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003306}}
   .inst_opcode {
     float: left;
     width: 16.66667%;
   }
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003302}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003309}}
 .inst_operands {
   position: relative;
   min-height: 1px;
@@ -8370,14 +8378,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003302}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003309}}
   .inst_operands {
     float: left;
     width: 25%;
   }
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003305}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003312}}
 .inst_comment {
   position: relative;
   min-height: 1px;
@@ -8386,14 +8394,14 @@ body {
   color: #00AA00;
 }
 @media (min-width: 992px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003305}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003312}}
   .inst_comment {
     float: left;
     width: 25%;
   }
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003309}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003316}}
 .reg_row {
   margin-left: -15px;
   margin-right: -15px;
@@ -8409,7 +8417,7 @@ body {
   clear: both;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003312}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003319}}
 .reg_name {
   position: relative;
   min-height: 1px;
@@ -8417,14 +8425,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003312}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003319}}
   .reg_name {
     float: left;
     width: 16.66667%;
   }
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003315}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003322}}
 .reg_value1 {
   position: relative;
   min-height: 1px;
@@ -8432,14 +8440,14 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003315}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003322}}
   .reg_value1 {
     float: left;
     width: 41.66667%;
   }
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003318}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003325}}
 .reg_value2 {
   position: relative;
   min-height: 1px;
@@ -8447,19 +8455,19 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003318}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003325}}
   .reg_value2 {
     float: left;
     width: 41.66667%;
   }
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003321}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003328}}
 #registers .reg_row:nth-child(odd), .secInst:nth-child(odd), .hero-unit .inst_row:nth-child(odd) {
   background: rgba(220, 220, 220, 0.35);
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003325}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003332}}
 .inst_row_current {
   margin-left: -15px;
   margin-right: -15px;
@@ -8476,7 +8484,7 @@ body {
   clear: both;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003329}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003336}}
 .sectionS div {
   position: relative;
   min-height: 1px;
@@ -8484,7 +8492,7 @@ body {
   padding-right: 15px;
 }
 @media (min-width: 992px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003329}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003336}}
   .sectionS div {
     float: left;
     width: 25%;
@@ -8493,7 +8501,7 @@ body {
 
 /*   /debug view     */
 /*   graph view      */
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003336}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003343}}
 #holder, .sectionP, .sectionS, .sectionView {
   margin-left: -15px;
   margin-right: -15px;
@@ -8511,13 +8519,13 @@ body {
 
 /*    /graph view     */
 /* linkify  */
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003342}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003349}}
 a {
   text-decoration: none;
   color: #198de6;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003347}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003354}}
 .roll {
   display: inline-block;
   overflow: hidden;
@@ -8528,7 +8536,7 @@ a {
   -moz-perspective-origin: 50% 50%;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003359}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003366}}
 .roll span {
   display: block;
   position: relative;
@@ -8541,14 +8549,14 @@ a {
   -moz-transform-style: preserve-3d;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003373}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003380}}
 .roll:hover span {
   background: #111;
   -webkit-transform: translate3d(0px, 0px, -30px) rotateX(90deg);
   -moz-transform: translate3d(0px, 0px, -30px) rotateX(90deg);
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003379}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/name\/diskotek\/app\/styles\/main\.scss}line{font-family:\00003386}}
 .roll span:after {
   content: attr(data-title);
   display: block;

@@ -1,5 +1,5 @@
 (function() {
-  angular.module('ldApp').factory('configState', function() {
+  angular.module('ldApp').factory('configState', function(jsX) {
     var configState;
     return configState = {
       architecture: 'x86 elf',
