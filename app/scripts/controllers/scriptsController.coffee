@@ -17,7 +17,7 @@ angular.module('ldApp').controller "scriptsController", (configState,command,$ro
       windFact=jsX.module()
         
      
-    windNew = windFact({title:name,content:'//'+name+'\n'})
+    windNew = windFact({title:name,contents:'//'+name+'\n'})
       
     $scope.bWindows.push(windNew)
     

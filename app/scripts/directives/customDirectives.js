@@ -405,10 +405,10 @@ angular.module('ldApp').directive('beditor',['command','state','ace','beeScript'
       var editor = scope.editor = ace.edit(editEl);
       editor.setTheme('ace/theme/monokai');
       editor.getSession().setMode('ace/mode/beeScript');
-      editor.setValue(scope.contents);
+      editor.setValue(scope.contents=scope.windowObj.contents);
       editor.getSession().on('change', function(e) {
         // e.type, etc
-        scope.contents=editor.getValue();
+        scope.windowObj.contents=scope.contents=editor.getValue();
         scope.dirty=true;
         scope.$digest();
       });

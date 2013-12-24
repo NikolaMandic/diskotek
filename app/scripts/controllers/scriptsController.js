@@ -23,7 +23,7 @@
       }
       windNew = windFact({
         title: name,
-        content: '//' + name + '\n'
+        contents: '//' + name + '\n'
       });
       return $scope.bWindows.push(windNew);
     };
