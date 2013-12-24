@@ -190,6 +190,17 @@ body {
 }
 .sm_discard{
 }
+#windowBar{
+  position:fixed;
+  bottom:0px;
+  left:32px;
+}
+#windowBarToggle{
+  font-size:32px;
+  position:fixed;
+  bottom:0px;
+  left:0px;
+}
 #newScript, #scriptList{
   font-size:32px;
   //@include milky(95)

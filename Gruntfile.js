@@ -135,14 +135,14 @@ module.exports = function (grunt) {
     coffee: {
       options: {
         sourceMap: true,
-        sourceRoot: ''
+        sourceRoot: '<%= yeoman.app %>/scripts'
       },
       dist: {
         files: [{
           expand: true,
           cwd: '<%= yeoman.app %>/scripts',
           src: '{,*/}*.coffee',
-          dest: '.tmp/scripts',
+          dest: '<%= yeoman.app %>/scripts',
           ext: '.js'
         }]
       },

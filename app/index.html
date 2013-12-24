@@ -119,7 +119,19 @@
     <beditor  >  </beditor>
     </div>
   </span>
+  
+  <div id="windowBarToggle" class="ion-arrow-shrink" ng-click="toggleWindowBar()">
+
+  </div>
+  <div id="windowBar" ng-show="windowBarShowFlag">
+    <span ng-repeat="w in bWindows track by $index">
+      <div minimizedWind >
+        {{w}}
+      </div>
+    </span>
+  </div>
 </div>
+
 </body>
 <template id="commandWindT">
   <div >
