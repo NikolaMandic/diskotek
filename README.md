@@ -49,4 +49,4 @@ Pictures
 
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/NikolaMandic/diskotek/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-[![Analytics](https://ga-beacon.appspot.com/UA-44812767-2/NikolaMandic/diskotek/readme)](https://github.com/igrigorik/ga-beacon)
+[![Analytics](https://ga-beacon.appspot.com/UA-44812767-2/diskotek/readme)](https://github.com/igrigorik/ga-beacon)
