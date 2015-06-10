@@ -1,6 +1,6 @@
 diskotek
 ==             
-did not touch it in a while you can find old demo on youtube here nikolamandic.me        
+did not touch it in a while you can find old demo on youtube here http://nikolamandic.me        
 early development version of ui for gdb debugger for arm on linux !!!
 some code is not as it should be right now because I wanted to implement some features faster.
 unstable now but in active development<br/>
